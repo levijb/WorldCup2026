@@ -1,0 +1,56 @@
+name: Morning Report
+
+on:
+  schedule:
+    # 11:00 UTC = 7:00 AM EDT (UTC-4) — runs every day during the tournament
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Configure git for auto-commit
+        run: |
+          git config user.name "WorldCup2026 Bot"
+          git config user.email "actions@github.com"
+
+      - name: Run morning report
+        env:
+          THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+          API_SPORTS_KEY: ${{ secrets.API_SPORTS_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_TO_EMAIL: ${{ secrets.RESEND_TO_EMAIL }}
+          STATS_API_KEY: ${{ secrets.STATS_API_KEY }}
+        run: python agent/morning_report.py
+
+      - name: Send failure notification
+        if: failure()
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_TO_EMAIL: ${{ secrets.RESEND_TO_EMAIL }}
+        run: |
+          curl -s -X POST https://api.resend.com/emails \
+            -H "Authorization: Bearer $RESEND_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"from\": \"$RESEND_TO_EMAIL\",
+              \"to\": [\"$RESEND_TO_EMAIL\"],
+              \"subject\": \"⚠️ WC2026 Morning Report FAILED — $(date +'%Y-%m-%d')\",
+              \"html\": \"<p>The morning report workflow failed on $(date +'%Y-%m-%d %H:%M UTC'). Check the <a href='https://github.com/${{ github.repository }}/actions'>Actions tab</a> for details.</p>\"
+            }" || true

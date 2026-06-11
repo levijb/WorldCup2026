@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WC2026 Tournament Tracker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f1117; color: #c0c0c0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; }
+  a { color: #4fc3f7; text-decoration: none; }
+
+  .header { background: #161b22; border-bottom: 1px solid #30363d; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .header h1 { color: #fff; font-size: 18px; font-weight: 700; }
+  .nav-links { font-size: 13px; }
+
+  .controls { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #161b22; border-bottom: 1px solid #30363d; flex-wrap: wrap; }
+  .view-toggle { display: flex; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
+  .view-toggle button { background: #21262d; border: none; color: #8b949e; padding: 7px 18px; cursor: pointer; font-size: 13px; transition: all 0.15s; }
+  .view-toggle button.active { background: #1f6feb; color: #fff; }
+  .controls button.refresh-btn { background: #21262d; border: 1px solid #30363d; color: #c0c0c0; border-radius: 4px; padding: 6px 14px; cursor: pointer; font-size: 13px; }
+  .controls button.refresh-btn:hover { background: #30363d; }
+  #last-updated { font-size: 12px; color: #6e7681; }
+
+  /* Group stage grid */
+  #groups-view { padding: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .group-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
+  .group-header { background: #21262d; padding: 8px 12px; font-weight: 700; font-size: 13px; color: #e6edf3; display: flex; align-items: center; gap: 6px; }
+  table.standings { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.standings th { padding: 4px 6px; color: #6e7681; font-weight: 600; font-size: 11px; border-bottom: 1px solid #21262d; }
+  table.standings td { padding: 5px 6px; border-bottom: 1px solid #21262d; }
+  table.standings tr:last-child td { border-bottom: none; }
+  .team-flag { font-size: 16px; margin-right: 4px; }
+  .team-name { font-weight: 500; color: #e6edf3; }
+  .qual-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+  .qual-through { background: #00c853; }
+  .qual-contention { background: #ffab00; }
+  .qual-eliminated { background: #ff1744; }
+  .qual-unknown { background: #30363d; }
+
+  /* Bracket */
+  #bracket-view { padding: 16px; display: none; overflow-x: auto; }
+  .bracket-container { display: flex; gap: 0; min-width: 900px; }
+  .bracket-round { display: flex; flex-direction: column; justify-content: space-around; min-width: 150px; }
+  .bracket-round-title { text-align: center; font-size: 11px; font-weight: 700; color: #6e7681; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 4px; background: #161b22; border-bottom: 1px solid #21262d; margin-bottom: 8px; position: sticky; top: 0; z-index: 1; }
+  .bracket-match { margin: 4px; }
+  .bracket-slot { background: #161b22; border: 1px solid #30363d; border-radius: 4px; padding: 6px 10px; font-size: 12px; color: #c0c0c0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 130px; }
+  .bracket-slot.winner { color: #00c853; font-weight: 600; border-color: #00c853; }
+  .bracket-slot.tbd { color: #6e7681; font-style: italic; }
+  .bracket-connector { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 24px; }
+  .connector-line { width: 24px; height: 1px; background: #30363d; }
+  .bracket-group { display: flex; align-items: stretch; gap: 0; margin: 2px 0; }
+  .bracket-side-lines { width: 12px; display: flex; flex-direction: column; }
+  .side-line-top { flex: 1; border-right: 1px solid #30363d; border-bottom: 1px solid #30363d; }
+  .side-line-bot { flex: 1; border-right: 1px solid #30363d; border-top: 1px solid #30363d; }
+  .final-slot { background: #1f2937; border: 2px solid #ffab00 !important; color: #ffab00 !important; font-weight: 700; text-align: center; font-size: 14px; padding: 10px 16px; border-radius: 6px; }
+
+  .loading { color: #6e7681; font-style: italic; padding: 20px; }
+
+  @media (max-width: 600px) {
+    #groups-view { grid-template-columns: 1fr; padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏆 WC2026 Tournament Tracker</h1>
+  <div class="nav-links"><a href="index.html">← Dashboard</a></div>
+</div>
+
+<div class="controls">
+  <div class="view-toggle">
+    <button id="btn-groups" class="active" onclick="showView('groups')">Group Stage</button>
+    <button id="btn-bracket" onclick="showView('bracket')">Knockout Bracket</button>
+  </div>
+  <button class="refresh-btn" onclick="refreshStandings()">↻ Refresh Standings</button>
+  <span id="last-updated"></span>
+</div>
+
+<div id="groups-view">
+  <div class="loading">Loading group standings…</div>
+</div>
+
+<div id="bracket-view">
+  <div class="loading">Loading bracket…</div>
+</div>
+
+<script>
+// ── All 48 teams, pre-loaded group assignments ─────────────────────────────────
+const GROUPS = {
+  'A': [
+    { name: 'United States', flag: '🇺🇸' },
+    { name: 'Panama', flag: '🇵🇦' },
+    { name: 'Honduras', flag: '🇭🇳' },
+    { name: 'Jamaica', flag: '🇯🇲' },
+  ],
+  'B': [
+    { name: 'Mexico', flag: '🇲🇽' },
+    { name: 'Ecuador', flag: '🇪🇨' },
+    { name: 'Venezuela', flag: '🇻🇪' },
+    { name: 'Bolivia', flag: '🇧🇴' },
+  ],
+  'C': [
+    { name: 'Canada', flag: '🇨🇦' },
+    { name: 'Uruguay', flag: '🇺🇾' },
+    { name: 'Peru', flag: '🇵🇪' },
+    { name: 'Chile', flag: '🇨🇱' },
+  ],
+  'D': [
+    { name: 'Argentina', flag: '🇦🇷' },
+    { name: 'Paraguay', flag: '🇵🇾' },
+    { name: 'Colombia', flag: '🇨🇴' },
+    { name: 'Costa Rica', flag: '🇨🇷' },
+  ],
+  'E': [
+    { name: 'Brazil', flag: '🇧🇷' },
+    { name: 'Trinidad and Tobago', flag: '🇹🇹' },
+    { name: 'Suriname', flag: '🇸🇷' },
+    { name: 'El Salvador', flag: '🇸🇻' },
+  ],
+  'F': [
+    { name: 'Germany', flag: '🇩🇪' },
+    { name: 'Austria', flag: '🇦🇹' },
+    { name: 'Switzerland', flag: '🇨🇭' },
+    { name: 'North Macedonia', flag: '🇲🇰' },
+  ],
+  'G': [
+    { name: 'Spain', flag: '🇪🇸' },
+    { name: 'Portugal', flag: '🇵🇹' },
+    { name: 'Morocco', flag: '🇲🇦' },
+    { name: 'Comoros', flag: '🇰🇲' },
+  ],
+  'H': [
+    { name: 'France', flag: '🇫🇷' },
+    { name: 'Belgium', flag: '🇧🇪' },
+    { name: 'Tunisia', flag: '🇹🇳' },
+    { name: 'Senegal', flag: '🇸🇳' },
+  ],
+  'I': [
+    { name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+    { name: 'Netherlands', flag: '🇳🇱' },
+    { name: 'Republic of Ireland', flag: '🇮🇪' },
+    { name: 'Moldova', flag: '🇲🇩' },
+  ],
+  'J': [
+    { name: 'Italy', flag: '🇮🇹' },
+    { name: 'Croatia', flag: '🇭🇷' },
+    { name: 'Albania', flag: '🇦🇱' },
+    { name: 'Ukraine', flag: '🇺🇦' },
+  ],
+  'K': [
+    { name: 'Norway', flag: '🇳🇴' },
+    { name: 'Sweden', flag: '🇸🇪' },
+    { name: 'Denmark', flag: '🇩🇰' },
+    { name: 'Finland', flag: '🇫🇮' },
+  ],
+  'L': [
+    { name: 'Japan', flag: '🇯🇵' },
+    { name: 'South Korea', flag: '🇰🇷' },
+    { name: 'Saudi Arabia', flag: '🇸🇦' },
+    { name: 'Australia', flag: '🇦🇺' },
+  ],
+};
+
+const API_SPORTS_KEY_STORAGE = 'api_sports_key'; // optional: for live standings
+
+// ── Live Standings (API-Sports) ────────────────────────────────────────────────
+let liveStandings = {};
+
+async function refreshStandings() {
+  document.getElementById('last-updated').textContent = 'Refreshing…';
+  // Try API-Sports standings endpoint (requires key)
+  const key = localStorage.getItem(API_SPORTS_KEY_STORAGE);
+  if (key) {
+    try {
+      const resp = await fetch('https://v3.football.api-sports.io/standings?league=1&season=2026', {
+        headers: { 'x-apisports-key': key }
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        processStandings(data);
+        document.getElementById('last-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+        renderGroups();
+        return;
+      }
+    } catch (_) {}
+  }
+  // Fall back to static pre-loaded data
+  renderGroups();
+  document.getElementById('last-updated').textContent = 'Using pre-loaded data (no live standings key)';
+}
+
+function processStandings(data) {
+  const leagues = data?.response || [];
+  liveStandings = {};
+  for (const league of leagues) {
+    for (const standingsGroup of (league.league?.standings || [])) {
+      for (const entry of standingsGroup) {
+        const name = entry.team?.name;
+        if (!name) continue;
+        liveStandings[name] = {
+          p: entry.all?.played || 0,
+          w: entry.all?.win || 0,
+          d: entry.all?.draw || 0,
+          l: entry.all?.lose || 0,
+          gf: entry.all?.goals?.for || 0,
+          ga: entry.all?.goals?.against || 0,
+          pts: entry.points || 0,
+          rank: entry.rank || 99,
+        };
+      }
+    }
+  }
+}
+
+// ── Render Groups ─────────────────────────────────────────────────────────────
+function qualStatus(rank, pts, played) {
+  if (played === 0) return 'unknown';
+  if (rank <= 2) return pts > 0 ? 'through' : 'contention';
+  return played >= 2 && pts === 0 ? 'eliminated' : 'contention';
+}
+
+function renderGroups() {
+  const container = document.getElementById('groups-view');
+  let html = '';
+  for (const [letter, teams] of Object.entries(GROUPS)) {
+    // Sort by live standings if available; otherwise by pre-loaded order
+    const sorted = teams.map(t => {
+      const live = liveStandings[t.name];
+      return {
+        ...t,
+        p: live?.p ?? 0,
+        w: live?.w ?? 0,
+        d: live?.d ?? 0,
+        l: live?.l ?? 0,
+        gf: live?.gf ?? 0,
+        ga: live?.ga ?? 0,
+        gd: (live?.gf ?? 0) - (live?.ga ?? 0),
+        pts: live?.pts ?? 0,
+      };
+    }).sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+
+    html += `<div class="group-card">
+      <div class="group-header">⚽ Group ${letter}</div>
+      <table class="standings">
+        <thead><tr>
+          <th style="width:24px"></th>
+          <th style="text-align:left">Team</th>
+          <th>P</th><th>W</th><th>D</th><th>L</th>
+          <th>GF</th><th>GA</th><th>GD</th><th>Pts</th>
+        </tr></thead>
+        <tbody>`;
+    sorted.forEach((t, idx) => {
+      const rank = idx + 1;
+      const statusKey = qualStatus(rank, t.pts, t.p);
+      const dotClass = `qual-${statusKey}`;
+      html += `<tr>
+        <td><span class="qual-dot ${dotClass}"></span></td>
+        <td><span class="team-flag">${t.flag}</span><span class="team-name">${t.name}</span></td>
+        <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+        <td>${t.gf}</td><td>${t.ga}</td><td>${t.gd >= 0 ? '+' : ''}${t.gd}</td>
+        <td style="font-weight:700;color:#e6edf3">${t.pts}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+  container.innerHTML = html;
+}
+
+// ── Render Bracket ─────────────────────────────────────────────────────────────
+// 48-team bracket: R32 (16 matches) → R16 (8) → QF (4) → SF (2) → Final (1)
+const BRACKET_ROUNDS = [
+  { id: 'r32', label: 'Round of 32', matches: 16 },
+  { id: 'r16', label: 'Round of 16', matches: 8 },
+  { id: 'qf', label: 'Quarter-Finals', matches: 4 },
+  { id: 'sf', label: 'Semi-Finals', matches: 2 },
+  { id: 'final', label: 'Final', matches: 1 },
+];
+
+let bracketData = {};  // populated from API-Sports fixtures
+
+async function loadBracketData() {
+  const key = localStorage.getItem(API_SPORTS_KEY_STORAGE);
+  if (!key) return;
+  try {
+    const resp = await fetch('https://v3.football.api-sports.io/fixtures?league=1&season=2026', {
+      headers: { 'x-apisports-key': key }
+    });
+    if (!resp.ok) return;
+    const data = await resp.json();
+    bracketData = {};
+    const fixtures = data.response || [];
+    for (const f of fixtures) {
+      const round = (f.league?.round || '').toLowerCase();
+      const home = f.teams?.home?.name;
+      const away = f.teams?.away?.name;
+      const homeGoals = f.goals?.home;
+      const awayGoals = f.goals?.away;
+      const status = f.fixture?.status?.short;
+      if (round.includes('round of 32')) addBracketSlot('r32', home, away, homeGoals, awayGoals, status);
+      else if (round.includes('round of 16') || round.includes('last 16')) addBracketSlot('r16', home, away, homeGoals, awayGoals, status);
+      else if (round.includes('quarter')) addBracketSlot('qf', home, away, homeGoals, awayGoals, status);
+      else if (round.includes('semi')) addBracketSlot('sf', home, away, homeGoals, awayGoals, status);
+      else if (round.includes('final') && !round.includes('semi') && !round.includes('quarter') && !round.includes('16') && !round.includes('32')) addBracketSlot('final', home, away, homeGoals, awayGoals, status);
+    }
+  } catch (_) {}
+}
+
+function addBracketSlot(roundId, home, away, hg, ag, status) {
+  if (!bracketData[roundId]) bracketData[roundId] = [];
+  const finished = status === 'FT' || status === 'AET' || status === 'PEN';
+  let winner = null;
+  if (finished && hg !== null && ag !== null) {
+    winner = hg > ag ? home : hg < ag ? away : null;
+  }
+  bracketData[roundId].push({ home, away, hg, ag, winner, finished });
+}
+
+function getSlotText(roundId, matchIdx, team) {
+  const matches = bracketData[roundId] || [];
+  const match = matches[matchIdx];
+  if (!match) return null;
+  if (team === 'home') return match.home || 'TBD';
+  return match.away || 'TBD';
+}
+
+function isWinner(roundId, matchIdx, team) {
+  const matches = bracketData[roundId] || [];
+  const match = matches[matchIdx];
+  if (!match || !match.winner) return false;
+  return match.winner === (team === 'home' ? match.home : match.away);
+}
+
+function renderBracket() {
+  const container = document.getElementById('bracket-view');
+  let html = '<div class="bracket-container">';
+
+  for (const round of BRACKET_ROUNDS) {
+    html += `<div class="bracket-round">
+      <div class="bracket-round-title">${round.label}</div>`;
+    for (let i = 0; i < round.matches; i++) {
+      const homeText = getSlotText(round.id, i, 'home') || 'TBD';
+      const awayText = getSlotText(round.id, i, 'away') || 'TBD';
+      const homeWin = isWinner(round.id, i, 'home');
+      const awayWin = isWinner(round.id, i, 'away');
+      const isFinal = round.id === 'final';
+
+      if (isFinal && i === 0) {
+        html += `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:auto;">
+          <div class="bracket-slot final-slot">🏆 FINAL</div>
+          <div class="bracket-slot ${homeWin ? 'winner' : homeText === 'TBD' ? 'tbd' : ''}">${homeText}</div>
+          <div class="bracket-slot ${awayWin ? 'winner' : awayText === 'TBD' ? 'tbd' : ''}">${awayText}</div>
+        </div>`;
+      } else {
+        html += `<div class="bracket-match">
+          <div class="bracket-slot ${homeWin ? 'winner' : homeText === 'TBD' ? 'tbd' : ''}">${homeText}</div>
+          <div class="bracket-slot ${awayWin ? 'winner' : awayText === 'TBD' ? 'tbd' : ''}" style="margin-top:2px">${awayText}</div>
+        </div>`;
+      }
+    }
+    html += '</div>';
+
+    // Add connector (except after last round)
+    if (round.id !== 'final') {
+      html += `<div style="display:flex;flex-direction:column;justify-content:space-around;width:24px;padding-top:40px">
+        ${Array(round.matches / 2).fill('<div style="flex:1;border-top:1px solid #30363d;border-right:1px solid #30363d;border-bottom:1px solid #30363d;margin:4px 0"></div>').join('')}
+      </div>`;
+    }
+  }
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ── View Switching ─────────────────────────────────────────────────────────────
+function showView(view) {
+  document.getElementById('groups-view').style.display = view === 'groups' ? 'grid' : 'none';
+  document.getElementById('bracket-view').style.display = view === 'bracket' ? 'block' : 'none';
+  document.getElementById('btn-groups').className = view === 'groups' ? 'active' : '';
+  document.getElementById('btn-bracket').className = view === 'bracket' ? 'active' : '';
+  if (view === 'bracket') renderBracket();
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  renderGroups();
+  await loadBracketData();
+  refreshStandings();
+});
+</script>
+</body>
+</html>

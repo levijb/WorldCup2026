@@ -1,0 +1,55 @@
+name: Live Query (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      match_focus:
+        description: "Focus on specific match e.g. 'Brazil vs Morocco' (leave blank for all)"
+        required: false
+        default: ''
+
+jobs:
+  live-query:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Configure git for auto-commit
+        run: |
+          git config user.name "WorldCup2026 Bot"
+          git config user.email "actions@github.com"
+
+      - name: Run live query
+        env:
+          THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+          API_SPORTS_KEY: ${{ secrets.API_SPORTS_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_TO_EMAIL: ${{ secrets.RESEND_TO_EMAIL }}
+          STATS_API_KEY: ${{ secrets.STATS_API_KEY }}
+        run: |
+          python agent/live_query.py \
+            --match "${{ github.event.inputs.match_focus }}" \
+            --save
+
+      - name: Commit and push live report
+        run: |
+          git add reports/
+          if ! git diff --cached --quiet; then
+            git commit -m "report: live query $(date +'%Y-%m-%d %H:%M')"
+            git push
+          else
+            echo "No changes to commit."
+          fi
