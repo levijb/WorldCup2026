@@ -360,6 +360,27 @@ Use specific American odds numbers. Be concise but thorough. If no strong plays 
 """
 
 
+# ── WC Odds Caching ───────────────────────────────────────────────────────────
+
+def cache_upcoming_wc_odds() -> None:
+    """Cache Pinnacle pre-match odds for WC matches in the next 3 days.
+
+    Requires STATS_API_KEY. Silently skips if the key is absent or if the
+    import fails. Never raises — a caching failure must not block the report.
+    """
+    if not os.getenv("STATS_API_KEY", ""):
+        return
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(ROOT / "model"))
+        from data_collector import pull_wc_prematch_odds  # noqa: PLC0415
+        result = pull_wc_prematch_odds(resume=True, lookahead_days=3)
+        if result.get("saved"):
+            print(f"[ODDS CACHE] Saved {result['saved']} Pinnacle odds file(s) for upcoming WC matches")
+    except Exception as e:
+        print(f"[WARN] WC odds caching skipped: {e}", file=sys.stderr)
+
+
 # ── Model Predictions ──────────────────────────────────────────────────────────
 
 def load_model_predictions_markdown() -> str:
@@ -603,11 +624,14 @@ def main() -> None:
     print("[FETCH] Injuries...")
     injuries = fetch_injuries()
 
-    # 3. Load yesterday's cache for line movement comparison
+    # 3. Cache upcoming Pinnacle odds for the next 3 days (optional — requires STATS_API_KEY)
+    cache_upcoming_wc_odds()
+
+    # 4. Load yesterday's cache for line movement comparison
     previous_cache = load_odds_cache()
     line_movements = compute_line_movements(odds_result["data"], previous_cache)
 
-    # 4. Web search for news (only if not dry-run — costs API tokens)
+    # 5. Web search for news (only if not dry-run — costs API tokens)
     if not args.dry_run:
         print("[FETCH] News via web search...")
         try:
@@ -619,11 +643,11 @@ def main() -> None:
     else:
         news = "(news search skipped in dry-run mode)"
 
-    # 5. Load model predictions
+    # 6. Load model predictions
     print("[MODEL] Loading predictions...")
     model_predictions_md = load_model_predictions_markdown()
 
-    # 6. Build prompt
+    # 7. Build prompt
     static_context = build_static_context()
     dynamic_content = build_dynamic_content(
         today_str=today_str,
@@ -650,22 +674,22 @@ def main() -> None:
         print("[DRY RUN] Skipping Claude API call, report save, git push, and email.")
         return
 
-    # 7. Call Claude
+    # 8. Call Claude
     print("[CLAUDE] Generating report...")
     report_text = call_claude(system_prompt, static_context, dynamic_content)
 
-    # 8. Save odds cache (before saving report so quota is current)
+    # 9. Save odds cache (before saving report so quota is current)
     save_odds_cache(odds_result["data"])
 
-    # 9. Save report
+    # 10. Save report
     quota_remaining = odds_result.get("quota_remaining", "unknown")
     report_path = save_report(report_text, today_str, quota_remaining)
 
-    # 10. Git commit and push
+    # 11. Git commit and push
     if not args.no_push:
         git_commit_and_push(report_path, today_str)
 
-    # 11. Send emails
+    # 12. Send emails
     if not args.no_email:
         send_emails(report_text, today_str)
 

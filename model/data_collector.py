@@ -3,7 +3,8 @@ data_collector.py — One-time bulk data pull from TheStatsAPI during trial peri
 
 Run all phases during the 7-day trial. After that, daily operations use only
 The Odds API and API-Sports — TheStatsAPI is NOT called in morning_report.py
-or live_query.py.
+or live_query.py, EXCEPT: pull_wc_prematch_odds() is called by morning_report.py
+with a 3-day lookahead to progressively cache upcoming match Pinnacle odds.
 
 Usage:
     python model/data_collector.py --teams-only     # pull team match history first
@@ -248,8 +249,11 @@ def pull_xg_data(resume: bool = False, dry_run: bool = False) -> None:
         try:
             data = stats_api_get(f"/football/matches/{match_id}/stats")
             out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        except requests.RequestException as e:
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
             print(f"  [ERROR] xG for match {match_id}: {e}")
+            continue
 
     print(f"[OK] xG data done. {len(list(RAW_XG_DIR.glob('*.json')))} xG files saved.")
 
@@ -316,8 +320,10 @@ def pull_historical_wc(resume: bool = False, dry_run: bool = False) -> None:
                         try:
                             xg_data = stats_api_get(f"/football/matches/{match_id}/stats")
                             xg_path.write_text(json.dumps(xg_data, indent=2), encoding="utf-8")
-                        except requests.RequestException:
-                            pass
+                        except KeyboardInterrupt:
+                            raise
+                        except Exception:
+                            pass  # xG is best-effort; skip silently
         except requests.RequestException as e:
             print(f"  [ERROR] WC {year} pull failed: {e}")
 
@@ -326,44 +332,99 @@ def pull_historical_wc(resume: bool = False, dry_run: bool = False) -> None:
 
 # ── Phase 6: WC 2026 pre-match odds (Pinnacle) ───────────────────────────────
 
-def pull_wc_prematch_odds(resume: bool = False, dry_run: bool = False) -> None:
-    print(f"\n[PHASE 5] Pulling Pinnacle pre-match odds for all WC 2026 fixtures...")
-    print(f"  Using competition_id={WC_COMPETITION_ID}, season_id={WC_SEASON_ID}")
+def _parse_match_date(match: dict):
+    """Return a date object from a match record, or None if unparseable."""
+    raw = (
+        match.get("date")
+        or match.get("utc_date")
+        or match.get("match_date")
+        or match.get("kickoff")
+        or match.get("datetime")
+    )
+    if not raw:
+        return None
+    try:
+        return datetime.fromisoformat(str(raw).replace("Z", "+00:00")).date()
+    except (ValueError, TypeError):
+        return None
+
+
+def pull_wc_prematch_odds(
+    resume: bool = False,
+    dry_run: bool = False,
+    lookahead_days: int = 7,
+) -> dict:
+    """Fetch Pinnacle pre-match odds for WC fixtures within the lookahead window.
+
+    Only requests odds for matches where the date is within the next
+    `lookahead_days` days, or where status is 'live' or 'finished'.
+    Pinnacle only publishes odds once a match is close; future fixtures
+    silently return nothing. Run daily (or call from morning_report.py)
+    to accumulate odds incrementally.
+
+    Returns {"saved": N, "skipped": M}.
+    """
+    print(f"\n[PHASE 5] Pulling Pinnacle pre-match odds (lookahead={lookahead_days}d)...")
+    print(f"  competition_id={WC_COMPETITION_ID}, season_id={WC_SEASON_ID}")
 
     if dry_run:
-        print(f"[DRY RUN] Steps:")
-        print(f"  1. GET /football/matches?competition_id={WC_COMPETITION_ID}&season_id={WC_SEASON_ID}&per_page=100  (paginate)")
-        print(f"  2. GET /football/matches/<match_id>/odds  for each of the 104 fixtures")
+        print("[DRY RUN] Steps:")
+        print(f"  1. GET /football/matches?competition_id={WC_COMPETITION_ID}&season_id={WC_SEASON_ID}&per_page=100")
+        print(f"  2. Filter to matches within {lookahead_days}d or status=live/finished")
+        print(f"  3. GET /football/matches/<match_id>/odds for each eligible fixture")
         print(f"  Save to data/raw/wc_odds/<match_id>.json")
-        return
+        return {"saved": 0, "skipped": 0}
 
     RAW_WC_ODDS_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Fetch all 104 WC 2026 fixtures
     try:
         all_matches = paginate_all(
             "/football/matches",
             {"competition_id": WC_COMPETITION_ID, "season_id": WC_SEASON_ID, "per_page": 100},
         )
-        print(f"  Found {len(all_matches)} WC 2026 fixtures")
-    except requests.RequestException as e:
+        print(f"  Found {len(all_matches)} WC 2026 fixtures total")
+    except Exception as e:
         print(f"  [ERROR] Failed to fetch WC fixtures: {e}")
-        return
+        return {"saved": 0, "skipped": 0}
+
+    today = datetime.now(timezone.utc).date()
+    cutoff = today + timedelta(days=lookahead_days)
+
+    saved = 0
+    skipped = 0
 
     for match in tqdm(all_matches, desc="WC prematch odds"):
         match_id = str(match.get("id") or match.get("match_id", ""))
         if not match_id:
             continue
+
         out_path = RAW_WC_ODDS_DIR / f"{match_id}.json"
         if resume and out_path.exists():
             continue
+
+        status = str(match.get("status", "")).lower()
+        match_date = _parse_match_date(match)
+
+        # Skip matches outside the lookahead window that aren't live/finished.
+        # Pinnacle won't have odds for them yet; 404s waste quota.
+        in_window = match_date is not None and today <= match_date <= cutoff
+        is_active = status in ("live", "finished", "in_play", "halftime")
+        if not in_window and not is_active:
+            skipped += 1
+            continue
+
         try:
             odds_data = stats_api_get(f"/football/matches/{match_id}/odds")
             out_path.write_text(json.dumps(odds_data, indent=2), encoding="utf-8")
-        except requests.RequestException as e:
+            saved += 1
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
             print(f"  [ERROR] Odds for {match_id}: {e}")
+            continue
 
-    print(f"[OK] WC pre-match odds done. {len(list(RAW_WC_ODDS_DIR.glob('*.json')))} files saved.")
+    print(f"[OK] WC pre-match odds: {saved} saved, {skipped} skipped (outside {lookahead_days}d window)")
+    return {"saved": saved, "skipped": skipped}
 
 
 # ── Phase 7: Shotmaps ─────────────────────────────────────────────────────────
@@ -395,8 +456,11 @@ def pull_shotmaps(dry_run: bool = False) -> None:
         try:
             data = stats_api_get(f"/football/matches/{match_id}/shotmap")
             out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        except requests.RequestException as e:
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
             print(f"  [ERROR] Shotmap for {match_id}: {e}")
+            continue
 
     print(f"[OK] Shotmaps done. {len(list(RAW_SHOTMAPS_DIR.glob('*.json')))} files saved.")
 
@@ -437,8 +501,11 @@ def pull_wc_timelines(resume: bool = False, dry_run: bool = False) -> None:
         try:
             data = stats_api_get(f"/football/matches/{match_id}/timeline")
             out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        except requests.RequestException as e:
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
             print(f"  [ERROR] Timeline for {match_id}: {e}")
+            continue
 
     print(f"[OK] WC timelines done. {len(list(RAW_WC_TIMELINES_DIR.glob('*.json')))} files saved.")
 
@@ -479,10 +546,11 @@ def pull_match_player_stats(resume: bool = False, dry_run: bool = False) -> None
                 continue
             data = stats_api_get("/football/players/stats", {"match_id": match_id})
             out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        except (json.JSONDecodeError, OSError):
-            pass
-        except requests.RequestException as e:
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
             print(f"  [ERROR] Match player stats for {mf.stem}: {e}")
+            continue
 
     print(f"[OK] Match player stats done. {len(list(RAW_MATCH_PLAYERS_DIR.glob('*.json')))} files saved.")
 
@@ -543,7 +611,7 @@ def main() -> None:
         pull_historical_wc(resume=args.resume, dry_run=args.dry_run)
 
     if run_wc_odds:
-        pull_wc_prematch_odds(resume=args.resume, dry_run=args.dry_run)
+        pull_wc_prematch_odds(resume=args.resume, dry_run=args.dry_run, lookahead_days=7)
 
     if run_shotmaps:
         pull_shotmaps(dry_run=args.dry_run)
