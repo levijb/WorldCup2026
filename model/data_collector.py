@@ -510,19 +510,31 @@ def pull_wc_timelines(resume: bool = False, dry_run: bool = False) -> None:
     print(f"[OK] WC timelines done. {len(list(RAW_WC_TIMELINES_DIR.glob('*.json')))} files saved.")
 
 
-# ── Phase 9: Per-match player stats ──────────────────────────────────────────
+# ── Phase 9: Player stats via lineup discovery ────────────────────────────────
 
 def pull_match_player_stats(resume: bool = False, dry_run: bool = False) -> None:
+    """
+    Phase 1: Pull lineups from all cached matches to discover unique player IDs.
+    Phase 2: Fetch WC 2026 season stats for each discovered player.
+
+    TheStatsAPI has no per-match player stats endpoint at the trial tier.
+    Lineups (GET /football/matches/{id}/lineups) give player IDs; we then fetch
+    each player's WC season totals (goals/assists/shots/minutes) which are more
+    predictive for WC props than club-season form anyway.
+
+    Output: data/raw/match_player_stats/{player_id}.json (one file per player).
+    """
     match_files = list(RAW_MATCHES_DIR.glob("*.json"))
-    print(f"\n[PHASE 8] Pulling per-match player stats for {len(match_files)} matches...")
+    print(f"\n[PHASE 8] Pulling WC player stats (lineup discovery → WC season stats)...")
+    print(f"  {len(match_files)} match files to scan for player IDs")
 
     if dry_run:
-        print(f"[DRY RUN] Would fetch per-match player stats via GET /football/players/stats?match_id=<id>")
-        print(f"  for each of the {len(match_files)} cached match files")
+        print(f"[DRY RUN] Would:")
+        print(f"  1. GET /football/matches/<id>/lineups for {len(match_files)} matches → extract player IDs")
+        print(f"  2. GET /football/players/<id>/stats?season_id={WC_SEASON_ID} for each unique player")
         return
 
     # One-time cleanup: delete stale stats_pending files left by the deprecated --players phase.
-    # These files have no usable stats and would confuse --resume accounting.
     stale_deleted = 0
     for stale in RAW_PLAYERS_DIR.glob("*.json"):
         try:
@@ -535,24 +547,54 @@ def pull_match_player_stats(resume: bool = False, dry_run: bool = False) -> None
         print(f"  [CLEANUP] Deleted {stale_deleted} stale stats_pending file(s) from data/raw/player_stats/")
 
     RAW_MATCH_PLAYERS_DIR.mkdir(parents=True, exist_ok=True)
-    for mf in tqdm(match_files, desc="Match player stats"):
+
+    # Phase 1: collect unique player IDs from lineups
+    print("  Phase 1: Fetching lineups to discover player IDs...")
+    player_ids: dict = {}  # player_id → name
+    for mf in tqdm(match_files, desc="Lineups"):
         try:
             match = json.loads(mf.read_text(encoding="utf-8"))
             match_id = str(match.get("id") or match.get("match_id", ""))
             if not match_id:
                 continue
-            out_path = RAW_MATCH_PLAYERS_DIR / f"{match_id}.json"
-            if resume and out_path.exists():
-                continue
-            data = stats_api_get("/football/players/stats", {"match_id": match_id})
-            out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+            data = stats_api_get(f"/football/matches/{match_id}/lineups")
+            d = data.get("data", {})
+            for side in ["home", "away"]:
+                for group in ["starting_xi", "bench"]:
+                    for p in d.get(side, {}).get(group, []):
+                        pid = str(p.get("id") or "")
+                        name = str(p.get("name") or pid)
+                        if pid:
+                            player_ids[pid] = name
         except KeyboardInterrupt:
             raise
         except Exception as e:
-            print(f"  [ERROR] Match player stats for {mf.stem}: {e}")
+            print(f"  [ERROR] Lineups for {mf.stem}: {e}")
             continue
 
-    print(f"[OK] Match player stats done. {len(list(RAW_MATCH_PLAYERS_DIR.glob('*.json')))} files saved.")
+    print(f"  Found {len(player_ids)} unique players across all matches")
+
+    # Phase 2: fetch WC 2026 season stats for each discovered player
+    print(f"  Phase 2: Fetching WC 2026 season stats (season_id={WC_SEASON_ID})...")
+    saved = 0
+    skipped = 0
+    for pid, name in tqdm(player_ids.items(), desc="Player WC stats"):
+        out_path = RAW_MATCH_PLAYERS_DIR / f"{pid}.json"
+        if resume and out_path.exists():
+            skipped += 1
+            continue
+        try:
+            data = stats_api_get(f"/football/players/{pid}/stats", {"season_id": WC_SEASON_ID})
+            out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+            saved += 1
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
+            print(f"  [ERROR] WC stats for {name} ({pid}): {e}")
+            continue
+
+    total = len(list(RAW_MATCH_PLAYERS_DIR.glob("*.json")))
+    print(f"[OK] Player WC stats done. {saved} saved, {skipped} skipped (resume). {total} total files.")
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────

@@ -491,8 +491,9 @@ No changes needed for model layer.
 - Match timeline: `GET /football/matches/{match_id}/timeline`
 - Match shotmap: `GET /football/matches/{match_id}/shotmap`
 - Match odds: `GET /football/matches/{match_id}/odds`
-- Per-match player stats: `GET /football/players/stats?match_id={id}`
-- Player season stats (correct endpoint): `GET /football/players/{player_id}/stats?season_id=sn_XXXXXX`
+- Match lineups (player IDs + positions, NO per-player stats): `GET /football/matches/{match_id}/lineups`
+- Player season stats: `GET /football/players/{player_id}/stats?season_id=sn_XXXXXX`
+- NOTE: there is NO per-match player stats endpoint at the trial tier. `--match-players` uses lineups to discover player IDs then fetches WC season totals via the season stats endpoint.
 - Player search: `GET /football/players?search={accent-stripped name}` (paginate ALL pages)
 - WC fixtures: `GET /football/matches?competition_id=comp_6107&season_id=sn_118868&per_page=100`
 - WC seasons list: `GET /football/competitions/comp_6107/seasons`

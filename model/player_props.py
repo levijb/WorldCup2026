@@ -18,7 +18,6 @@ RAW_MATCHES_DIR = ROOT / "data" / "raw" / "matches"
 PROCESSED_DIR = ROOT / "data" / "processed"
 PLAYER_PROFILES_PATH = PROCESSED_DIR / "player_profiles.json"
 
-DECAY_RATE = 0.005  # same as poisson_model
 EXPECTED_MINUTES = 90.0
 
 
@@ -35,116 +34,63 @@ def _per_90(value: float | None, minutes: float) -> float | None:
     return value / minutes * 90
 
 
-def _decay_weight(days_ago: int) -> float:
-    return math.exp(-DECAY_RATE * days_ago)
-
-
 # ── Player Profile Computation ─────────────────────────────────────────────────
 
 def build_player_profiles_from_matches(
     match_players_dir: Path = RAW_MATCH_PLAYERS_DIR,
-    matches_dir: Path = RAW_MATCHES_DIR,
+    matches_dir: Path = RAW_MATCHES_DIR,  # kept for signature compatibility
 ) -> dict:
     """
-    Build player profiles by aggregating per-match stats across all cached matches.
-    Primary data source — better coverage than season stats API (no search ambiguity,
-    covers all leagues). Reads from data/raw/match_player_stats/ and
-    data/raw/matches/ (for match dates). Saves to data/processed/player_profiles.json.
+    Build player profiles from WC 2026 season stats files.
+    Each file in match_players_dir is a per-player season stats JSON pulled by
+    data_collector.py --match-players (one file per player_id, WC season totals).
+    No time-decay needed — files are already tournament-scoped.
     """
-    today = datetime.now(timezone.utc).date()
-
-    # Build match_id → date lookup so we can apply time-decay per match
-    match_dates: dict[str, object] = {}
-    for mf in matches_dir.glob("*.json"):
-        data = _load_json(mf)
-        if not data:
-            continue
-        date_str = (
-            data.get("date")
-            or data.get("match_date")
-            or (data.get("fixture") or {}).get("date", "")
-        )
-        if date_str:
-            try:
-                match_dates[mf.stem] = datetime.fromisoformat(
-                    str(date_str).replace("Z", "+00:00")
-                ).date()
-            except ValueError:
-                pass
-
     stats_files = list(match_players_dir.glob("*.json"))
     if not stats_files:
-        print("[WARN] No match player stats files found. Run: python model/data_collector.py --match-players")
+        print("[WARN] No player stats files found. Run: python model/data_collector.py --match-players")
         return {"generated_at": datetime.now(timezone.utc).isoformat(), "players": {}}
 
-    # Aggregate per player_id: weighted totals + weighted minutes
-    aggregates: dict[str, dict] = {}
+    profiles: dict[str, dict] = {}
 
     for sf in stats_files:
         data = _load_json(sf)
         if not data:
             continue
 
-        match_id = sf.stem
-        match_date = match_dates.get(match_id)
-        days_ago = max((today - match_date).days, 0) if match_date else 400
-        w = _decay_weight(days_ago)
-
-        # API returns {"data": [...]} or bare list
-        if isinstance(data, dict):
-            entries = data.get("data", [])
-        elif isinstance(data, list):
-            entries = data
-        else:
+        # Season stats: {"data": {...}} or bare dict
+        entry = data.get("data", data) if isinstance(data, dict) else None
+        if not entry or not isinstance(entry, dict):
             continue
 
-        for entry in entries:
-            pid = str(entry.get("player_id") or entry.get("id") or "")
-            if not pid:
-                continue
-            pname = str(entry.get("player_name") or entry.get("name") or pid)
-            minutes = float(entry.get("minutes_played") or entry.get("minutes") or 0)
-            if minutes < 1:
-                continue
-
-            if pid not in aggregates:
-                aggregates[pid] = {"name": pname, "player_id": pid, "totals": {}, "total_minutes": 0.0}
-
-            for stat_key in ["goals", "assists", "shots", "shots_on_target", "key_passes", "yellow_cards", "xg"]:
-                raw = entry.get(stat_key) or entry.get(stat_key.replace("_", ""))
-                if raw is not None:
-                    aggregates[pid]["totals"][stat_key] = (
-                        aggregates[pid]["totals"].get(stat_key, 0.0) + float(raw) * w
-                    )
-            aggregates[pid]["total_minutes"] += minutes * w
-
-    # Convert aggregates to per-90 profiles
-    profiles: dict[str, dict] = {}
-    for pid, agg in aggregates.items():
-        wm = agg["total_minutes"]
-        if wm < 45:  # require at least one half's worth of weighted minutes
+        pid = str(entry.get("player_id") or entry.get("id") or sf.stem)
+        pname = str(entry.get("player_name") or entry.get("name") or pid)
+        minutes = float(entry.get("minutes_played") or entry.get("minutes") or 0)
+        if minutes < 1:
             continue
+
         profile: dict = {
-            "name": agg["name"],
+            "name": pname,
             "player_id": pid,
-            "weighted_minutes": round(wm, 1),
+            "weighted_minutes": round(minutes, 1),
         }
         for stat_key in ["goals", "assists", "shots", "shots_on_target", "key_passes", "yellow_cards", "xg"]:
-            if stat_key in agg["totals"]:
-                p90 = _per_90(agg["totals"][stat_key], wm)
+            raw = entry.get(stat_key) or entry.get(stat_key.replace("_", ""))
+            if raw is not None:
+                p90 = _per_90(float(raw), minutes)
                 if p90 is not None:
                     profile[f"{stat_key}_per_90"] = round(p90, 4)
-        profiles[agg["name"]] = profile
+        profiles[pname] = profile
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "source": "match_player_stats",
-        "match_files_processed": len(stats_files),
+        "source": "wc_season_stats",
+        "player_files_processed": len(stats_files),
         "players": profiles,
     }
     PLAYER_PROFILES_PATH.write_text(json.dumps(output, indent=2), encoding="utf-8")
-    print(f"[OK] Player profiles saved ({len(profiles)} players from {len(stats_files)} match files)")
+    print(f"[OK] Player profiles saved ({len(profiles)} players from {len(stats_files)} stat files)")
     return output
 
 
