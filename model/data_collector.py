@@ -26,9 +26,13 @@ import unicodedata
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+import warnings
+
 import requests
 from dotenv import load_dotenv
 from tqdm import tqdm
+
+warnings.filterwarnings("ignore", category=Warning, module="requests")
 
 load_dotenv()
 
@@ -161,13 +165,17 @@ def stats_api_get(path: str, params: dict | None = None) -> dict:
     return {}
 
 
-def paginate_all(path: str, params: dict | None = None) -> list:
-    """Fetch all pages for a paginated endpoint."""
+def paginate_all(path: str, params: dict | None = None, max_pages: int = 10) -> list:
+    """Fetch all pages for a paginated endpoint. Returns partial results on error."""
     all_results = []
     page = 1
-    while True:
+    while page <= max_pages:
         p = {**(params or {}), "page": page}
-        data = stats_api_get(path, p)
+        try:
+            data = stats_api_get(path, p)
+        except Exception as e:
+            print(f"  [WARN] paginate_all: error on page {page} of {path!r}: {e} — returning {len(all_results)} results collected so far")
+            break
         results = data.get("data", [])
         all_results.extend(results)
         meta = data.get("meta", {})
@@ -190,34 +198,56 @@ def get_club_season_id() -> str | None:
     if CLUB_SEASON_2025_ID is not None:
         return CLUB_SEASON_2025_ID
 
+    # Hardcoded fallback from API docs example (sn_6125938 is a known valid season_id)
+    FALLBACK_SEASON_ID = "sn_6125938"
+
     try:
-        # Find Premier League competition
-        comps = stats_api_get("/football/competitions", {"search": "premier league"})
+        # Try multiple search terms for the Premier League
         pl_id = None
-        for c in comps.get("data", []):
-            name = c.get("name", "").lower()
-            country = c.get("country", "").lower()
-            if "premier league" in name and "england" in country:
-                pl_id = c.get("id") or c.get("competition_id")
+        for search_term in ("premier league", "english premier league", "epl"):
+            comps = stats_api_get("/football/competitions", {"search": search_term})
+            comp_list = comps.get("data", [])
+            print(f"  [DEBUG] Competition search {search_term!r}: {len(comp_list)} result(s)")
+            for c in comp_list:
+                name = c.get("name", "").lower()
+                country = (c.get("country") or c.get("country_name") or "").lower()
+                print(f"    competition: {c.get('name')!r}, country: {c.get('country') or c.get('country_name')!r}, id: {c.get('id') or c.get('competition_id')!r}")
+                if "premier league" in name and ("england" in country or "united kingdom" in country or country == ""):
+                    pl_id = c.get("id") or c.get("competition_id")
+                    print(f"  [INFO] Matched Premier League: id={pl_id!r}")
+                    break
+            if pl_id:
                 break
+
         if not pl_id:
-            print("  [WARN] Could not find Premier League competition ID")
-            return None
+            print(f"  [WARN] Could not find Premier League competition ID — using fallback season_id={FALLBACK_SEASON_ID}")
+            CLUB_SEASON_2025_ID = FALLBACK_SEASON_ID
+            return CLUB_SEASON_2025_ID
 
-        # Find the 2024/25 season
+        # Fetch and print all seasons so we can see the exact name format
         seasons_data = stats_api_get(f"/football/competitions/{pl_id}/seasons")
-        for s in seasons_data.get("data", []):
-            name = str(s.get("name", ""))
-            if "2024" in name or "2025" in name:
-                CLUB_SEASON_2025_ID = str(s.get("id") or s.get("season_id") or "")
-                if CLUB_SEASON_2025_ID:
-                    print(f"  [INFO] Club season 2024/25 ID: {CLUB_SEASON_2025_ID}")
-                    return CLUB_SEASON_2025_ID
+        seasons = seasons_data.get("data", [])
+        print(f"  [DEBUG] All seasons for competition {pl_id!r} ({len(seasons)} total):")
+        for s in seasons:
+            sid = s.get("id") or s.get("season_id")
+            print(f"    season: name={s.get('name')!r}, id={sid!r}, raw={json.dumps(s)}")
 
-        print("  [WARN] Could not find 2024/25 season in Premier League seasons list")
+        for s in seasons:
+            name = str(s.get("name", ""))
+            sid = str(s.get("id") or s.get("season_id") or "")
+            if sid and ("2024" in name or "2025" in name):
+                CLUB_SEASON_2025_ID = sid
+                print(f"  [INFO] Club season 2024/25 ID: {CLUB_SEASON_2025_ID}")
+                return CLUB_SEASON_2025_ID
+
+        print(f"  [WARN] Could not match 2024/25 in seasons list — using fallback season_id={FALLBACK_SEASON_ID}")
+        CLUB_SEASON_2025_ID = FALLBACK_SEASON_ID
+        return CLUB_SEASON_2025_ID
+
     except requests.RequestException as e:
-        print(f"  [WARN] Failed to retrieve club season ID: {e}")
-    return None
+        print(f"  [WARN] Failed to retrieve club season ID: {e} — using fallback season_id={FALLBACK_SEASON_ID}")
+        CLUB_SEASON_2025_ID = FALLBACK_SEASON_ID
+        return CLUB_SEASON_2025_ID
 
 
 # ── Phase 1: Build team ID map ─────────────────────────────────────────────────
@@ -352,9 +382,9 @@ def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
     # Resolve club season ID once for all players
     print("  Resolving club season ID for 2024/25...")
     season_id = get_club_season_id()
-    if not season_id:
-        print("  [WARN] No club season ID found — stats calls will use season_id=unknown")
-        season_id = "unknown"
+    season_id_valid = season_id and season_id != "unknown"
+    if not season_id_valid:
+        print("  [WARN] No valid club season ID — will cache player IDs only (stats skipped to avoid 400 errors)")
 
     for player_name, meta in tqdm(PLAYER_METADATA.items(), desc="Player stats"):
         expected_nationality = meta["nationality"]
@@ -397,6 +427,19 @@ def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
 
             out_path = RAW_PLAYERS_DIR / f"{player_id}.json"
             if resume and out_path.exists():
+                continue
+
+            if not season_id_valid:
+                # Cache the player ID lookup so we don't repeat the search later,
+                # but skip the stats call since we have no valid season_id.
+                out_data = {
+                    "name": player_name,
+                    "player_id": player_id,
+                    "stats": None,
+                    "stats_pending": True,
+                    "stats_skip_reason": "season_id unavailable at collection time",
+                }
+                out_path.write_text(json.dumps(out_data, indent=2), encoding="utf-8")
                 continue
 
             # Correct endpoint: GET /football/players/{player_id}/stats?season_id=sn_XXXXX
