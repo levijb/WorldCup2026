@@ -55,6 +55,10 @@ STATS_API_BASE = "https://api.thestatsapi.com/api"
 WC_COMPETITION_ID = "comp_6107"
 WC_SEASON_ID      = "sn_118868"
 
+# ── Confirmed Premier League season IDs (from API debug output) ───────────────
+CLUB_SEASON_2425_ID = "sn_3057848"  # PL 2024/25 — most recent full season
+CLUB_SEASON_2526_ID = "sn_6125938"  # PL 2025/26 — current season
+
 # ── All 48 World Cup 2026 teams ────────────────────────────────────────────────
 WC_2026_TEAMS = [
     # Group A
@@ -87,14 +91,14 @@ WC_2026_TEAMS = [
 # Keys are accent-free names used as both the search term and the display name.
 # nationality must match result["nationality"]; age must fall within age_range.
 PLAYER_METADATA: dict[str, dict] = {
-    "Kylian Mbappe":         {"nationality": "France",      "age_range": (24, 28)},
-    "Harry Kane":            {"nationality": "England",     "age_range": (30, 33)},
-    "Erling Haaland":        {"nationality": "Norway",      "age_range": (23, 26)},
-    "Lionel Messi":          {"nationality": "Argentina",   "age_range": (36, 39)},
-    "Cristiano Ronaldo":     {"nationality": "Portugal",    "age_range": (39, 42)},
-    "Vinicius Junior":       {"nationality": "Brazil",      "age_range": (23, 26)},
+    "Kylian Mbappe":         {"nationality": "France",      "age_range": (24, 28),  "search_fallback": "Mbappe"},
+    "Harry Kane":            {"nationality": "England",     "age_range": (30, 33),  "search_fallback": "Kane"},
+    "Erling Haaland":        {"nationality": "Norway",      "age_range": (23, 26),  "search_fallback": "Haaland"},
+    "Lionel Messi":          {"nationality": "Argentina",   "age_range": (36, 39),  "search_fallback": "Messi"},
+    "Cristiano Ronaldo":     {"nationality": "Portugal",    "age_range": (39, 42),  "search_fallback": "Ronaldo"},
+    "Vinicius Junior":       {"nationality": "Brazil",      "age_range": (23, 26),  "search_fallback": "Vinicius"},
     "Raphinha":              {"nationality": "Brazil",      "age_range": (27, 30)},
-    "Lamine Yamal":          {"nationality": "Spain",       "age_range": (16, 18)},
+    "Lamine Yamal":          {"nationality": "Spain",       "age_range": (16, 18),  "search_fallback": "Yamal"},
     "Pedri":                 {"nationality": "Spain",       "age_range": (21, 23)},
     "Mikel Oyarzabal":       {"nationality": "Spain",       "age_range": (26, 29)},
     "Julian Alvarez":        {"nationality": "Argentina",   "age_range": (24, 26)},
@@ -131,10 +135,6 @@ PLAYER_METADATA: dict[str, dict] = {
     "Marc-Andre ter Stegen": {"nationality": "Germany",     "age_range": (33, 36)},
     "Thibaut Courtois":      {"nationality": "Belgium",     "age_range": (31, 34)},
 }
-
-# ── Module-level cache for club season ID (set by get_club_season_id()) ───────
-CLUB_SEASON_2025_ID: str | None = None
-
 
 # ── Request helper ────────────────────────────────────────────────────────────
 # Simple timestamp-based throttle: guarantees ≥0.6s between every request.
@@ -173,81 +173,23 @@ def paginate_all(path: str, params: dict | None = None, max_pages: int = 10) -> 
         p = {**(params or {}), "page": page}
         try:
             data = stats_api_get(path, p)
+            results = data.get("data", [])
+            all_results.extend(results)
+            meta = data.get("meta", {})
+            total_pages = int(meta.get("total_pages", 1))
+            if page >= total_pages:
+                break
+            page += 1
+        except KeyboardInterrupt:
+            raise
         except Exception as e:
-            print(f"  [WARN] paginate_all: error on page {page} of {path!r}: {e} — returning {len(all_results)} results collected so far")
+            print(f"  [WARN] paginate_all page {page} failed for {path!r}: {e}")
             break
-        results = data.get("data", [])
-        all_results.extend(results)
-        meta = data.get("meta", {})
-        total_pages = meta.get("total_pages", 1)
-        if page >= total_pages:
-            break
-        page += 1
     return all_results
 
 
 def _strip_accents(s: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
-
-
-# ── Club season ID helper ─────────────────────────────────────────────────────
-
-def get_club_season_id() -> str | None:
-    """Find the Premier League 2024/25 season ID and cache it module-wide."""
-    global CLUB_SEASON_2025_ID
-    if CLUB_SEASON_2025_ID is not None:
-        return CLUB_SEASON_2025_ID
-
-    # Hardcoded fallback from API docs example (sn_6125938 is a known valid season_id)
-    FALLBACK_SEASON_ID = "sn_6125938"
-
-    try:
-        # Try multiple search terms for the Premier League
-        pl_id = None
-        for search_term in ("premier league", "english premier league", "epl"):
-            comps = stats_api_get("/football/competitions", {"search": search_term})
-            comp_list = comps.get("data", [])
-            print(f"  [DEBUG] Competition search {search_term!r}: {len(comp_list)} result(s)")
-            for c in comp_list:
-                name = c.get("name", "").lower()
-                country = (c.get("country") or c.get("country_name") or "").lower()
-                print(f"    competition: {c.get('name')!r}, country: {c.get('country') or c.get('country_name')!r}, id: {c.get('id') or c.get('competition_id')!r}")
-                if "premier league" in name and ("england" in country or "united kingdom" in country or country == ""):
-                    pl_id = c.get("id") or c.get("competition_id")
-                    print(f"  [INFO] Matched Premier League: id={pl_id!r}")
-                    break
-            if pl_id:
-                break
-
-        if not pl_id:
-            print(f"  [WARN] Could not find Premier League competition ID — using fallback season_id={FALLBACK_SEASON_ID}")
-            CLUB_SEASON_2025_ID = FALLBACK_SEASON_ID
-            return CLUB_SEASON_2025_ID
-
-        # Fetch and print all seasons so we can see the exact name format
-        seasons_data = stats_api_get(f"/football/competitions/{pl_id}/seasons")
-        seasons = seasons_data.get("data", [])
-        print(f"  [DEBUG] All seasons for competition {pl_id!r} ({len(seasons)} total):")
-        for s in seasons:
-            sid = s.get("id") or s.get("season_id")
-            print(f"    season: name={s.get('name')!r}, id={sid!r}, raw={json.dumps(s)}")
-
-        for s in seasons:
-            name = str(s.get("name", ""))
-            sid = str(s.get("id") or s.get("season_id") or "")
-            if sid and ("2024" in name or "2025" in name):
-                CLUB_SEASON_2025_ID = sid
-                print(f"  [INFO] Club season 2024/25 ID: {CLUB_SEASON_2025_ID}")
-                return CLUB_SEASON_2025_ID
-
-        print(f"  [WARN] Could not match 2024/25 in seasons list — using fallback season_id={FALLBACK_SEASON_ID}")
-        CLUB_SEASON_2025_ID = FALLBACK_SEASON_ID
-        return CLUB_SEASON_2025_ID
-
-    except requests.RequestException as e:
-        print(f"  [WARN] Failed to retrieve club season ID: {e} — using fallback season_id={FALLBACK_SEASON_ID}")
-        CLUB_SEASON_2025_ID = FALLBACK_SEASON_ID
-        return CLUB_SEASON_2025_ID
 
 
 # ── Phase 1: Build team ID map ─────────────────────────────────────────────────
@@ -367,43 +309,49 @@ def pull_xg_data(resume: bool = False, dry_run: bool = False) -> None:
 
 # ── Phase 4: Pull player stats ────────────────────────────────────────────────
 
+def _search_players(search_term: str) -> list:
+    """Search for players by name and return all paginated results."""
+    return paginate_all("/football/players", {"search": _strip_accents(search_term)})
+
+
 def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
     print(f"\n[PHASE 3] Pulling player stats for {len(PLAYER_METADATA)} key players...")
+    print(f"  Using season_id={CLUB_SEASON_2425_ID} (PL 2024/25)")
 
     if dry_run:
         print(f"[DRY RUN] Would search player IDs then fetch stats for {len(PLAYER_METADATA)} players")
         print("  First: GET /football/players?search=<accent-stripped name>  (all pages)")
+        print("  Fallback: last-name-only search if full-name returns empty")
         print("  Validate: nationality + age_range against PLAYER_METADATA")
-        print("  Then: GET /football/players/<player_id>/stats?season_id=<club_season_id>")
+        print(f"  Then: GET /football/players/<player_id>/stats?season_id={CLUB_SEASON_2425_ID}")
         return
 
     RAW_PLAYERS_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Resolve club season ID once for all players
-    print("  Resolving club season ID for 2024/25...")
-    season_id = get_club_season_id()
-    season_id_valid = season_id and season_id != "unknown"
-    if not season_id_valid:
-        print("  [WARN] No valid club season ID — will cache player IDs only (stats skipped to avoid 400 errors)")
-
     for player_name, meta in tqdm(PLAYER_METADATA.items(), desc="Player stats"):
         expected_nationality = meta["nationality"]
         age_lo, age_hi = meta["age_range"]
+        fallback_term = meta.get("search_fallback")
 
         try:
-            # Paginate ALL search result pages to find the right player
-            all_players = paginate_all(
-                "/football/players",
-                {"search": _strip_accents(player_name)},
-            )
+            # Primary search: full accent-stripped name
+            all_players = _search_players(player_name)
+
+            # Fallback: last-name-only search if primary returns nothing
+            search_term_used = player_name
+            if not all_players and fallback_term:
+                print(f"  [INFO] {player_name}: primary search empty, trying fallback {fallback_term!r}")
+                all_players = _search_players(fallback_term)
+                search_term_used = fallback_term
+
             if not all_players:
-                print(f"  [WARN] No results for: {player_name}")
+                print(f"  [WARN] No results for: {player_name} (tried {search_term_used!r})")
                 continue
 
-            # Log raw first result so we can verify exact field names from this API
-            print(f"  [DEBUG] {player_name} → first result: {json.dumps(all_players[0], ensure_ascii=False)}")
+            # Log raw first result so field names remain visible in output
+            print(f"  [DEBUG] {player_name} ({search_term_used!r}) → first result: {json.dumps(all_players[0], ensure_ascii=False)}")
 
-            # Scan ALL results across all pages for nationality + age match
+            # Scan ALL results for nationality + age match
             matched = None
             for candidate in all_players:
                 nat = candidate.get("nationality", "")
@@ -429,25 +377,26 @@ def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
             if resume and out_path.exists():
                 continue
 
-            if not season_id_valid:
-                # Cache the player ID lookup so we don't repeat the search later,
-                # but skip the stats call since we have no valid season_id.
-                out_data = {
-                    "name": player_name,
-                    "player_id": player_id,
-                    "stats": None,
-                    "stats_pending": True,
-                    "stats_skip_reason": "season_id unavailable at collection time",
-                }
-                out_path.write_text(json.dumps(out_data, indent=2), encoding="utf-8")
-                continue
+            # GET /football/players/{player_id}/stats?season_id=sn_XXXXX
+            try:
+                stats_data = stats_api_get(
+                    f"/football/players/{player_id}/stats",
+                    {"season_id": CLUB_SEASON_2425_ID},
+                )
+                out_data = {"name": player_name, "player_id": player_id, "stats": stats_data}
+            except requests.HTTPError as http_err:
+                if http_err.response is not None and http_err.response.status_code == 404:
+                    print(f"  [WARN] {player_name} (id={player_id}): stats 404 for season {CLUB_SEASON_2425_ID} — saving ID only")
+                    out_data = {
+                        "name": player_name,
+                        "player_id": player_id,
+                        "stats": None,
+                        "stats_pending": True,
+                        "stats_skip_reason": f"404 for season_id={CLUB_SEASON_2425_ID}",
+                    }
+                else:
+                    raise
 
-            # Correct endpoint: GET /football/players/{player_id}/stats?season_id=sn_XXXXX
-            stats_data = stats_api_get(
-                f"/football/players/{player_id}/stats",
-                {"season_id": season_id},
-            )
-            out_data = {"name": player_name, "player_id": player_id, "stats": stats_data}
             out_path.write_text(json.dumps(out_data, indent=2), encoding="utf-8")
 
         except requests.RequestException as e:
@@ -701,6 +650,7 @@ def main() -> None:
         print(f"Teams:       {len(WC_2026_TEAMS)}")
         print(f"Key players: {len(PLAYER_METADATA)}")
         print(f"WC IDs:      competition={WC_COMPETITION_ID}, season={WC_SEASON_ID}")
+        print(f"PL season:   2024/25={CLUB_SEASON_2425_ID}, 2025/26={CLUB_SEASON_2526_ID}")
         print(f"Phases:      teams={run_teams}, players={run_players}, historical={run_historical}")
         print(f"             wc_odds={run_wc_odds}, shotmaps={run_shotmaps}, timelines={run_timelines}")
         print(f"             match_players={run_match_players}")
