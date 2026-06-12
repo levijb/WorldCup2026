@@ -20,7 +20,6 @@ from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
-from ratelimit import limits, sleep_and_retry
 from tqdm import tqdm
 
 load_dotenv()
@@ -35,8 +34,6 @@ TEAM_ID_MAP_PATH = PROCESSED_DIR / "team_id_map.json"
 
 STATS_API_KEY = os.getenv("STATS_API_KEY", "")
 STATS_API_BASE = "https://api.thestatsapi.com/api"
-RATE_LIMIT_CALLS = 110
-RATE_LIMIT_PERIOD = 60
 
 # ── All 48 World Cup 2026 teams ────────────────────────────────────────────────
 WC_2026_TEAMS = [
@@ -66,31 +63,83 @@ WC_2026_TEAMS = [
     "Japan", "South Korea", "Saudi Arabia", "Australia",
 ]
 
-# ── Key players for initial player stats pull ──────────────────────────────────
-KEY_PLAYERS = [
-    "Kylian Mbappé", "Harry Kane", "Erling Haaland", "Lionel Messi", "Cristiano Ronaldo",
-    "Vinícius Júnior", "Raphinha", "Lamine Yamal", "Pedri", "Mikel Oyarzabal",
-    "Julián Álvarez", "Jude Bellingham", "Bukayo Saka", "Mohamed Salah", "Ousmane Dembélé",
-    "Michael Olise", "Martin Ødegaard", "Luis Díaz", "Neymar", "Bruno Fernandes",
-    "Cody Gakpo", "Memphis Depay", "Son Heung-min", "Kaoru Mitoma", "Sadio Mané",
-    "Leroy Sané", "Florian Wirtz", "Serge Gnabry", "Thomas Müller", "Paulo Dybala",
-    "Kevin De Bruyne", "Romelu Lukaku", "Charles De Ketelaere", "Marcelo Brozović",
-    "Luka Modrić", "İlkay Gündoğan", "Antoine Griezmann", "Marcus Thuram", "Jules Koundé",
-    "Wojciech Szczęsny", "Alisson Becker", "Ederson", "Marc-André ter Stegen", "Thibaut Courtois",
-]
+# ── Player metadata for identity validation during search ─────────────────────
+# Keys are accent-free names used as both the search term and the display name.
+# nationality must match result["nationality"]; age must fall within age_range.
+PLAYER_METADATA: dict[str, dict] = {
+    "Kylian Mbappe":         {"nationality": "France",      "age_range": (24, 28)},
+    "Harry Kane":            {"nationality": "England",     "age_range": (30, 33)},
+    "Erling Haaland":        {"nationality": "Norway",      "age_range": (23, 26)},
+    "Lionel Messi":          {"nationality": "Argentina",   "age_range": (36, 39)},
+    "Cristiano Ronaldo":     {"nationality": "Portugal",    "age_range": (39, 42)},
+    "Vinicius Junior":       {"nationality": "Brazil",      "age_range": (23, 26)},
+    "Raphinha":              {"nationality": "Brazil",      "age_range": (27, 30)},
+    "Lamine Yamal":          {"nationality": "Spain",       "age_range": (16, 18)},
+    "Pedri":                 {"nationality": "Spain",       "age_range": (21, 23)},
+    "Mikel Oyarzabal":       {"nationality": "Spain",       "age_range": (26, 29)},
+    "Julian Alvarez":        {"nationality": "Argentina",   "age_range": (24, 26)},
+    "Jude Bellingham":       {"nationality": "England",     "age_range": (20, 22)},
+    "Bukayo Saka":           {"nationality": "England",     "age_range": (22, 24)},
+    "Mohamed Salah":         {"nationality": "Egypt",       "age_range": (31, 34)},
+    "Ousmane Dembele":       {"nationality": "France",      "age_range": (26, 29)},
+    "Michael Olise":         {"nationality": "France",      "age_range": (22, 24)},
+    "Martin Odegaard":       {"nationality": "Norway",      "age_range": (25, 28)},
+    "Luis Diaz":             {"nationality": "Colombia",    "age_range": (27, 29)},
+    "Neymar":                {"nationality": "Brazil",      "age_range": (32, 35)},
+    "Bruno Fernandes":       {"nationality": "Portugal",    "age_range": (29, 32)},
+    "Cody Gakpo":            {"nationality": "Netherlands", "age_range": (24, 27)},
+    "Memphis Depay":         {"nationality": "Netherlands", "age_range": (29, 32)},
+    "Son Heung-min":         {"nationality": "South Korea", "age_range": (31, 34)},
+    "Kaoru Mitoma":          {"nationality": "Japan",       "age_range": (26, 29)},
+    "Sadio Mane":            {"nationality": "Senegal",     "age_range": (31, 34)},
+    "Leroy Sane":            {"nationality": "Germany",     "age_range": (29, 31)},
+    "Florian Wirtz":         {"nationality": "Germany",     "age_range": (20, 22)},
+    "Serge Gnabry":          {"nationality": "Germany",     "age_range": (28, 31)},
+    "Thomas Muller":         {"nationality": "Germany",     "age_range": (34, 37)},
+    "Paulo Dybala":          {"nationality": "Argentina",   "age_range": (30, 33)},
+    "Kevin De Bruyne":       {"nationality": "Belgium",     "age_range": (32, 35)},
+    "Romelu Lukaku":         {"nationality": "Belgium",     "age_range": (30, 33)},
+    "Charles De Ketelaere":  {"nationality": "Belgium",     "age_range": (23, 25)},
+    "Marcelo Brozovic":      {"nationality": "Croatia",     "age_range": (31, 34)},
+    "Luka Modric":           {"nationality": "Croatia",     "age_range": (38, 41)},
+    "Ilkay Gundogan":        {"nationality": "Germany",     "age_range": (33, 36)},
+    "Antoine Griezmann":     {"nationality": "France",      "age_range": (32, 35)},
+    "Marcus Thuram":         {"nationality": "France",      "age_range": (26, 29)},
+    "Jules Kounde":          {"nationality": "France",      "age_range": (25, 28)},
+    "Alisson Becker":        {"nationality": "Brazil",      "age_range": (31, 34)},
+    "Ederson":               {"nationality": "Brazil",      "age_range": (30, 33)},
+    "Marc-Andre ter Stegen": {"nationality": "Germany",     "age_range": (33, 36)},
+    "Thibaut Courtois":      {"nationality": "Belgium",     "age_range": (31, 34)},
+}
 
 
-# ── Rate-limited request helper ────────────────────────────────────────────────
+# ── Request helper ────────────────────────────────────────────────────────────
+# Simple timestamp-based throttle: guarantees ≥0.6s between every request.
 
-@sleep_and_retry
-@limits(calls=RATE_LIMIT_CALLS, period=RATE_LIMIT_PERIOD)
+_last_request_time = 0.0
+
+
 def stats_api_get(path: str, params: dict | None = None) -> dict:
-    """Rate-limited GET to TheStatsAPI."""
+    """GET to TheStatsAPI with minimum 0.6s gap and 429-retry logic."""
+    global _last_request_time
+    elapsed = time.time() - _last_request_time
+    if elapsed < 0.6:
+        time.sleep(0.6 - elapsed)
+    _last_request_time = time.time()
+
     url = f"{STATS_API_BASE}{path}"
     headers = {"Authorization": f"Bearer {STATS_API_KEY}"}
-    resp = requests.get(url, headers=headers, params=params or {}, timeout=20)
-    resp.raise_for_status()
-    return resp.json()
+    for attempt in range(3):
+        resp = requests.get(url, headers=headers, params=params or {}, timeout=20)
+        if resp.status_code == 429:
+            if attempt < 2:
+                print(f"  [WARN] 429 received, waiting 10s... (attempt {attempt + 1}/3)")
+                time.sleep(10)
+                continue
+            resp.raise_for_status()
+        resp.raise_for_status()
+        return resp.json()
+    return {}
 
 
 def paginate_all(path: str, params: dict | None = None) -> list:
@@ -127,8 +176,14 @@ def build_team_id_map(dry_run: bool = False) -> dict:
     team_map = {}
     for team_name in tqdm(WC_2026_TEAMS, desc="Team ID lookup"):
         try:
-            results = stats_api_get("/football/teams", {"search": team_name})
-            teams = results.get("data", [])
+            # Try alternate search term first for known problem names
+            search_names = ["USA", "United States"] if team_name == "United States" else [team_name]
+            teams = []
+            for search_name in search_names:
+                results = stats_api_get("/football/teams", {"search": search_name})
+                teams = results.get("data", [])
+                if teams:
+                    break
             if teams:
                 team_map[team_name] = teams[0].get("id") or teams[0].get("team_id")
             else:
@@ -223,37 +278,55 @@ def pull_xg_data(resume: bool = False, dry_run: bool = False) -> None:
 
 # ── Phase 4: Pull player stats ────────────────────────────────────────────────
 
+def _strip_accents(s: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
+
+
 def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
-    print(f"\n[PHASE 3] Pulling player stats for {len(KEY_PLAYERS)} key players...")
+    print(f"\n[PHASE 3] Pulling player stats for {len(PLAYER_METADATA)} key players...")
 
     if dry_run:
-        print(f"[DRY RUN] Would search player IDs then fetch stats for {len(KEY_PLAYERS)} players")
-        print("  First: GET /football/players?search=<name>")
-        print("  Then:  GET /football/players/stats?player_id=<id>&season=2025")
+        print(f"[DRY RUN] Would search player IDs then fetch stats for {len(PLAYER_METADATA)} players")
+        print("  First: GET /football/players?search=<accent-stripped name>")
+        print("  Then:  validate nationality + age, then GET /football/players/stats?player_id=<id>&season=2025")
         return
 
     RAW_PLAYERS_DIR.mkdir(parents=True, exist_ok=True)
 
-    for player_name in tqdm(KEY_PLAYERS, desc="Player stats"):
-        try:
-            # Strip accents so "Mbappé" → "Mbappe", "Vinícius" → "Vinicius", etc.
-            search_name = "".join(
-                c for c in unicodedata.normalize("NFD", player_name)
-                if unicodedata.category(c) != "Mn"
-            )
+    for player_name, meta in tqdm(PLAYER_METADATA.items(), desc="Player stats"):
+        expected_nationality = meta["nationality"]
+        age_lo, age_hi = meta["age_range"]
 
-            search_result = stats_api_get("/football/players", {"search": search_name})
+        try:
+            search_result = stats_api_get("/football/players", {"search": _strip_accents(player_name)})
             players = search_result.get("data", [])
             if not players:
-                print(f"  [WARN] No player found: {player_name} (searched: {search_name!r})")
+                print(f"  [WARN] No results for: {player_name}")
                 continue
 
-            # Log raw first result to verify exact ID field name from this API
+            # Log raw first result so we can verify exact field names from this API
             print(f"  [DEBUG] {player_name} → first result: {json.dumps(players[0], ensure_ascii=False)}")
 
-            player_id = players[0].get("id") or players[0].get("player_id")
+            # Scan ALL results for the one matching nationality + age
+            matched = None
+            for candidate in players:
+                nat = candidate.get("nationality", "")
+                age = candidate.get("age")
+                if nat == expected_nationality and age is not None and age_lo <= int(age) <= age_hi:
+                    matched = candidate
+                    break
+
+            if matched is None:
+                print(
+                    f"  [WARN] No match for {player_name} "
+                    f"(want nationality={expected_nationality!r}, age {age_lo}–{age_hi}) "
+                    f"across {len(players)} result(s)"
+                )
+                continue
+
+            player_id = matched.get("id") or matched.get("player_id")
             if not player_id:
-                print(f"  [WARN] No ID field found in result for: {player_name}")
+                print(f"  [WARN] No ID field in matched result for: {player_name}")
                 continue
 
             out_path = RAW_PLAYERS_DIR / f"{player_id}.json"
@@ -265,7 +338,6 @@ def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
                 "/football/players/stats",
                 {"player_id": player_id, "season": 2025},
             )
-            # Merge name + stats
             out_data = {"name": player_name, "player_id": player_id, "stats": stats_data}
             out_path.write_text(json.dumps(out_data, indent=2), encoding="utf-8")
 
@@ -357,7 +429,7 @@ def main() -> None:
         print("DRY RUN — Fetch Plan")
         print("=" * 60)
         print(f"Teams: {len(WC_2026_TEAMS)}")
-        print(f"Key players: {len(KEY_PLAYERS)}")
+        print(f"Key players: {len(PLAYER_METADATA)}")
         print(f"Phases to run: teams={run_teams}, players={run_players}, historical={run_historical}")
         print()
 
