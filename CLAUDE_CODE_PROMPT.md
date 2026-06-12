@@ -290,7 +290,7 @@ This addendum supersedes any conflicting instructions above. Add the following t
 - All raw API responses saved to `data/raw/` (gitignored)
 - Computed model outputs saved to `data/processed/` (committed)
 - Model files in `model/` directory
-- Rate limiting: TheStatsAPI allows 120 req/min — always throttle with `ratelimit` library
+- Rate limiting: TheStatsAPI — use `_last_request_time` module-level float + `time.sleep()` to enforce ≥0.6s between requests; do NOT use the `ratelimit` library (causes crashes)
 - All data stored with UTC timestamps; display in ET
 
 ---
@@ -307,7 +307,7 @@ This is a ONE-TIME bulk data pull script to run during the 7-day TheStatsAPI tri
 
 3. **xG data for every collected match** — endpoint: `GET /api/football/matches/{match_id}/stats`. Save to `data/raw/xg/{match_id}.json`. Only pull if `xg_available: true` in the match record.
 
-4. **Season player stats for all WC squad members** — endpoint: `GET /api/football/players/stats?player_id={id}&season=2025`. Save to `data/raw/player_stats/{player_id}.json`. Start from a hardcoded list of ~200 key players (the main attackers, midfielders, and GKs for top 20 teams). Expand to full squads if quota allows.
+4. **Season player stats for all WC squad members** — endpoint: `GET /api/football/players/{player_id}/stats?season_id=sn_XXXXXX` (resolve club season ID via `get_club_season_id()`). Save to `data/raw/player_stats/{player_id}.json`. Start from the `PLAYER_METADATA` dict (43 key players). Resolve player IDs by searching with accent-stripped names and validating nationality + age against `PLAYER_METADATA`; paginate ALL search result pages before picking a match.
 
 5. **2018 and 2022 World Cup match xG** — pull historical WC matches and their xG for tournament-specific calibration. Save to `data/raw/wc_historical/`.
 
@@ -483,29 +483,42 @@ No changes needed for model layer.
 
 ### API REFERENCE ADDITIONS
 
-**TheStatsAPI:**
+**TheStatsAPI (trial-only — bulk data collection during 7-day trial; NOT used in morning_report.py or live_query.py):**
 - Base: `https://api.thestatsapi.com/api`
 - Auth header: `Authorization: Bearer KEY`
 - All matches for a team: `GET /football/matches?team_id={id}&from=YYYY-MM-DD&to=YYYY-MM-DD`
 - Match stats + xG: `GET /football/matches/{match_id}/stats`
-- Player season stats: `GET /football/players/stats?player_id={id}&season=2025`
-- Player per-match stats: `GET /football/players/stats?player_id={id}&match_id={id}`
-- Lineups: `GET /football/matches/{match_id}/lineups`
-- Historical WC matches: `GET /football/matches?competition_id={WC_ID}&season=2022`
+- Match timeline: `GET /football/matches/{match_id}/timeline`
+- Match shotmap: `GET /football/matches/{match_id}/shotmap`
+- Match odds: `GET /football/matches/{match_id}/odds`
+- Per-match player stats: `GET /football/players/stats?match_id={id}`
+- Player season stats (correct endpoint): `GET /football/players/{player_id}/stats?season_id=sn_XXXXXX`
+- Player search: `GET /football/players?search={accent-stripped name}` (paginate ALL pages)
+- WC fixtures: `GET /football/matches?competition_id=comp_6107&season_id=sn_118868&per_page=100`
+- WC seasons list: `GET /football/competitions/comp_6107/seasons`
 - Competition search: `GET /football/competitions?search=world+cup`
+- Club season list: `GET /football/competitions/{comp_id}/seasons`
 - Pagination: all endpoints return `meta.total_pages` — always paginate fully
-- Rate limit: 120 req/min — use `@sleep_and_retry @limits(calls=110, period=60)` decorator
+- Rate limit: maintain ≥0.6s between every request using `_last_request_time` timestamp tracker (no decorator); retry on 429 with 10s backoff, 3 attempts max
+
+**Confirmed WC 2026 IDs:**
+- `WC_COMPETITION_ID = "comp_6107"`
+- `WC_SEASON_ID = "sn_118868"`
+
+**New CLI flags in data_collector.py:**
+- `--wc-odds` — Pull Pinnacle pre-match odds for all 104 WC 2026 fixtures → `data/raw/wc_odds/`
+- `--shotmaps` — Pull shotmap data for matches with `xg_available=true` → `data/raw/shotmaps/`
+- `--timelines` — Pull event timelines for finished WC 2026 matches → `data/raw/wc_timelines/`
+- `--match-players` — Pull per-match player stats for all cached matches → `data/raw/match_player_stats/`
 
 **Data flow summary:**
 ```
-TheStatsAPI (trial: bulk pull once)
+TheStatsAPI (trial: bulk pull once — data_collector.py only)
     → data/raw/ (cached locally, gitignored)
     → model/poisson_model.py (processes raw into ratings)
     → data/processed/team_ratings.json (committed)
 
-TheStatsAPI (ongoing: daily WC match updates)
-    + API-Sports (scores, injuries, lineups)
-    + The Odds API (live DK lines)
+The Odds API + API-Sports (daily operations — morning_report.py and live_query.py ONLY)
     → model/predictions.py (daily run)
     → data/processed/model_predictions.json
     → agent/morning_report.py (reads predictions + calls Claude)
@@ -513,14 +526,18 @@ TheStatsAPI (ongoing: daily WC match updates)
 
 **Important notes for Claude Code:**
 - TheStatsAPI uses `Bearer` token auth, not an API key query param
-- Competition IDs are strings like `comp_3039` not integers — discover the WC 2026 ID via `GET /football/competitions?search=world+cup+2026`
+- WC 2026 competition ID is `comp_6107`, season ID is `sn_118868` — use these constants, do not search for them
 - Team IDs are strings like `tm_50` — build the team_id_map.json lookup first before any bulk pulling
 - The `xg_available` field on a match record tells you whether to bother calling the stats endpoint
-- Player IDs are integers in the player stats endpoint based on example responses
+- `home_team` and `away_team` in match records are objects `{"id": "tm_XXX", "name": "..."}` not plain strings
+- Player search returns results by nationality and age fields — validate both before accepting a match
+- Always strip accents from player names before searching: `unicodedata.normalize('NFD', name)` then filter non-Mn chars
+- Correct player stats endpoint: `GET /football/players/{player_id}/stats?season_id=sn_XXXXXX` (NOT `?player_id=X&season=2025`)
 - Exponential decay weight formula: `import math; weight = math.exp(-0.005 * days_ago)` where `days_ago = (today - match_date).days`
 - For Dixon-Coles, the correction only applies to scorelines where both scores are 0 or 1. The standard rho value of -0.13 works well; no need to estimate it from data for this project.
 - `scipy.stats.poisson.pmf(k, mu)` is the core function for Poisson probabilities
 - The model needs at least 5 matches of data per team to produce meaningful ratings — flag teams with fewer matches
+- `compute_vig_free_prob(home_odds, draw_odds, away_odds)` removes Pinnacle vig from 3-way lines; pass the `home`/`draw`/`away` decimal result as `pinnacle_odds` to `compute_edge()`
 
 ---
 

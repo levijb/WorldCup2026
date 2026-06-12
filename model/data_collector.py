@@ -1,10 +1,18 @@
 """
 data_collector.py — One-time bulk data pull from TheStatsAPI during trial period.
 
+Run all phases during the 7-day trial. After that, daily operations use only
+The Odds API and API-Sports — TheStatsAPI is NOT called in morning_report.py
+or live_query.py.
+
 Usage:
     python model/data_collector.py --teams-only     # pull team match history first
     python model/data_collector.py --players         # add player stats
-    python model/data_collector.py --historical      # add 2018/2022 WC data
+    python model/data_collector.py --historical      # add 2018/2022 WC historical data
+    python model/data_collector.py --wc-odds         # Pinnacle pre-match odds for WC 2026
+    python model/data_collector.py --shotmaps        # shotmap data for matches with xG
+    python model/data_collector.py --timelines       # event timelines for finished WC matches
+    python model/data_collector.py --match-players   # per-match player stats
     python model/data_collector.py --resume          # skip already-cached files
     python model/data_collector.py --dry-run         # print plan, no API calls
 """
@@ -25,15 +33,23 @@ from tqdm import tqdm
 load_dotenv()
 
 ROOT = Path(__file__).resolve().parent.parent
-RAW_MATCHES_DIR = ROOT / "data" / "raw" / "matches"
-RAW_XG_DIR = ROOT / "data" / "raw" / "xg"
-RAW_PLAYERS_DIR = ROOT / "data" / "raw" / "player_stats"
-RAW_HISTORICAL_DIR = ROOT / "data" / "raw" / "wc_historical"
-PROCESSED_DIR = ROOT / "data" / "processed"
-TEAM_ID_MAP_PATH = PROCESSED_DIR / "team_id_map.json"
+RAW_MATCHES_DIR        = ROOT / "data" / "raw" / "matches"
+RAW_XG_DIR             = ROOT / "data" / "raw" / "xg"
+RAW_PLAYERS_DIR        = ROOT / "data" / "raw" / "player_stats"
+RAW_HISTORICAL_DIR     = ROOT / "data" / "raw" / "wc_historical"
+RAW_WC_ODDS_DIR        = ROOT / "data" / "raw" / "wc_odds"
+RAW_SHOTMAPS_DIR       = ROOT / "data" / "raw" / "shotmaps"
+RAW_WC_TIMELINES_DIR   = ROOT / "data" / "raw" / "wc_timelines"
+RAW_MATCH_PLAYERS_DIR  = ROOT / "data" / "raw" / "match_player_stats"
+PROCESSED_DIR          = ROOT / "data" / "processed"
+TEAM_ID_MAP_PATH       = PROCESSED_DIR / "team_id_map.json"
 
-STATS_API_KEY = os.getenv("STATS_API_KEY", "")
+STATS_API_KEY  = os.getenv("STATS_API_KEY", "")
 STATS_API_BASE = "https://api.thestatsapi.com/api"
+
+# ── Confirmed WC 2026 IDs ──────────────────────────────────────────────────────
+WC_COMPETITION_ID = "comp_6107"
+WC_SEASON_ID      = "sn_118868"
 
 # ── All 48 World Cup 2026 teams ────────────────────────────────────────────────
 WC_2026_TEAMS = [
@@ -112,6 +128,9 @@ PLAYER_METADATA: dict[str, dict] = {
     "Thibaut Courtois":      {"nationality": "Belgium",     "age_range": (31, 34)},
 }
 
+# ── Module-level cache for club season ID (set by get_club_season_id()) ───────
+CLUB_SEASON_2025_ID: str | None = None
+
 
 # ── Request helper ────────────────────────────────────────────────────────────
 # Simple timestamp-based throttle: guarantees ≥0.6s between every request.
@@ -157,6 +176,48 @@ def paginate_all(path: str, params: dict | None = None) -> list:
             break
         page += 1
     return all_results
+
+
+def _strip_accents(s: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
+
+
+# ── Club season ID helper ─────────────────────────────────────────────────────
+
+def get_club_season_id() -> str | None:
+    """Find the Premier League 2024/25 season ID and cache it module-wide."""
+    global CLUB_SEASON_2025_ID
+    if CLUB_SEASON_2025_ID is not None:
+        return CLUB_SEASON_2025_ID
+
+    try:
+        # Find Premier League competition
+        comps = stats_api_get("/football/competitions", {"search": "premier league"})
+        pl_id = None
+        for c in comps.get("data", []):
+            name = c.get("name", "").lower()
+            country = c.get("country", "").lower()
+            if "premier league" in name and "england" in country:
+                pl_id = c.get("id") or c.get("competition_id")
+                break
+        if not pl_id:
+            print("  [WARN] Could not find Premier League competition ID")
+            return None
+
+        # Find the 2024/25 season
+        seasons_data = stats_api_get(f"/football/competitions/{pl_id}/seasons")
+        for s in seasons_data.get("data", []):
+            name = str(s.get("name", ""))
+            if "2024" in name or "2025" in name:
+                CLUB_SEASON_2025_ID = str(s.get("id") or s.get("season_id") or "")
+                if CLUB_SEASON_2025_ID:
+                    print(f"  [INFO] Club season 2024/25 ID: {CLUB_SEASON_2025_ID}")
+                    return CLUB_SEASON_2025_ID
+
+        print("  [WARN] Could not find 2024/25 season in Premier League seasons list")
+    except requests.RequestException as e:
+        print(f"  [WARN] Failed to retrieve club season ID: {e}")
+    return None
 
 
 # ── Phase 1: Build team ID map ─────────────────────────────────────────────────
@@ -207,7 +268,7 @@ def pull_team_matches(team_map: dict, resume: bool = False, dry_run: bool = Fals
     print(f"\n[PHASE 1] Pulling match history for {len(team_map)} teams ({from_date} to {to_date})...")
 
     if dry_run:
-        total_est = len(team_map) * 30  # ~30 matches per team on average
+        total_est = len(team_map) * 30
         print(f"[DRY RUN] Would fetch ~{total_est} matches via GET /football/matches?team_id=<id>&from=&to=")
         print(f"  Estimated API calls: {len(team_map)} team queries + pagination")
         return
@@ -225,9 +286,7 @@ def pull_team_matches(team_map: dict, resume: bool = False, dry_run: bool = Fals
             )
             for match in matches:
                 match_id = str(match.get("id") or match.get("match_id", ""))
-                if not match_id:
-                    continue
-                if match_id in match_ids_seen:
+                if not match_id or match_id in match_ids_seen:
                     continue
                 match_ids_seen.add(match_id)
                 out_path = RAW_MATCHES_DIR / f"{match_id}.json"
@@ -259,7 +318,7 @@ def pull_xg_data(resume: bool = False, dry_run: bool = False) -> None:
     print(f"  {len(eligible)} matches have xG available.")
 
     if dry_run:
-        print(f"[DRY RUN] Would fetch xG stats for {len(eligible)} matches via GET /football/matches/<id>/stats")
+        print(f"[DRY RUN] Would fetch xG for {len(eligible)} matches via GET /football/matches/<id>/stats")
         return
 
     RAW_XG_DIR.mkdir(parents=True, exist_ok=True)
@@ -278,38 +337,45 @@ def pull_xg_data(resume: bool = False, dry_run: bool = False) -> None:
 
 # ── Phase 4: Pull player stats ────────────────────────────────────────────────
 
-def _strip_accents(s: str) -> str:
-    return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
-
-
 def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
     print(f"\n[PHASE 3] Pulling player stats for {len(PLAYER_METADATA)} key players...")
 
     if dry_run:
         print(f"[DRY RUN] Would search player IDs then fetch stats for {len(PLAYER_METADATA)} players")
-        print("  First: GET /football/players?search=<accent-stripped name>")
-        print("  Then:  validate nationality + age, then GET /football/players/stats?player_id=<id>&season=2025")
+        print("  First: GET /football/players?search=<accent-stripped name>  (all pages)")
+        print("  Validate: nationality + age_range against PLAYER_METADATA")
+        print("  Then: GET /football/players/<player_id>/stats?season_id=<club_season_id>")
         return
 
     RAW_PLAYERS_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Resolve club season ID once for all players
+    print("  Resolving club season ID for 2024/25...")
+    season_id = get_club_season_id()
+    if not season_id:
+        print("  [WARN] No club season ID found — stats calls will use season_id=unknown")
+        season_id = "unknown"
 
     for player_name, meta in tqdm(PLAYER_METADATA.items(), desc="Player stats"):
         expected_nationality = meta["nationality"]
         age_lo, age_hi = meta["age_range"]
 
         try:
-            search_result = stats_api_get("/football/players", {"search": _strip_accents(player_name)})
-            players = search_result.get("data", [])
-            if not players:
+            # Paginate ALL search result pages to find the right player
+            all_players = paginate_all(
+                "/football/players",
+                {"search": _strip_accents(player_name)},
+            )
+            if not all_players:
                 print(f"  [WARN] No results for: {player_name}")
                 continue
 
             # Log raw first result so we can verify exact field names from this API
-            print(f"  [DEBUG] {player_name} → first result: {json.dumps(players[0], ensure_ascii=False)}")
+            print(f"  [DEBUG] {player_name} → first result: {json.dumps(all_players[0], ensure_ascii=False)}")
 
-            # Scan ALL results for the one matching nationality + age
+            # Scan ALL results across all pages for nationality + age match
             matched = None
-            for candidate in players:
+            for candidate in all_players:
                 nat = candidate.get("nationality", "")
                 age = candidate.get("age")
                 if nat == expected_nationality and age is not None and age_lo <= int(age) <= age_hi:
@@ -320,7 +386,7 @@ def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
                 print(
                     f"  [WARN] No match for {player_name} "
                     f"(want nationality={expected_nationality!r}, age {age_lo}–{age_hi}) "
-                    f"across {len(players)} result(s)"
+                    f"across {len(all_players)} result(s)"
                 )
                 continue
 
@@ -333,10 +399,10 @@ def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
             if resume and out_path.exists():
                 continue
 
-            # Fetch 2025 season stats
+            # Correct endpoint: GET /football/players/{player_id}/stats?season_id=sn_XXXXX
             stats_data = stats_api_get(
-                "/football/players/stats",
-                {"player_id": player_id, "season": 2025},
+                f"/football/players/{player_id}/stats",
+                {"season_id": season_id},
             )
             out_data = {"name": player_name, "player_id": player_id, "stats": stats_data}
             out_path.write_text(json.dumps(out_data, indent=2), encoding="utf-8")
@@ -354,44 +420,46 @@ def pull_historical_wc(resume: bool = False, dry_run: bool = False) -> None:
 
     if dry_run:
         print("[DRY RUN] Steps:")
-        print("  1. GET /football/competitions?search=world+cup to find competition IDs")
-        print("  2. GET /football/matches?competition_id=<id>&season=2022 for WC matches")
+        print(f"  1. GET /football/competitions/{WC_COMPETITION_ID}/seasons  →  find 2018/2022 season IDs")
+        print(f"  2. GET /football/matches?competition_id={WC_COMPETITION_ID}&season_id=<id>")
         print("  3. GET /football/matches/<id>/stats for xG on each match")
         return
 
     RAW_HISTORICAL_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Find World Cup competition IDs
+    # Find 2018/2022 season IDs for the WC competition (same comp, different seasons)
     try:
-        comps_result = stats_api_get("/football/competitions", {"search": "world cup"})
-        comps = comps_result.get("data", [])
-        wc_ids = {}
-        for comp in comps:
-            name = comp.get("name", "").lower()
-            season = str(comp.get("season", ""))
-            if "world cup" in name and season in ("2018", "2022", "2026"):
-                wc_ids[season] = comp.get("id") or comp.get("competition_id")
-        print(f"  Found WC competition IDs: {wc_ids}")
+        seasons_data = stats_api_get(f"/football/competitions/{WC_COMPETITION_ID}/seasons")
+        seasons = seasons_data.get("data", [])
+        wc_seasons: dict[str, str] = {}
+        for s in seasons:
+            name = str(s.get("name", ""))
+            sid = s.get("id") or s.get("season_id")
+            for year in ("2018", "2022"):
+                if year in name and sid:
+                    wc_seasons[year] = str(sid)
+        print(f"  Found historical WC season IDs: {wc_seasons}")
     except requests.RequestException as e:
-        print(f"  [ERROR] Competition search failed: {e}")
+        print(f"  [ERROR] Failed to fetch WC seasons: {e}")
         return
 
-    for season, comp_id in wc_ids.items():
-        if not comp_id or season == "2026":
-            continue
+    for year, season_id in wc_seasons.items():
         try:
-            matches = paginate_all("/football/matches", {"competition_id": comp_id, "season": season})
-            print(f"  Found {len(matches)} matches for WC {season}")
-            for match in tqdm(matches, desc=f"WC {season} matches"):
+            matches = paginate_all(
+                "/football/matches",
+                {"competition_id": WC_COMPETITION_ID, "season_id": season_id},
+            )
+            print(f"  Found {len(matches)} matches for WC {year}")
+            for match in tqdm(matches, desc=f"WC {year} matches"):
                 match_id = str(match.get("id") or match.get("match_id", ""))
                 if not match_id:
                     continue
-                match_path = RAW_HISTORICAL_DIR / f"{season}_{match_id}.json"
+                match_path = RAW_HISTORICAL_DIR / f"{year}_{match_id}.json"
                 if not (resume and match_path.exists()):
                     match_path.write_text(json.dumps(match, indent=2), encoding="utf-8")
 
                 if match.get("xg_available"):
-                    xg_path = RAW_HISTORICAL_DIR / f"{season}_{match_id}_xg.json"
+                    xg_path = RAW_HISTORICAL_DIR / f"{year}_{match_id}_xg.json"
                     if not (resume and xg_path.exists()):
                         try:
                             xg_data = stats_api_get(f"/football/matches/{match_id}/stats")
@@ -399,38 +467,200 @@ def pull_historical_wc(resume: bool = False, dry_run: bool = False) -> None:
                         except requests.RequestException:
                             pass
         except requests.RequestException as e:
-            print(f"  [ERROR] WC {season} pull failed: {e}")
+            print(f"  [ERROR] WC {year} pull failed: {e}")
 
     print(f"[OK] Historical data done. {len(list(RAW_HISTORICAL_DIR.glob('*.json')))} files saved.")
+
+
+# ── Phase 6: WC 2026 pre-match odds (Pinnacle) ───────────────────────────────
+
+def pull_wc_prematch_odds(resume: bool = False, dry_run: bool = False) -> None:
+    print(f"\n[PHASE 5] Pulling Pinnacle pre-match odds for all WC 2026 fixtures...")
+    print(f"  Using competition_id={WC_COMPETITION_ID}, season_id={WC_SEASON_ID}")
+
+    if dry_run:
+        print(f"[DRY RUN] Steps:")
+        print(f"  1. GET /football/matches?competition_id={WC_COMPETITION_ID}&season_id={WC_SEASON_ID}&per_page=100  (paginate)")
+        print(f"  2. GET /football/matches/<match_id>/odds  for each of the 104 fixtures")
+        print(f"  Save to data/raw/wc_odds/<match_id>.json")
+        return
+
+    RAW_WC_ODDS_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Fetch all 104 WC 2026 fixtures
+    try:
+        all_matches = paginate_all(
+            "/football/matches",
+            {"competition_id": WC_COMPETITION_ID, "season_id": WC_SEASON_ID, "per_page": 100},
+        )
+        print(f"  Found {len(all_matches)} WC 2026 fixtures")
+    except requests.RequestException as e:
+        print(f"  [ERROR] Failed to fetch WC fixtures: {e}")
+        return
+
+    for match in tqdm(all_matches, desc="WC prematch odds"):
+        match_id = str(match.get("id") or match.get("match_id", ""))
+        if not match_id:
+            continue
+        out_path = RAW_WC_ODDS_DIR / f"{match_id}.json"
+        if resume and out_path.exists():
+            continue
+        try:
+            odds_data = stats_api_get(f"/football/matches/{match_id}/odds")
+            out_path.write_text(json.dumps(odds_data, indent=2), encoding="utf-8")
+        except requests.RequestException as e:
+            print(f"  [ERROR] Odds for {match_id}: {e}")
+
+    print(f"[OK] WC pre-match odds done. {len(list(RAW_WC_ODDS_DIR.glob('*.json')))} files saved.")
+
+
+# ── Phase 7: Shotmaps ─────────────────────────────────────────────────────────
+
+def pull_shotmaps(dry_run: bool = False) -> None:
+    match_files = list(RAW_MATCHES_DIR.glob("*.json"))
+    eligible = []
+    for mf in match_files:
+        try:
+            match = json.loads(mf.read_text(encoding="utf-8"))
+            if match.get("xg_available"):
+                match_id = str(match.get("id") or match.get("match_id", ""))
+                if match_id:
+                    eligible.append(match_id)
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    print(f"\n[PHASE 6] Pulling shotmaps for {len(eligible)} matches (xg_available=true)...")
+
+    if dry_run:
+        print(f"[DRY RUN] Would fetch {len(eligible)} shotmaps via GET /football/matches/<id>/shotmap")
+        return
+
+    RAW_SHOTMAPS_DIR.mkdir(parents=True, exist_ok=True)
+    for match_id in tqdm(eligible, desc="Shotmaps"):
+        out_path = RAW_SHOTMAPS_DIR / f"{match_id}.json"
+        if out_path.exists():  # always resume-safe: skip if already fetched
+            continue
+        try:
+            data = stats_api_get(f"/football/matches/{match_id}/shotmap")
+            out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        except requests.RequestException as e:
+            print(f"  [ERROR] Shotmap for {match_id}: {e}")
+
+    print(f"[OK] Shotmaps done. {len(list(RAW_SHOTMAPS_DIR.glob('*.json')))} files saved.")
+
+
+# ── Phase 8: WC 2026 event timelines ─────────────────────────────────────────
+
+def pull_wc_timelines(resume: bool = False, dry_run: bool = False) -> None:
+    print("\n[PHASE 7] Pulling event timelines for finished WC 2026 matches...")
+
+    if dry_run:
+        print("[DRY RUN] Steps:")
+        print(f"  1. GET /football/matches?competition_id={WC_COMPETITION_ID}&season_id={WC_SEASON_ID}&per_page=100  (paginate)")
+        print("  2. Filter for status='finished'")
+        print("  3. GET /football/matches/<id>/timeline  for each finished match")
+        print("  Save to data/raw/wc_timelines/<match_id>.json")
+        return
+
+    RAW_WC_TIMELINES_DIR.mkdir(parents=True, exist_ok=True)
+
+    try:
+        all_matches = paginate_all(
+            "/football/matches",
+            {"competition_id": WC_COMPETITION_ID, "season_id": WC_SEASON_ID, "per_page": 100},
+        )
+        finished = [m for m in all_matches if str(m.get("status", "")).lower() == "finished"]
+        print(f"  {len(finished)} finished WC matches (of {len(all_matches)} total)")
+    except requests.RequestException as e:
+        print(f"  [ERROR] Failed to fetch WC matches: {e}")
+        return
+
+    for match in tqdm(finished, desc="WC timelines"):
+        match_id = str(match.get("id") or match.get("match_id", ""))
+        if not match_id:
+            continue
+        out_path = RAW_WC_TIMELINES_DIR / f"{match_id}.json"
+        if resume and out_path.exists():
+            continue
+        try:
+            data = stats_api_get(f"/football/matches/{match_id}/timeline")
+            out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        except requests.RequestException as e:
+            print(f"  [ERROR] Timeline for {match_id}: {e}")
+
+    print(f"[OK] WC timelines done. {len(list(RAW_WC_TIMELINES_DIR.glob('*.json')))} files saved.")
+
+
+# ── Phase 9: Per-match player stats ──────────────────────────────────────────
+
+def pull_match_player_stats(resume: bool = False, dry_run: bool = False) -> None:
+    match_files = list(RAW_MATCHES_DIR.glob("*.json"))
+    print(f"\n[PHASE 8] Pulling per-match player stats for {len(match_files)} matches...")
+
+    if dry_run:
+        print(f"[DRY RUN] Would fetch per-match player stats via GET /football/players/stats?match_id=<id>")
+        print(f"  for each of the {len(match_files)} cached match files")
+        return
+
+    RAW_MATCH_PLAYERS_DIR.mkdir(parents=True, exist_ok=True)
+    for mf in tqdm(match_files, desc="Match player stats"):
+        try:
+            match = json.loads(mf.read_text(encoding="utf-8"))
+            match_id = str(match.get("id") or match.get("match_id", ""))
+            if not match_id:
+                continue
+            out_path = RAW_MATCH_PLAYERS_DIR / f"{match_id}.json"
+            if resume and out_path.exists():
+                continue
+            data = stats_api_get("/football/players/stats", {"match_id": match_id})
+            out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        except (json.JSONDecodeError, OSError):
+            pass
+        except requests.RequestException as e:
+            print(f"  [ERROR] Match player stats for {mf.stem}: {e}")
+
+    print(f"[OK] Match player stats done. {len(list(RAW_MATCH_PLAYERS_DIR.glob('*.json')))} files saved.")
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="WC2026 Bulk Data Collector (TheStatsAPI)")
-    parser.add_argument("--teams-only", action="store_true", help="Only pull team match history")
-    parser.add_argument("--players", action="store_true", help="Also pull player stats")
-    parser.add_argument("--historical", action="store_true", help="Also pull 2018/2022 WC historical data")
-    parser.add_argument("--resume", action="store_true", help="Skip already-cached files")
-    parser.add_argument("--dry-run", action="store_true", help="Print fetch plan without calling API")
+    parser = argparse.ArgumentParser(description="WC2026 Bulk Data Collector (TheStatsAPI — trial only)")
+    parser.add_argument("--teams-only",    action="store_true", help="Pull team match history + xG")
+    parser.add_argument("--players",       action="store_true", help="Pull player season stats")
+    parser.add_argument("--historical",    action="store_true", help="Pull 2018/2022 WC historical data")
+    parser.add_argument("--wc-odds",       action="store_true", help="Pull Pinnacle pre-match odds for WC 2026")
+    parser.add_argument("--shotmaps",      action="store_true", help="Pull shotmap data for xG matches")
+    parser.add_argument("--timelines",     action="store_true", help="Pull event timelines for finished WC matches")
+    parser.add_argument("--match-players", action="store_true", help="Pull per-match player stats")
+    parser.add_argument("--resume",        action="store_true", help="Skip already-cached files")
+    parser.add_argument("--dry-run",       action="store_true", help="Print fetch plan without calling API")
     args = parser.parse_args()
 
     if not STATS_API_KEY and not args.dry_run:
         print("[ERROR] STATS_API_KEY not set in .env", file=sys.stderr)
         sys.exit(1)
 
-    run_all = not args.teams_only and not args.players and not args.historical
-    run_teams = run_all or args.teams_only
-    run_players = run_all or args.players
-    run_historical = run_all or args.historical
+    any_flag = args.teams_only or args.players or args.historical or args.wc_odds or args.shotmaps or args.timelines or args.match_players
+    run_all          = not any_flag
+    run_teams        = run_all or args.teams_only
+    run_players      = run_all or args.players
+    run_historical   = run_all or args.historical
+    run_wc_odds      = run_all or args.wc_odds
+    run_shotmaps     = run_all or args.shotmaps
+    run_timelines    = run_all or args.timelines
+    run_match_players = run_all or args.match_players
 
     if args.dry_run:
         print("=" * 60)
         print("DRY RUN — Fetch Plan")
         print("=" * 60)
-        print(f"Teams: {len(WC_2026_TEAMS)}")
+        print(f"Teams:       {len(WC_2026_TEAMS)}")
         print(f"Key players: {len(PLAYER_METADATA)}")
-        print(f"Phases to run: teams={run_teams}, players={run_players}, historical={run_historical}")
+        print(f"WC IDs:      competition={WC_COMPETITION_ID}, season={WC_SEASON_ID}")
+        print(f"Phases:      teams={run_teams}, players={run_players}, historical={run_historical}")
+        print(f"             wc_odds={run_wc_odds}, shotmaps={run_shotmaps}, timelines={run_timelines}")
+        print(f"             match_players={run_match_players}")
         print()
 
     # Always build team map first (needed for match pulls)
@@ -447,14 +677,30 @@ def main() -> None:
     if run_historical:
         pull_historical_wc(resume=args.resume, dry_run=args.dry_run)
 
+    if run_wc_odds:
+        pull_wc_prematch_odds(resume=args.resume, dry_run=args.dry_run)
+
+    if run_shotmaps:
+        pull_shotmaps(dry_run=args.dry_run)
+
+    if run_timelines:
+        pull_wc_timelines(resume=args.resume, dry_run=args.dry_run)
+
+    if run_match_players:
+        pull_match_player_stats(resume=args.resume, dry_run=args.dry_run)
+
     if args.dry_run:
         print("\n[DRY RUN COMPLETE] No API calls made.")
     else:
         print("\n[DONE] Data collection complete.")
-        print(f"  Matches: {len(list(RAW_MATCHES_DIR.glob('*.json')))}")
-        print(f"  xG:      {len(list(RAW_XG_DIR.glob('*.json')))}")
-        print(f"  Players: {len(list(RAW_PLAYERS_DIR.glob('*.json')))}")
-        print(f"  History: {len(list(RAW_HISTORICAL_DIR.glob('*.json')))}")
+        print(f"  Matches:       {len(list(RAW_MATCHES_DIR.glob('*.json')))}")
+        print(f"  xG:            {len(list(RAW_XG_DIR.glob('*.json')))}")
+        print(f"  Players:       {len(list(RAW_PLAYERS_DIR.glob('*.json')))}")
+        print(f"  History:       {len(list(RAW_HISTORICAL_DIR.glob('*.json')))}")
+        print(f"  WC odds:       {len(list(RAW_WC_ODDS_DIR.glob('*.json')))}")
+        print(f"  Shotmaps:      {len(list(RAW_SHOTMAPS_DIR.glob('*.json')))}")
+        print(f"  Timelines:     {len(list(RAW_WC_TIMELINES_DIR.glob('*.json')))}")
+        print(f"  Match players: {len(list(RAW_MATCH_PLAYERS_DIR.glob('*.json')))}")
 
 
 if __name__ == "__main__":

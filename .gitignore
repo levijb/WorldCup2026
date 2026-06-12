@@ -32,6 +32,12 @@ logs/
 # Raw API cache (large, gitignored — populate with data_collector.py)
 data/raw/
 
+# Exceptions: .gitkeep placeholder files that must be tracked
+!data/raw/wc_odds/.gitkeep
+!data/raw/shotmaps/.gitkeep
+!data/raw/wc_timelines/.gitkeep
+!data/raw/match_player_stats/.gitkeep
+
 # Live odds cache (regenerated each run)
 data/odds_cache.json
 

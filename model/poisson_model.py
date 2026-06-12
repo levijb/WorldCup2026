@@ -16,8 +16,12 @@ load_dotenv()
 ROOT = Path(__file__).resolve().parent.parent
 RAW_MATCHES_DIR = ROOT / "data" / "raw" / "matches"
 RAW_XG_DIR = ROOT / "data" / "raw" / "xg"
+RAW_WC_ODDS_DIR = ROOT / "data" / "raw" / "wc_odds"
 PROCESSED_DIR = ROOT / "data" / "processed"
 TEAM_RATINGS_PATH = PROCESSED_DIR / "team_ratings.json"
+
+WC_COMPETITION_ID = "comp_6107"
+WC_SEASON_ID = "sn_118868"
 
 DIXON_COLES_RHO = -0.13
 MAX_GOALS = 7  # compute scoreline probs for 0-0 through 6-6
@@ -343,12 +347,44 @@ def generate_all_predictions(upcoming_fixtures: list, ratings: dict | None = Non
     return predictions
 
 
-def compute_edge(model_pct: float, american_odds: int) -> float:
+def compute_vig_free_prob(home_odds: int, draw_odds: int, away_odds: int) -> dict:
+    """
+    Remove Pinnacle vig from 3-way match odds.
+    Divide each raw implied probability by the sum of all three to get vig-free fair probs.
+    Returns decimal probabilities (0–1) for each outcome.
+    """
+    def implied(american: int) -> float:
+        if american > 0:
+            return 100 / (american + 100)
+        return (-american) / (-american + 100)
+
+    raw_home = implied(home_odds)
+    raw_draw = implied(draw_odds)
+    raw_away = implied(away_odds)
+    total = raw_home + raw_draw + raw_away
+    return {
+        "home": round(raw_home / total, 6),
+        "draw": round(raw_draw / total, 6),
+        "away": round(raw_away / total, 6),
+        "vig": round(total - 1.0, 6),
+    }
+
+
+def compute_edge(
+    model_pct: float,
+    american_odds: int,
+    pinnacle_odds: float | None = None,
+) -> float:
     """
     Edge = model probability - market implied probability (percentage points).
     Positive = model thinks market is underpricing this outcome.
+
+    If pinnacle_odds is provided (vig-free decimal probability from compute_vig_free_prob),
+    it is used as the market benchmark instead of the raw American odds implied probability.
     """
-    if american_odds > 0:
+    if pinnacle_odds is not None:
+        implied = pinnacle_odds
+    elif american_odds > 0:
         implied = 100 / (american_odds + 100)
     else:
         implied = (-american_odds) / (-american_odds + 100)

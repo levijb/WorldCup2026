@@ -103,6 +103,10 @@ The model uses xG data to predict match outcomes and compute edges vs. DraftKing
 
 ### One-time data collection (run during TheStatsAPI 7-day trial)
 
+TheStatsAPI is used **only during the 7-day trial** for bulk historical data collection. After that, daily operations use only The Odds API and API-Sports — `morning_report.py` and `live_query.py` do not call TheStatsAPI.
+
+Confirmed WC 2026 IDs: `competition_id=comp_6107`, `season_id=sn_118868`.
+
 ```bash
 # Step 1: Pull team match history (fastest, do this first)
 python model/data_collector.py --teams-only
@@ -113,10 +117,22 @@ python model/data_collector.py --players
 # Step 3: Pull 2018/2022 WC historical data
 python model/data_collector.py --historical
 
+# Step 4: Pull Pinnacle pre-match odds for all WC 2026 fixtures
+python model/data_collector.py --wc-odds
+
+# Step 5: Pull shotmap data for matches with xG available
+python model/data_collector.py --shotmaps
+
+# Step 6: Pull event timelines for finished WC 2026 matches
+python model/data_collector.py --timelines
+
+# Step 7: Pull per-match player stats for all cached matches
+python model/data_collector.py --match-players
+
 # Use --resume to safely re-run without re-fetching already-cached files
 python model/data_collector.py --teams-only --resume
 
-# Dry-run to see the fetch plan
+# Dry-run to see the fetch plan without making any API calls
 python model/data_collector.py --dry-run
 ```
 

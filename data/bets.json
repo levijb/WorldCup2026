@@ -16,6 +16,8 @@
     "status": "pending | won | lost | void | pushed",
     "result_notes": "",
     "profit_loss": null,
+    "pinnacle_closing_odds": null,
+    "clv_pct": null,
     "legs": []
   }
 }
