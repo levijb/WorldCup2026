@@ -13,7 +13,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 ROOT = Path(__file__).resolve().parent.parent
-RAW_PLAYERS_DIR = ROOT / "data" / "raw" / "player_stats"
+RAW_MATCH_PLAYERS_DIR = ROOT / "data" / "raw" / "match_player_stats"
+RAW_MATCHES_DIR = ROOT / "data" / "raw" / "matches"
 PROCESSED_DIR = ROOT / "data" / "processed"
 PLAYER_PROFILES_PATH = PROCESSED_DIR / "player_profiles.json"
 
@@ -40,80 +41,110 @@ def _decay_weight(days_ago: int) -> float:
 
 # ── Player Profile Computation ─────────────────────────────────────────────────
 
-def compute_player_profiles(player_stats_dir: Path = RAW_PLAYERS_DIR) -> dict:
+def build_player_profiles_from_matches(
+    match_players_dir: Path = RAW_MATCH_PLAYERS_DIR,
+    matches_dir: Path = RAW_MATCHES_DIR,
+) -> dict:
     """
-    Load all cached player stats, compute per-90 rates with decay weighting.
-    Saves to data/processed/player_profiles.json and returns the dict.
+    Build player profiles by aggregating per-match stats across all cached matches.
+    Primary data source — better coverage than season stats API (no search ambiguity,
+    covers all leagues). Reads from data/raw/match_player_stats/ and
+    data/raw/matches/ (for match dates). Saves to data/processed/player_profiles.json.
     """
     today = datetime.now(timezone.utc).date()
-    profiles: dict[str, dict] = {}
 
-    for pf in player_stats_dir.glob("*.json"):
-        data = _load_json(pf)
+    # Build match_id → date lookup so we can apply time-decay per match
+    match_dates: dict[str, object] = {}
+    for mf in matches_dir.glob("*.json"):
+        data = _load_json(mf)
+        if not data:
+            continue
+        date_str = (
+            data.get("date")
+            or data.get("match_date")
+            or (data.get("fixture") or {}).get("date", "")
+        )
+        if date_str:
+            try:
+                match_dates[mf.stem] = datetime.fromisoformat(
+                    str(date_str).replace("Z", "+00:00")
+                ).date()
+            except ValueError:
+                pass
+
+    stats_files = list(match_players_dir.glob("*.json"))
+    if not stats_files:
+        print("[WARN] No match player stats files found. Run: python model/data_collector.py --match-players")
+        return {"generated_at": datetime.now(timezone.utc).isoformat(), "players": {}}
+
+    # Aggregate per player_id: weighted totals + weighted minutes
+    aggregates: dict[str, dict] = {}
+
+    for sf in stats_files:
+        data = _load_json(sf)
         if not data:
             continue
 
-        name = data.get("name", pf.stem)
-        player_id = data.get("player_id", pf.stem)
-        stats_raw = data.get("stats", {})
+        match_id = sf.stem
+        match_date = match_dates.get(match_id)
+        days_ago = max((today - match_date).days, 0) if match_date else 400
+        w = _decay_weight(days_ago)
 
-        # Handle both list-of-season-objects and dict formats
-        if isinstance(stats_raw, dict):
-            stat_entries = stats_raw.get("data", [stats_raw])
-        elif isinstance(stats_raw, list):
-            stat_entries = stats_raw
+        # API returns {"data": [...]} or bare list
+        if isinstance(data, dict):
+            entries = data.get("data", [])
+        elif isinstance(data, list):
+            entries = data
         else:
             continue
 
-        # Aggregate across seasons/competitions with decay weighting
-        totals: dict[str, float] = {}
-        total_minutes = 0.0
-        total_weight = 0.0
-
-        for entry in stat_entries:
-            season_str = str(entry.get("season", ""))
-            # Estimate recency: 2025 season ~0 days ago, 2024 ~365 days ago
-            if "2025" in season_str:
-                days_ago = 0
-            elif "2024" in season_str:
-                days_ago = 200
-            else:
-                days_ago = 400
-            w = _decay_weight(days_ago)
-
+        for entry in entries:
+            pid = str(entry.get("player_id") or entry.get("id") or "")
+            if not pid:
+                continue
+            pname = str(entry.get("player_name") or entry.get("name") or pid)
             minutes = float(entry.get("minutes_played") or entry.get("minutes") or 0)
-            if minutes < 30:
+            if minutes < 1:
                 continue
 
+            if pid not in aggregates:
+                aggregates[pid] = {"name": pname, "player_id": pid, "totals": {}, "total_minutes": 0.0}
+
             for stat_key in ["goals", "assists", "shots", "shots_on_target", "key_passes", "yellow_cards", "xg"]:
-                val = entry.get(stat_key) or entry.get(stat_key.replace("_", ""))
-                if val is not None:
-                    totals[stat_key] = totals.get(stat_key, 0) + float(val) * w
+                raw = entry.get(stat_key) or entry.get(stat_key.replace("_", ""))
+                if raw is not None:
+                    aggregates[pid]["totals"][stat_key] = (
+                        aggregates[pid]["totals"].get(stat_key, 0.0) + float(raw) * w
+                    )
+            aggregates[pid]["total_minutes"] += minutes * w
 
-            total_minutes += minutes * w
-            total_weight += w
-
-        if total_minutes < 30:
+    # Convert aggregates to per-90 profiles
+    profiles: dict[str, dict] = {}
+    for pid, agg in aggregates.items():
+        wm = agg["total_minutes"]
+        if wm < 45:  # require at least one half's worth of weighted minutes
             continue
-
-        profile = {
-            "name": name,
-            "player_id": player_id,
-            "weighted_minutes": round(total_minutes, 1),
+        profile: dict = {
+            "name": agg["name"],
+            "player_id": pid,
+            "weighted_minutes": round(wm, 1),
         }
         for stat_key in ["goals", "assists", "shots", "shots_on_target", "key_passes", "yellow_cards", "xg"]:
-            if stat_key in totals:
-                profile[f"{stat_key}_per_90"] = round(_per_90(totals[stat_key], total_minutes), 4)
-
-        profiles[name] = profile
+            if stat_key in agg["totals"]:
+                p90 = _per_90(agg["totals"][stat_key], wm)
+                if p90 is not None:
+                    profile[f"{stat_key}_per_90"] = round(p90, 4)
+        profiles[agg["name"]] = profile
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "source": "match_player_stats",
+        "match_files_processed": len(stats_files),
         "players": profiles,
     }
     PLAYER_PROFILES_PATH.write_text(json.dumps(output, indent=2), encoding="utf-8")
-    print(f"[OK] Player profiles saved ({len(profiles)} players)")
+    print(f"[OK] Player profiles saved ({len(profiles)} players from {len(stats_files)} match files)")
     return output
 
 
@@ -262,6 +293,6 @@ def predict_team_corners(
 
 
 if __name__ == "__main__":
-    print("Computing player profiles from cached data...")
-    profiles = compute_player_profiles()
+    print("Building player profiles from match player stats...")
+    profiles = build_player_profiles_from_matches()
     print(f"Profiles built for {len(profiles.get('players', {}))} players.")

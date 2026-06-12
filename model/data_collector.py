@@ -22,7 +22,6 @@ import json
 import os
 import sys
 import time
-import unicodedata
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -87,54 +86,6 @@ WC_2026_TEAMS = [
     "Japan", "South Korea", "Saudi Arabia", "Australia",
 ]
 
-# ── Player metadata for identity validation during search ─────────────────────
-# Keys are accent-free names used as both the search term and the display name.
-# nationality must match result["nationality"]; age must fall within age_range.
-PLAYER_METADATA: dict[str, dict] = {
-    "Kylian Mbappe":         {"nationality": "France",      "age_range": (24, 28),  "search_fallback": "Mbappe"},
-    "Harry Kane":            {"nationality": "England",     "age_range": (30, 33),  "search_fallback": "Kane"},
-    "Erling Haaland":        {"nationality": "Norway",      "age_range": (23, 26),  "search_fallback": "Haaland"},
-    "Lionel Messi":          {"nationality": "Argentina",   "age_range": (36, 39),  "search_fallback": "Messi"},
-    "Cristiano Ronaldo":     {"nationality": "Portugal",    "age_range": (39, 42),  "search_fallback": "Ronaldo"},
-    "Vinicius Junior":       {"nationality": "Brazil",      "age_range": (23, 26),  "search_fallback": "Vinicius"},
-    "Raphinha":              {"nationality": "Brazil",      "age_range": (27, 30)},
-    "Lamine Yamal":          {"nationality": "Spain",       "age_range": (16, 18),  "search_fallback": "Yamal"},
-    "Pedri":                 {"nationality": "Spain",       "age_range": (21, 23)},
-    "Mikel Oyarzabal":       {"nationality": "Spain",       "age_range": (26, 29)},
-    "Julian Alvarez":        {"nationality": "Argentina",   "age_range": (24, 26)},
-    "Jude Bellingham":       {"nationality": "England",     "age_range": (20, 22)},
-    "Bukayo Saka":           {"nationality": "England",     "age_range": (22, 24)},
-    "Mohamed Salah":         {"nationality": "Egypt",       "age_range": (31, 34)},
-    "Ousmane Dembele":       {"nationality": "France",      "age_range": (26, 29)},
-    "Michael Olise":         {"nationality": "France",      "age_range": (22, 24)},
-    "Martin Odegaard":       {"nationality": "Norway",      "age_range": (25, 28)},
-    "Luis Diaz":             {"nationality": "Colombia",    "age_range": (27, 29)},
-    "Neymar":                {"nationality": "Brazil",      "age_range": (32, 35)},
-    "Bruno Fernandes":       {"nationality": "Portugal",    "age_range": (29, 32)},
-    "Cody Gakpo":            {"nationality": "Netherlands", "age_range": (24, 27)},
-    "Memphis Depay":         {"nationality": "Netherlands", "age_range": (29, 32)},
-    "Son Heung-min":         {"nationality": "South Korea", "age_range": (31, 34)},
-    "Kaoru Mitoma":          {"nationality": "Japan",       "age_range": (26, 29)},
-    "Sadio Mane":            {"nationality": "Senegal",     "age_range": (31, 34)},
-    "Leroy Sane":            {"nationality": "Germany",     "age_range": (29, 31)},
-    "Florian Wirtz":         {"nationality": "Germany",     "age_range": (20, 22)},
-    "Serge Gnabry":          {"nationality": "Germany",     "age_range": (28, 31)},
-    "Thomas Muller":         {"nationality": "Germany",     "age_range": (34, 37)},
-    "Paulo Dybala":          {"nationality": "Argentina",   "age_range": (30, 33)},
-    "Kevin De Bruyne":       {"nationality": "Belgium",     "age_range": (32, 35)},
-    "Romelu Lukaku":         {"nationality": "Belgium",     "age_range": (30, 33)},
-    "Charles De Ketelaere":  {"nationality": "Belgium",     "age_range": (23, 25)},
-    "Marcelo Brozovic":      {"nationality": "Croatia",     "age_range": (31, 34)},
-    "Luka Modric":           {"nationality": "Croatia",     "age_range": (38, 41)},
-    "Ilkay Gundogan":        {"nationality": "Germany",     "age_range": (33, 36)},
-    "Antoine Griezmann":     {"nationality": "France",      "age_range": (32, 35)},
-    "Marcus Thuram":         {"nationality": "France",      "age_range": (26, 29)},
-    "Jules Kounde":          {"nationality": "France",      "age_range": (25, 28)},
-    "Alisson Becker":        {"nationality": "Brazil",      "age_range": (31, 34)},
-    "Ederson":               {"nationality": "Brazil",      "age_range": (30, 33)},
-    "Marc-Andre ter Stegen": {"nationality": "Germany",     "age_range": (33, 36)},
-    "Thibaut Courtois":      {"nationality": "Belgium",     "age_range": (31, 34)},
-}
 
 # ── Request helper ────────────────────────────────────────────────────────────
 # Simple timestamp-based throttle: guarantees ≥0.6s between every request.
@@ -186,10 +137,6 @@ def paginate_all(path: str, params: dict | None = None, max_pages: int = 10) -> 
             print(f"  [WARN] paginate_all page {page} failed for {path!r}: {e}")
             break
     return all_results
-
-
-def _strip_accents(s: str) -> str:
-    return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
 
 
 # ── Phase 1: Build team ID map ─────────────────────────────────────────────────
@@ -307,102 +254,15 @@ def pull_xg_data(resume: bool = False, dry_run: bool = False) -> None:
     print(f"[OK] xG data done. {len(list(RAW_XG_DIR.glob('*.json')))} xG files saved.")
 
 
-# ── Phase 4: Pull player stats ────────────────────────────────────────────────
-
-def _search_players(search_term: str) -> list:
-    """Search for players by name and return all paginated results."""
-    return paginate_all("/football/players", {"search": _strip_accents(search_term)})
-
+# ── Phase 4: Pull player stats (DEPRECATED) ───────────────────────────────────
 
 def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
-    print(f"\n[PHASE 3] Pulling player stats for {len(PLAYER_METADATA)} key players...")
-    print(f"  Using season_id={CLUB_SEASON_2425_ID} (PL 2024/25)")
-
-    if dry_run:
-        print(f"[DRY RUN] Would search player IDs then fetch stats for {len(PLAYER_METADATA)} players")
-        print("  First: GET /football/players?search=<accent-stripped name>  (all pages)")
-        print("  Fallback: last-name-only search if full-name returns empty")
-        print("  Validate: nationality + age_range against PLAYER_METADATA")
-        print(f"  Then: GET /football/players/<player_id>/stats?season_id={CLUB_SEASON_2425_ID}")
-        return
-
-    RAW_PLAYERS_DIR.mkdir(parents=True, exist_ok=True)
-
-    for player_name, meta in tqdm(PLAYER_METADATA.items(), desc="Player stats"):
-        expected_nationality = meta["nationality"]
-        age_lo, age_hi = meta["age_range"]
-        fallback_term = meta.get("search_fallback")
-
-        try:
-            # Primary search: full accent-stripped name
-            all_players = _search_players(player_name)
-
-            # Fallback: last-name-only search if primary returns nothing
-            search_term_used = player_name
-            if not all_players and fallback_term:
-                print(f"  [INFO] {player_name}: primary search empty, trying fallback {fallback_term!r}")
-                all_players = _search_players(fallback_term)
-                search_term_used = fallback_term
-
-            if not all_players:
-                print(f"  [WARN] No results for: {player_name} (tried {search_term_used!r})")
-                continue
-
-            # Log raw first result so field names remain visible in output
-            print(f"  [DEBUG] {player_name} ({search_term_used!r}) → first result: {json.dumps(all_players[0], ensure_ascii=False)}")
-
-            # Scan ALL results for nationality + age match
-            matched = None
-            for candidate in all_players:
-                nat = candidate.get("nationality", "")
-                age = candidate.get("age")
-                if nat == expected_nationality and age is not None and age_lo <= int(age) <= age_hi:
-                    matched = candidate
-                    break
-
-            if matched is None:
-                print(
-                    f"  [WARN] No match for {player_name} "
-                    f"(want nationality={expected_nationality!r}, age {age_lo}–{age_hi}) "
-                    f"across {len(all_players)} result(s)"
-                )
-                continue
-
-            player_id = matched.get("id") or matched.get("player_id")
-            if not player_id:
-                print(f"  [WARN] No ID field in matched result for: {player_name}")
-                continue
-
-            out_path = RAW_PLAYERS_DIR / f"{player_id}.json"
-            if resume and out_path.exists():
-                continue
-
-            # GET /football/players/{player_id}/stats?season_id=sn_XXXXX
-            try:
-                stats_data = stats_api_get(
-                    f"/football/players/{player_id}/stats",
-                    {"season_id": CLUB_SEASON_2425_ID},
-                )
-                out_data = {"name": player_name, "player_id": player_id, "stats": stats_data}
-            except requests.HTTPError as http_err:
-                if http_err.response is not None and http_err.response.status_code == 404:
-                    print(f"  [WARN] {player_name} (id={player_id}): stats 404 for season {CLUB_SEASON_2425_ID} — saving ID only")
-                    out_data = {
-                        "name": player_name,
-                        "player_id": player_id,
-                        "stats": None,
-                        "stats_pending": True,
-                        "stats_skip_reason": f"404 for season_id={CLUB_SEASON_2425_ID}",
-                    }
-                else:
-                    raise
-
-            out_path.write_text(json.dumps(out_data, indent=2), encoding="utf-8")
-
-        except requests.RequestException as e:
-            print(f"  [ERROR] {player_name}: {e}")
-
-    print(f"[OK] Player stats done. {len(list(RAW_PLAYERS_DIR.glob('*.json')))} player files saved.")
+    """DEPRECATED — season stats via player search has poor non-PL coverage.
+    Use --match-players instead: it pulls per-match stats for every player
+    in every cached match, giving full coverage with no search ambiguity.
+    """
+    print("\n[WARN] --players phase deprecated: use --match-players instead for better coverage")
+    return
 
 
 # ── Phase 5: Historical WC data ───────────────────────────────────────────────
@@ -594,6 +454,19 @@ def pull_match_player_stats(resume: bool = False, dry_run: bool = False) -> None
         print(f"  for each of the {len(match_files)} cached match files")
         return
 
+    # One-time cleanup: delete stale stats_pending files left by the deprecated --players phase.
+    # These files have no usable stats and would confuse --resume accounting.
+    stale_deleted = 0
+    for stale in RAW_PLAYERS_DIR.glob("*.json"):
+        try:
+            if json.loads(stale.read_text(encoding="utf-8")).get("stats_pending"):
+                stale.unlink()
+                stale_deleted += 1
+        except (json.JSONDecodeError, OSError):
+            pass
+    if stale_deleted:
+        print(f"  [CLEANUP] Deleted {stale_deleted} stale stats_pending file(s) from data/raw/player_stats/")
+
     RAW_MATCH_PLAYERS_DIR.mkdir(parents=True, exist_ok=True)
     for mf in tqdm(match_files, desc="Match player stats"):
         try:
@@ -619,7 +492,7 @@ def pull_match_player_stats(resume: bool = False, dry_run: bool = False) -> None
 def main() -> None:
     parser = argparse.ArgumentParser(description="WC2026 Bulk Data Collector (TheStatsAPI — trial only)")
     parser.add_argument("--teams-only",    action="store_true", help="Pull team match history + xG")
-    parser.add_argument("--players",       action="store_true", help="Pull player season stats")
+    parser.add_argument("--players",       action="store_true", help="[DEPRECATED] Season stats via search — use --match-players instead")
     parser.add_argument("--historical",    action="store_true", help="Pull 2018/2022 WC historical data")
     parser.add_argument("--wc-odds",       action="store_true", help="Pull Pinnacle pre-match odds for WC 2026")
     parser.add_argument("--shotmaps",      action="store_true", help="Pull shotmap data for xG matches")
@@ -648,7 +521,6 @@ def main() -> None:
         print("DRY RUN — Fetch Plan")
         print("=" * 60)
         print(f"Teams:       {len(WC_2026_TEAMS)}")
-        print(f"Key players: {len(PLAYER_METADATA)}")
         print(f"WC IDs:      competition={WC_COMPETITION_ID}, season={WC_SEASON_ID}")
         print(f"PL season:   2024/25={CLUB_SEASON_2425_ID}, 2025/26={CLUB_SEASON_2526_ID}")
         print(f"Phases:      teams={run_teams}, players={run_players}, historical={run_historical}")
