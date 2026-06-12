@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import time
+import unicodedata
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -235,14 +236,24 @@ def pull_player_stats(resume: bool = False, dry_run: bool = False) -> None:
 
     for player_name in tqdm(KEY_PLAYERS, desc="Player stats"):
         try:
-            # Search for player ID
-            search_result = stats_api_get("/football/players", {"search": player_name})
+            # Strip accents so "Mbappé" → "Mbappe", "Vinícius" → "Vinicius", etc.
+            search_name = "".join(
+                c for c in unicodedata.normalize("NFD", player_name)
+                if unicodedata.category(c) != "Mn"
+            )
+
+            search_result = stats_api_get("/football/players", {"search": search_name})
             players = search_result.get("data", [])
             if not players:
-                print(f"  [WARN] No player found: {player_name}")
+                print(f"  [WARN] No player found: {player_name} (searched: {search_name!r})")
                 continue
+
+            # Log raw first result to verify exact ID field name from this API
+            print(f"  [DEBUG] {player_name} → first result: {json.dumps(players[0], ensure_ascii=False)}")
+
             player_id = players[0].get("id") or players[0].get("player_id")
             if not player_id:
+                print(f"  [WARN] No ID field found in result for: {player_name}")
                 continue
 
             out_path = RAW_PLAYERS_DIR / f"{player_id}.json"
