@@ -245,7 +245,13 @@ def build_dynamic_content(
     """Dynamic content block: today's data — never cache this."""
     et_now = now_et().strftime("%Y-%m-%d %H:%M ET")
 
-    # Format today's fixtures
+    # Format today's fixtures with multi-timezone kickoff times
+    def _fmt_kickoff(kickoff_dt: datetime) -> str:
+        def _t(hours_offset: int, label: str) -> str:
+            t = kickoff_dt.astimezone(timezone(timedelta(hours=hours_offset)))
+            return t.strftime("%I:%M %p").lstrip("0") + f" {label}"
+        return f"{_t(-4, 'ET')} | {_t(-5, 'CT')} | {_t(-7, 'PT')} | {_t(1, 'BST')}"
+
     fixture_lines = []
     for f in fixtures:
         try:
@@ -253,10 +259,10 @@ def build_dynamic_content(
             away = f["teams"]["away"]["name"]
             kickoff_utc = f["fixture"]["date"]
             kickoff_dt = datetime.fromisoformat(kickoff_utc.replace("Z", "+00:00"))
-            kickoff_et = kickoff_dt.astimezone(timezone(ET_OFFSET)).strftime("%I:%M %p ET")
+            times = _fmt_kickoff(kickoff_dt)
             venue = f["fixture"].get("venue", {}).get("name", "TBD")
             city = f["fixture"].get("venue", {}).get("city", "")
-            fixture_lines.append(f"  • {kickoff_et} | {home} vs {away} | {venue}, {city}")
+            fixture_lines.append(f"  • {home} vs {away} | {times} | {venue}, {city}")
         except (KeyError, ValueError):
             fixture_lines.append(f"  • {f}")
     fixtures_text = "\n".join(fixture_lines) if fixture_lines else "  No fixtures found for today."
@@ -643,9 +649,17 @@ def main() -> None:
     else:
         news = "(news search skipped in dry-run mode)"
 
-    # 6. Load model predictions
-    print("[MODEL] Loading predictions...")
-    model_predictions_md = load_model_predictions_markdown()
+    # 6. Run model predictions (regenerate fresh for today)
+    print("[MODEL] Running predictions...")
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(ROOT / "model"))
+        from predictions import run_predictions, format_predictions_markdown
+        preds = run_predictions(fixtures=fixtures)
+        model_predictions_md = format_predictions_markdown(preds) if preds else load_model_predictions_markdown()
+    except Exception as e:
+        print(f"[WARN] Predictions failed: {e}", file=sys.stderr)
+        model_predictions_md = load_model_predictions_markdown()
 
     # 7. Build prompt
     static_context = build_static_context()

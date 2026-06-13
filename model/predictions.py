@@ -35,6 +35,31 @@ EDGE_MILD = 3.0
 EDGE_STRONG = 5.0
 EDGE_SHARP = 8.0
 
+TEAM_NAME_ALIASES: dict[str, str] = {
+    "United States": "USA",
+    "USA": "United States",
+    "Republic of Ireland": "Ireland",
+    "Ireland": "Republic of Ireland",
+    "Korea Republic": "South Korea",
+    "South Korea": "Korea Republic",
+    "Iran": "IR Iran",
+    "IR Iran": "Iran",
+}
+
+
+def _teams_match(a: str, b: str) -> bool:
+    """Case-insensitive match with alias lookup and substring fallback."""
+    al, bl = a.lower(), b.lower()
+    if al == bl:
+        return True
+    alias = TEAM_NAME_ALIASES.get(a, TEAM_NAME_ALIASES.get(a.title(), "")).lower()
+    if alias and alias == bl:
+        return True
+    alias_b = TEAM_NAME_ALIASES.get(b, TEAM_NAME_ALIASES.get(b.title(), "")).lower()
+    if alias_b and alias_b == al:
+        return True
+    return al in bl or bl in al
+
 # Top prop targets per match (player name + which team they play for)
 PROP_PLAYERS: list[dict] = [
     {"name": "Kylian Mbappé", "team": "France"},
@@ -93,7 +118,7 @@ def extract_dk_odds(match_name_home: str, match_name_away: str, odds_cache: dict
     for match in odds_cache.get("matches", []):
         home = match.get("home_team", "")
         away = match.get("away_team", "")
-        if home.lower() != match_name_home.lower() and away.lower() != match_name_away.lower():
+        if not (_teams_match(home, match_name_home) and _teams_match(away, match_name_away)):
             continue
         for bm in match.get("bookmakers", []):
             if bm.get("key") != "draftkings":
