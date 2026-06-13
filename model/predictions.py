@@ -28,7 +28,6 @@ TEAM_RATINGS_PATH = PROCESSED_DIR / "team_ratings.json"
 ODDS_CACHE_PATH = ROOT / "data" / "odds_cache.json"
 MODEL_PREDICTIONS_PATH = PROCESSED_DIR / "model_predictions.json"
 
-API_SPORTS_KEY = os.getenv("API_SPORTS_KEY", "")
 ET_OFFSET = timedelta(hours=-4)
 
 EDGE_MILD = 3.0
@@ -92,16 +91,30 @@ def today_date_str() -> str:
 
 
 def fetch_fixtures_today() -> list:
+    """Derive today's WC fixtures from the odds cache.
+    API-Sports free tier doesn't cover 2026 season data."""
     try:
-        url = "https://v3.football.api-sports.io/fixtures"
-        headers = {"x-apisports-key": API_SPORTS_KEY}
-        params = {"league": 1, "season": 2026, "date": today_date_str()}
-        resp = requests.get(url, headers=headers, params=params, timeout=15)
-        resp.raise_for_status()
-        return resp.json().get("response", [])
-    except requests.RequestException as e:
-        print(f"[WARN] Fixtures fetch failed: {e}", file=sys.stderr)
+        cache = json.loads(ODDS_CACHE_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
         return []
+    today_et = now_et().date()
+    fixtures = []
+    for match in cache.get("matches", []):
+        try:
+            commence = match["commence_time"]
+            kickoff_dt = datetime.fromisoformat(commence.replace("Z", "+00:00"))
+            if kickoff_dt.astimezone(timezone(ET_OFFSET)).date() != today_et:
+                continue
+            fixtures.append({
+                "teams": {
+                    "home": {"name": match["home_team"]},
+                    "away": {"name": match["away_team"]},
+                },
+                "fixture": {"date": commence},
+            })
+        except (KeyError, ValueError):
+            continue
+    return fixtures
 
 
 def load_odds_cache() -> dict:

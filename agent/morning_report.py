@@ -89,34 +89,55 @@ def fetch_odds() -> dict:
 
 
 def fetch_fixtures_today() -> list:
-    """Fetch today's WC fixtures from API-Sports."""
+    """Derive today's WC fixtures from the odds cache.
+    API-Sports free tier doesn't cover 2026 season data, so we use
+    the already-fetched Odds API cache which has home_team, away_team,
+    and commence_time for every match."""
     try:
-        url = "https://v3.football.api-sports.io/fixtures"
-        headers = {"x-apisports-key": API_SPORTS_KEY}
-        params = {"league": 1, "season": 2026, "date": today_date_str()}
-        resp = requests.get(url, headers=headers, params=params, timeout=15)
-        resp.raise_for_status()
-        return resp.json().get("response", [])
-    except requests.RequestException as e:
-        print(f"[WARN] API-Sports fixtures fetch failed: {e}", file=sys.stderr)
+        cache = json.loads(ODDS_CACHE_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
         return []
+    today_et = now_et().date()
+    fixtures = []
+    for match in cache.get("matches", []):
+        try:
+            commence = match["commence_time"]
+            kickoff_dt = datetime.fromisoformat(commence.replace("Z", "+00:00"))
+            if kickoff_dt.astimezone(timezone(ET_OFFSET)).date() != today_et:
+                continue
+            fixtures.append({
+                "teams": {
+                    "home": {"name": match["home_team"]},
+                    "away": {"name": match["away_team"]},
+                },
+                "fixture": {"date": commence},
+            })
+        except (KeyError, ValueError):
+            continue
+    return fixtures
 
 
-def fetch_recent_results() -> list:
-    """Fetch WC results from the last 3 days."""
+def fetch_recent_results_via_search(client) -> str:
+    """Search for recent WC 2026 match results via web search."""
     try:
-        url = "https://v3.football.api-sports.io/fixtures"
-        headers = {"x-apisports-key": API_SPORTS_KEY}
-        today = now_et().date()
-        from_date = (today - timedelta(days=3)).isoformat()
-        to_date = (today - timedelta(days=1)).isoformat()
-        params = {"league": 1, "season": 2026, "from": from_date, "to": to_date}
-        resp = requests.get(url, headers=headers, params=params, timeout=15)
-        resp.raise_for_status()
-        return resp.json().get("response", [])
-    except requests.RequestException as e:
-        print(f"[WARN] API-Sports recent results fetch failed: {e}", file=sys.stderr)
-        return []
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=600,
+            tools=[{"type": "web_search_20250305", "name": "web_search"}],
+            messages=[{
+                "role": "user",
+                "content": (
+                    "Search for: 'World Cup 2026 match results scores'. "
+                    "Return a concise bullet-point list of results from the last 2 days only. "
+                    "Format each result as: 'Date: Team A score-score Team B'. No commentary."
+                ),
+            }],
+        )
+        text_parts = [b.text for b in resp.content if hasattr(b, "text")]
+        return "\n".join(text_parts) if text_parts else "  No recent results found."
+    except Exception as e:
+        print(f"[WARN] Recent results search failed: {e}", file=sys.stderr)
+        return f"  (recent results unavailable: {e})"
 
 
 def fetch_injuries() -> list:
@@ -235,7 +256,7 @@ Key sharp-money pre-tournament read:
 def build_dynamic_content(
     today_str: str,
     fixtures: list,
-    recent_results: list,
+    recent_results: str,
     odds_result: dict,
     injuries: list,
     news: str,
@@ -267,19 +288,7 @@ def build_dynamic_content(
             fixture_lines.append(f"  • {f}")
     fixtures_text = "\n".join(fixture_lines) if fixture_lines else "  No fixtures found for today."
 
-    # Format recent results
-    result_lines = []
-    for f in recent_results:
-        try:
-            home = f["teams"]["home"]["name"]
-            away = f["teams"]["away"]["name"]
-            hg = f["goals"]["home"]
-            ag = f["goals"]["away"]
-            match_date = f["fixture"]["date"][:10]
-            result_lines.append(f"  • {match_date}: {home} {hg}–{ag} {away}")
-        except (KeyError, TypeError):
-            pass
-    results_text = "\n".join(result_lines) if result_lines else "  No recent results."
+    results_text = recent_results if recent_results else "  No recent results."
 
     # Format DraftKings odds with implied probabilities
     odds_lines = []
@@ -626,15 +635,12 @@ def main() -> None:
         sys.exit(1)
     system_prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
 
-    # 2. Fetch all data sources
+    # 2. Fetch data that doesn't require Anthropic
     print("[FETCH] Odds...")
     odds_result = fetch_odds()
 
-    print("[FETCH] Today's fixtures...")
+    print("[FETCH] Today's fixtures (from odds cache)...")
     fixtures = fetch_fixtures_today()
-
-    print("[FETCH] Recent results...")
-    recent_results = fetch_recent_results()
 
     print("[FETCH] Injuries...")
     injuries = fetch_injuries()
@@ -646,16 +652,20 @@ def main() -> None:
     previous_cache = load_odds_cache()
     line_movements = compute_line_movements(odds_result["data"], previous_cache)
 
-    # 5. Web search for news (only if not dry-run — costs API tokens)
+    # 5. Web searches: recent results + news (share one Anthropic client)
     if not args.dry_run:
-        print("[FETCH] News via web search...")
         try:
             import anthropic
             client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+            print("[FETCH] Recent results via web search...")
+            recent_results = fetch_recent_results_via_search(client)
+            print("[FETCH] News via web search...")
             news = fetch_news_via_claude(client, today_str)
         except Exception as e:
+            recent_results = f"(recent results unavailable: {e})"
             news = f"(news search unavailable: {e})"
     else:
+        recent_results = "(recent results skipped in dry-run mode)"
         news = "(news search skipped in dry-run mode)"
 
     # 6. Run model predictions (regenerate fresh for today)
