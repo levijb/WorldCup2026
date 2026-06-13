@@ -302,8 +302,8 @@ def format_predictions_markdown(predictions: list) -> str:
                 if market in dk:
                     from model.poisson_model import compute_edge as _ce
                     edge = _ce(pred[model_key], dk[market])
-                    flag = "← EDGE" if edge >= EDGE_STRONG else ("← mild edge" if edge >= EDGE_MILD else "")
-                    lines.append(f"- {label}: Model {pred[model_key]}% vs DK {dk[market]:+d} → {edge:+.1f}% {flag}")
+                    flag = "<< EDGE" if edge >= EDGE_STRONG else ("<< mild edge" if edge >= EDGE_MILD else "")
+                    lines.append(f"- {label}: Model {pred[model_key]}% vs DK {dk[market]:+d} -> {edge:+.1f}% {flag}")
 
         top = pred.get("top_scorelines", [])[:3]
         if top:

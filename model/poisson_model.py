@@ -280,12 +280,26 @@ def predict_match(home_team: str, away_team: str, ratings: dict) -> dict:
     avg_home_xg = ratings.get("avg_home_xg", 1.35)
     avg_away_xg = ratings.get("avg_away_xg", 1.05)
 
-    home_data = teams.get(home_team, {"attack_strength": 1.0, "defense_strength": 1.0})
-    away_data = teams.get(away_team, {"attack_strength": 1.0, "defense_strength": 1.0})
+    DEFAULT_ATTACK = 1.0
+    DEFAULT_DEFENSE = 1.0
+    MIN_LAMBDA = 0.4  # floor prevents near-zero xG collapse for weak/unrated nations
+
+    home_data = teams.get(home_team, {"attack_strength": DEFAULT_ATTACK, "defense_strength": DEFAULT_DEFENSE})
+    away_data = teams.get(away_team, {"attack_strength": DEFAULT_ATTACK, "defense_strength": DEFAULT_DEFENSE})
 
     # Expected goals using Dixon-Coles MLE formula
-    home_xg = home_data["attack_strength"] * away_data["defense_strength"] * avg_home_xg
-    away_xg = away_data["attack_strength"] * home_data["defense_strength"] * avg_away_xg
+    home_lambda = home_data["attack_strength"] * away_data["defense_strength"] * avg_home_xg
+    away_lambda = away_data["attack_strength"] * home_data["defense_strength"] * avg_away_xg
+
+    home_lambda = max(home_lambda, MIN_LAMBDA)
+    away_lambda = max(away_lambda, MIN_LAMBDA)
+
+    if home_lambda + away_lambda < 1.2:
+        print(f"[WARN] Suspiciously low total xG for {home_team} vs {away_team}: "
+              f"{home_lambda:.3f} + {away_lambda:.3f} = {home_lambda + away_lambda:.3f}")
+
+    home_xg = home_lambda
+    away_xg = away_lambda
 
     warnings = []
     if home_data.get("low_sample_warning"):
