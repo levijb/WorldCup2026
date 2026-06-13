@@ -565,7 +565,7 @@ def send_emails(report_text: str, today_str: str) -> None:
 
     et_now = now_et()
     weekday = et_now.strftime("%A")
-    date_display = et_now.strftime("%B %-d")
+    date_display = et_now.strftime("%B %d").replace(" 0", " ").lstrip()
     subject = f"⚽ WC2026 Morning Brief — {weekday} {date_display}"
     html_body = markdown_to_html(report_text)
     from_addr = RESEND_TO_EMAIL or "noreply@worldcup2026.local"
