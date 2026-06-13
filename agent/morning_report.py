@@ -357,21 +357,25 @@ Odds quota remaining: {odds_result.get('quota_remaining', 'unknown')}
 
 ## REQUEST
 
-Please produce the full morning briefing report with these sections:
+Produce the full morning briefing report in this exact order:
 
-1. **OVERNIGHT SUMMARY** — Results from yesterday, key developments since last report, any breaking news affecting today's bets.
+1. **TOURNAMENT STATUS** — Current day/round, matches played, standings snapshot if relevant. 3–5 lines max.
 
-2. **TODAY'S MATCH PREVIEWS** — For each match today, a focused preview covering: tactical matchup, form, key players, conditions, narrative context.
+2. **YESTERDAY'S RESULTS** — One bullet per match, one line each. Score + one-sentence note if significant. If no matches yet: "No matches played yet."
 
-3. **BET RECOMMENDATIONS (3–5 bets)** — Use the exact structured format from the system prompt. Include model edge for each. Justify every recommendation specifically.
+3. **TODAY'S MATCHES** — One paragraph per match (4–5 sentences). Kickoff time ET, venue, tactical setup, key injuries, one betting angle sentence. Today's matches only.
 
-4. **PARLAY SUGGESTIONS (1–2 parlays)** — $1–5 each, max 3 legs. Explain leg selection rationale.
+4. **NEWS & INJURIES** — 3–5 bullets, one line each. Only items relevant to today's matches.
 
-5. **SHARP MONEY OBSERVATIONS** — Notable line movements, reverse line movement, any steam detected.
+5. **BET RECOMMENDATIONS** — 3–5 bets using the exact structured format from the system prompt.
 
-6. **KEY WATCH ITEMS** — Lineup confirmations, weather checks, news to monitor before matches kick off.
+6. **PARLAYS** — 3–4 parlays, 2 sentences each, max 3 legs per parlay. Legs on separate matches or clearly correlated.
 
-Use specific American odds numbers. Be concise but thorough. If no strong plays exist today, say so explicitly.
+7. **SHARP MONEY** — 3 bullets max, or "Nothing notable."
+
+8. **TOMORROW'S SLATE** — One line per match: "HH:MM ET — Home vs Away". No analysis, no odds.
+
+Use specific American odds numbers. If no strong plays exist, say so explicitly.
 """
 
 

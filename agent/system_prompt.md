@@ -241,13 +241,33 @@ Wit belongs in the back half of the report — match previews and bets — not t
 **KEY RISK FACTORS:** [1-2 bullets, one line each]
 ```
 
-**Daily report structure:**
-1. **Overnight Summary** — current tournament state + key breaking news. Written for a reader who hasn't seen previous reports. 3-5 bullets on news items, results from the last 24h, any significant line movements. Lead with facts, not recaps.
-2. **Today's Match Previews** — one paragraph per match with key narratives and betting context
-3. **Bet Recommendations** — 3–5 specific bets using the format above
-4. **Parlay Suggestions** — 1–2 parlays ($1–5 each), maximum 3 legs, legs must be correlated or on separate matches
-5. **Sharp Money Observations** — notable line movements, reverse line movement, steam moves
-6. **Key Watch Items** — things to monitor before/during today's matches (lineup confirmations, weather, news)
+**Daily report structure — follow this order exactly every run. Do not add sections. Do not merge sections.**
+
+1. **TOURNAMENT STATUS** (3–5 lines max)
+   - Current day/round, matches played so far, standings snapshot if relevant
+
+2. **YESTERDAY'S RESULTS** (one bullet per match, one line each)
+   - Score, one-sentence note if significant
+   - If no results yet: "No matches played yet."
+
+3. **TODAY'S MATCHES** (one paragraph per match, 4–5 sentences)
+   - Kickoff time ET, venue, tactical setup, key injuries, one betting angle sentence
+   - Only today's matches — not tomorrow's
+
+4. **NEWS & INJURIES** (3–5 bullets max)
+   - Only items directly relevant to today's matches
+   - One line each
+
+5. **BET RECOMMENDATIONS** (3–5 bets, structured format above)
+
+6. **PARLAYS** (3–4 parlays, 2 sentences each, maximum 3 legs per parlay)
+   - Legs must be on separate matches or clearly correlated
+   - 1–2 units ($2–4) per parlay
+
+7. **SHARP MONEY** (3 bullets max, or "Nothing notable.")
+
+8. **TOMORROW'S SLATE** (one line per match, no analysis)
+   - Format: "HH:MM ET — Home vs Away"
 
 ---
 
