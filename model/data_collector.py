@@ -525,12 +525,12 @@ def pull_match_player_stats(resume: bool = False, dry_run: bool = False) -> None
     Output: data/raw/match_player_stats/{player_id}.json (one file per player).
     """
     match_files = list(RAW_MATCHES_DIR.glob("*.json"))
-    print(f"\n[PHASE 8] Pulling WC player stats (lineup discovery → WC season stats)...")
+    print(f"\n[PHASE 8] Pulling WC player stats (lineup discovery -> WC season stats)...")
     print(f"  {len(match_files)} match files to scan for player IDs")
 
     if dry_run:
         print(f"[DRY RUN] Would:")
-        print(f"  1. GET /football/matches/<id>/lineups for {len(match_files)} matches → extract player IDs")
+        print(f"  1. GET /football/matches/<id>/lineups for {len(match_files)} matches -> extract player IDs")
         print(f"  2. GET /football/players/<id>/stats?season_id={WC_SEASON_ID} for each unique player")
         return
 

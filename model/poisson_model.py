@@ -25,6 +25,22 @@ WC_SEASON_ID = "sn_118868"
 
 DIXON_COLES_RHO = -0.13
 MAX_GOALS = 7  # compute scoreline probs for 0-0 through 6-6
+MIN_MATCHES = 3  # minimum matches for a team to influence league means / normalization
+
+WC_2026_TEAMS = {
+    "United States", "Panama", "Honduras", "Jamaica",
+    "Mexico", "Ecuador", "Venezuela", "Bolivia",
+    "Canada", "Uruguay", "Peru", "Chile",
+    "Argentina", "Paraguay", "Colombia", "Costa Rica",
+    "Brazil", "Trinidad and Tobago", "Suriname", "El Salvador",
+    "Germany", "Austria", "Switzerland", "North Macedonia",
+    "Spain", "Portugal", "Morocco", "Comoros",
+    "France", "Belgium", "Tunisia", "Senegal",
+    "England", "Netherlands", "Republic of Ireland", "Moldova",
+    "Italy", "Croatia", "Albania", "Ukraine",
+    "Norway", "Sweden", "Denmark", "Finland",
+    "Japan", "South Korea", "Saudi Arabia", "Australia",
+}
 
 
 def _load_json(path: Path) -> dict | list | None:
@@ -138,15 +154,25 @@ def compute_team_ratings(
         print("[WARN] No match records found. Run data_collector.py first.")
         return {}
 
-    # Gather all teams and compute weighted league averages
+    # Gather all teams and pre-compute match counts
     teams: set[str] = set()
+    match_counts: dict[str, int] = {}
     for r in records:
         teams.add(r["home_team"])
         teams.add(r["away_team"])
+        match_counts[r["home_team"]] = match_counts.get(r["home_team"], 0) + 1
+        match_counts[r["away_team"]] = match_counts.get(r["away_team"], 0) + 1
 
-    total_weight = sum(r["weight"] for r in records)
-    avg_home_xg = sum(r["home_xg"] * r["weight"] for r in records) / total_weight
-    avg_away_xg = sum(r["away_xg"] * r["weight"] for r in records) / total_weight
+    # Compute league means using only records where both teams have enough data.
+    # This prevents 1-2 freak results from low-sample/junk teams skewing the mean.
+    stable_records = [
+        r for r in records
+        if match_counts.get(r["home_team"], 0) >= MIN_MATCHES
+        and match_counts.get(r["away_team"], 0) >= MIN_MATCHES
+    ] or records  # fall back to all records if nothing qualifies
+    total_weight = sum(r["weight"] for r in stable_records)
+    avg_home_xg = sum(r["home_xg"] * r["weight"] for r in stable_records) / total_weight
+    avg_away_xg = sum(r["away_xg"] * r["weight"] for r in stable_records) / total_weight
     avg_xg = (avg_home_xg + avg_away_xg) / 2
 
     # Iterative MLE: attack and defense strengths
@@ -185,17 +211,13 @@ def compute_team_ratings(
             if denominator > 0:
                 defense[team] = numerator / denominator
 
-        # Normalize so mean attack = mean defense = 1
-        mean_attack = np.mean(list(attack.values()))
-        mean_defense = np.mean(list(defense.values()))
+        # Normalize so mean attack = mean defense = 1.
+        # Use only stable teams (>= MIN_MATCHES) so low-sample outliers don't skew the scale.
+        stable_teams = {t for t in teams if match_counts.get(t, 0) >= MIN_MATCHES} or teams
+        mean_attack = np.mean([attack[t] for t in stable_teams])
+        mean_defense = np.mean([defense[t] for t in stable_teams])
         attack = {t: v / mean_attack for t, v in attack.items()}
         defense = {t: v / mean_defense for t, v in defense.items()}
-
-    # Match counts per team for confidence flagging
-    match_counts: dict[str, int] = {}
-    for r in records:
-        match_counts[r["home_team"]] = match_counts.get(r["home_team"], 0) + 1
-        match_counts[r["away_team"]] = match_counts.get(r["away_team"], 0) + 1
 
     ratings = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -399,11 +421,19 @@ if __name__ == "__main__":
     print("Computing team ratings from cached data...")
     ratings = compute_team_ratings()
     if ratings:
-        print(f"Ratings computed for {len(ratings.get('teams', {}))} teams.")
-        # Quick smoke test
-        teams = list(ratings.get("teams", {}).keys())
-        if len(teams) >= 2:
-            pred = predict_match(teams[0], teams[1], ratings)
-            print(f"\nSample prediction: {pred['home_team']} vs {pred['away_team']}")
-            print(f"  xG: {pred['home_xg_pred']} — {pred['away_xg_pred']}")
-            print(f"  Win %: {pred['home_win_pct']} | {pred['draw_pct']} | {pred['away_win_pct']}")
+        all_teams = ratings.get("teams", {})
+        print(f"Ratings computed for {len(all_teams)} teams.")
+
+        wc_rated = [
+            (name, data) for name, data in all_teams.items()
+            if name in WC_2026_TEAMS and data.get("match_count", 0) >= MIN_MATCHES
+        ]
+        wc_ranked = sorted(wc_rated, key=lambda x: x[1]["attack_strength"], reverse=True)[:10]
+        print(f"\nTop 10 WC 2026 teams by attack strength (>= {MIN_MATCHES} matches):")
+        for i, (name, data) in enumerate(wc_ranked, 1):
+            print(
+                f"  {i:2}. {name:<28} "
+                f"attack={data['attack_strength']:.3f}  "
+                f"defense={data['defense_strength']:.3f}  "
+                f"matches={data['match_count']}"
+            )
