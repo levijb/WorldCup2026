@@ -105,7 +105,13 @@ def fetch_fixtures_today() -> list:
         try:
             commence = match["commence_time"]
             kickoff_dt = datetime.fromisoformat(commence.replace("Z", "+00:00"))
-            if kickoff_dt.astimezone(timezone(ET_OFFSET)).date() != today_et:
+            kickoff_et = kickoff_dt.astimezone(timezone(ET_OFFSET))
+            is_today = kickoff_et.date() == today_et
+            is_late_night = (
+                kickoff_et.date() == today_et + timedelta(days=1)
+                and kickoff_et.hour < 3
+            )
+            if not is_today and not is_late_night:
                 continue
             fixtures.append({
                 "teams": {
