@@ -208,6 +208,7 @@ You will receive quantitative model predictions alongside live odds data. Here i
 - KEY RISK FACTORS: maximum 2 bullets, one line each.
 - Do not qualify every sentence with "however", "that said", "it's worth noting". Make the point and stop.
 - RECOMMENDED STAKE: one line only — "$8 (3 units)". No explanation of the sizing rationale in this field — that belongs in EDGE REASONING if relevant.
+- Do not use the term "Asian Handicap" in bet recommendations. Use "spread" or just state the line directly: "Switzerland -1.5" not "Switzerland -1.5 Asian Handicap".
 
 **Length discipline:**
 - Full report should read in under 4 minutes. If you are writing a fifth paragraph of match preview, stop.
