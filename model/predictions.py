@@ -143,6 +143,23 @@ def run_predictions(fixtures: list | None = None) -> list:
     odds_cache = load_odds_cache()
     player_profiles = load_player_profiles()
     raw_preds = generate_all_predictions(fixtures, ratings)
+
+    # Flag low-confidence predictions where either team lacks sufficient match history
+    teams_data = ratings.get("teams", {})
+    for pred in raw_preds:
+        unreliable = [
+            t for t in [pred["home_team"], pred["away_team"]]
+            if not teams_data.get(t, {}).get("reliable", True)
+        ]
+        if unreliable:
+            reasons = [
+                f"{t} has only {teams_data.get(t, {}).get('match_count', 0)} matches"
+                " -- ratings unreliable, weight qualitative factors heavily"
+                for t in unreliable
+            ]
+            pred["low_confidence"] = True
+            pred["low_confidence_reason"] = "; ".join(reasons)
+
     enriched: list[dict] = []
 
     for pred in raw_preds:
@@ -260,9 +277,12 @@ def format_predictions_markdown(predictions: list) -> str:
                 if pct is not None:
                     lines.append(f"  • {p['player']}: anytime scorer {pct}%")
 
+        if pred.get("low_confidence"):
+            lines.append(f"- LOW CONFIDENCE: {pred.get('low_confidence_reason', 'small sample')}")
+
         if pred.get("warnings"):
             for w in pred["warnings"]:
-                lines.append(f"- ⚠️  {w}")
+                lines.append(f"- NOTE: {w}")
 
         lines.append("")
 

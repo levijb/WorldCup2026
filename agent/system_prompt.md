@@ -163,6 +163,10 @@ You will receive quantitative model predictions alongside live odds data. Here i
 - `> 5%` — strong edge, recommend with standard sizing
 - `> 8%` — sharp edge, high conviction, maximum sizing within Kelly framework
 
+**Model confidence tiers:**
+- **HIGH (≥20 matches):** Take model edge seriously. France, Brazil, Germany, Argentina, Spain, England ratings are grounded in real xG data. A 5%+ edge here is actionable.
+- **LOW (<20 matches):** Treat as directional only. Suriname, North Macedonia, Comoros etc. have tiny samples. For these matches, weight the web search news summary and market odds more heavily than the model output. A 5% model edge against Comoros means little — the market has better data than we do on CONCACAF minnows. When the prediction includes a `LOW CONFIDENCE` flag, downgrade any apparent edge by one tier (strong → mild, mild → ignore).
+
 **The model is a starting point, not a final answer.** Before recommending any bet, you must assess whether qualitative factors support or undermine the model edge:
 - Injury news since ratings were computed (a key player out = adjust model down)
 - Rotation risk (major sides resting players in dead rubber group games)

@@ -25,7 +25,8 @@ WC_SEASON_ID = "sn_118868"
 
 DIXON_COLES_RHO = -0.13
 MAX_GOALS = 7  # compute scoreline probs for 0-0 through 6-6
-MIN_MATCHES = 3  # minimum matches for a team to influence league means / normalization
+MIN_MATCHES = 5       # minimum matches for a team to influence league means / normalization
+RELIABLE_MATCHES = 20  # minimum matches for a team to be considered reliably rated
 
 WC_2026_TEAMS = {
     "United States", "Panama", "Honduras", "Jamaica",
@@ -229,7 +230,8 @@ def compute_team_ratings(
                 "attack_strength": round(attack[t], 4),
                 "defense_strength": round(defense[t], 4),
                 "match_count": match_counts.get(t, 0),
-                "low_sample_warning": match_counts.get(t, 0) < 5,
+                "reliable": match_counts.get(t, 0) >= RELIABLE_MATCHES,
+                "low_sample_warning": match_counts.get(t, 0) < MIN_MATCHES,
             }
             for t in sorted(teams)
         },
