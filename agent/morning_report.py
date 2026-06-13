@@ -34,8 +34,8 @@ MODEL_PREDICTIONS_PATH = ROOT / "data" / "processed" / "model_predictions.json"
 ODDS_API_KEY = os.getenv("THE_ODDS_API_KEY", "")
 API_SPORTS_KEY = os.getenv("API_SPORTS_KEY", "")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
-RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
-RESEND_TO_EMAIL = os.getenv("RESEND_TO_EMAIL", "")
+GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD", "")
+GMAIL_FROM = os.getenv("RESEND_TO_EMAIL", "")  # levijbdavis@gmail.com — reuses existing env var
 
 MODEL = "claude-sonnet-4-6"
 ET_OFFSET = timedelta(hours=-4)  # EDT (UTC-4)
@@ -554,8 +554,16 @@ def markdown_to_html(md_text: str) -> str:
 
 
 def send_emails(report_text: str, today_str: str) -> None:
-    if not RESEND_API_KEY:
-        print("[WARN] RESEND_API_KEY not set, skipping email.", file=sys.stderr)
+    import smtplib
+    import ssl
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+
+    if not GMAIL_APP_PASSWORD:
+        print("[WARN] GMAIL_APP_PASSWORD not set, skipping email.", file=sys.stderr)
+        return
+    if not GMAIL_FROM:
+        print("[WARN] RESEND_TO_EMAIL (Gmail sender address) not set, skipping email.", file=sys.stderr)
         return
 
     try:
@@ -572,31 +580,32 @@ def send_emails(report_text: str, today_str: str) -> None:
     et_now = now_et()
     weekday = et_now.strftime("%A")
     date_display = et_now.strftime("%B %d").replace(" 0", " ").lstrip()
-    subject = f"⚽ WC2026 Morning Brief — {weekday} {date_display}"
+    subject = f"WC2026 Morning Brief — {weekday} {date_display}"
     html_body = markdown_to_html(report_text)
-    from_addr = RESEND_TO_EMAIL or "noreply@worldcup2026.local"
 
-    for sub in active:
-        to_email = sub.get("email", "")
-        if not to_email or to_email == "REPLACE_WITH_YOUR_EMAIL":
-            print(f"[SKIP] Subscriber '{sub.get('name')}' has no valid email.")
-            continue
-        try:
-            resp = requests.post(
-                "https://api.resend.com/emails",
-                headers={
-                    "Authorization": f"Bearer {RESEND_API_KEY}",
-                    "Content-Type": "application/json",
-                },
-                json={"from": from_addr, "to": [to_email], "subject": subject, "html": html_body},
-                timeout=15,
-            )
-            if resp.status_code == 200:
-                print(f"[OK] Email sent to {to_email}")
-            else:
-                print(f"[WARN] Resend returned {resp.status_code} for {to_email}: {resp.text}", file=sys.stderr)
-        except requests.RequestException as e:
-            print(f"[WARN] Email send failed for {to_email}: {e}", file=sys.stderr)
+    context = ssl.create_default_context()
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(GMAIL_FROM, GMAIL_APP_PASSWORD)
+            for sub in active:
+                to_email = sub.get("email", "")
+                if not to_email or to_email == "REPLACE_WITH_YOUR_EMAIL":
+                    print(f"[SKIP] Subscriber '{sub.get('name')}' has no valid email.")
+                    continue
+                try:
+                    msg = MIMEMultipart("alternative")
+                    msg["Subject"] = subject
+                    msg["From"] = GMAIL_FROM
+                    msg["To"] = to_email
+                    msg.attach(MIMEText(html_body, "html"))
+                    server.sendmail(GMAIL_FROM, to_email, msg.as_string())
+                    print(f"[OK] Email sent to {to_email}")
+                except smtplib.SMTPException as e:
+                    print(f"[WARN] Email send failed for {to_email}: {e}", file=sys.stderr)
+    except smtplib.SMTPAuthenticationError:
+        print("[WARN] Gmail authentication failed — check GMAIL_APP_PASSWORD in .env", file=sys.stderr)
+    except smtplib.SMTPException as e:
+        print(f"[WARN] SMTP connection failed: {e}", file=sys.stderr)
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
