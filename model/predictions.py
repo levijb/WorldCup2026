@@ -30,6 +30,8 @@ MODEL_PREDICTIONS_PATH = PROCESSED_DIR / "model_predictions.json"
 
 ET_OFFSET = timedelta(hours=-4)
 
+MODEL_ENABLED = False  # Re-enable after group stage when WC match data is available
+
 EDGE_MILD = 3.0
 EDGE_STRONG = 5.0
 EDGE_SHARP = 8.0
@@ -163,6 +165,9 @@ def extract_dk_odds(match_name_home: str, match_name_away: str, odds_cache: dict
 
 def run_predictions(fixtures: list | None = None) -> list:
     """Run all predictions for today's fixtures. Returns list of prediction dicts."""
+    if not MODEL_ENABLED:
+        print("[MODEL] Disabled — run after group stage when WC match data is available.")
+        return []
     if fixtures is None:
         fixtures = fetch_fixtures_today()
 

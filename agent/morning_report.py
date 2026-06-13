@@ -264,7 +264,6 @@ def build_dynamic_content(
     injuries: list,
     news: str,
     line_movements: str,
-    model_predictions_md: str,
 ) -> str:
     """Dynamic content block: today's data — never cache this."""
     et_now = now_et().strftime("%Y-%m-%d %H:%M ET")
@@ -353,8 +352,6 @@ Odds quota remaining: {odds_result.get('quota_remaining', 'unknown')}
 
 ### Today's News & Intelligence
 {news}
-
-{model_predictions_md}
 
 ---
 
@@ -671,17 +668,8 @@ def main() -> None:
         recent_results = "(recent results skipped in dry-run mode)"
         news = "(news search skipped in dry-run mode)"
 
-    # 6. Run model predictions (regenerate fresh for today)
-    print("[MODEL] Running predictions...")
-    try:
-        import sys as _sys
-        _sys.path.insert(0, str(ROOT / "model"))
-        from predictions import run_predictions, format_predictions_markdown
-        preds = run_predictions(fixtures=fixtures)
-        model_predictions_md = format_predictions_markdown(preds) if preds else load_model_predictions_markdown()
-    except Exception as e:
-        print(f"[WARN] Predictions failed: {e}", file=sys.stderr)
-        model_predictions_md = load_model_predictions_markdown()
+    # 6. Model predictions disabled — insufficient WC data to calibrate
+    model_predictions_md = ""  # Model disabled — insufficient WC data
 
     # 7. Build prompt
     static_context = build_static_context()
@@ -693,7 +681,6 @@ def main() -> None:
         injuries=injuries,
         news=news,
         line_movements=line_movements,
-        model_predictions_md=model_predictions_md,
     )
 
     if args.dry_run:
