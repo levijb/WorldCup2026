@@ -57,20 +57,18 @@ def compute_team_ratings(
         match_id = xg_file.stem
         home_xg = None
         away_xg = None
-        # TheStatsAPI returns stats as a list or dict depending on endpoint
-        if isinstance(data, dict):
-            stats = data.get("data", data)
-        else:
-            stats = data
-        if isinstance(stats, list):
-            for entry in stats:
-                side = entry.get("side", "").lower()
-                val = entry.get("xg") or entry.get("expected_goals")
-                if val is not None:
-                    if side == "home":
-                        home_xg = float(val)
-                    elif side == "away":
-                        away_xg = float(val)
+        # Structure: {"data": {"overview": {"expected_goals": {"all": {"home": X, "away": Y}}}}}
+        stats = data.get("data", data) if isinstance(data, dict) else {}
+        if isinstance(stats, dict):
+            xg_all = (
+                stats.get("overview", {}).get("expected_goals", {}).get("all", {})
+            )
+            h = xg_all.get("home")
+            a = xg_all.get("away")
+            if h is not None:
+                home_xg = float(h)
+            if a is not None:
+                away_xg = float(a)
         xg_lookup[match_id] = {"home_xg": home_xg, "away_xg": away_xg}
 
     # Collect all match records
@@ -82,29 +80,35 @@ def compute_team_ratings(
         match_id = match_file.stem
         try:
             match_date_str = (
-                data.get("date") or data.get("match_date") or data.get("fixture", {}).get("date", "")
+                data.get("date") or data.get("utc_date") or data.get("match_date")
+                or data.get("fixture", {}).get("date", "")
             )
             if not match_date_str:
                 continue
-            match_date = datetime.fromisoformat(match_date_str.replace("Z", "+00:00")).date()
+            match_date = datetime.fromisoformat(str(match_date_str).replace("Z", "+00:00")).date()
             days_ago = (today - match_date).days
             if days_ago < 0:
                 continue
             weight = math.exp(-0.005 * days_ago)
 
-            home_team = (
-                data.get("home_team")
-                or data.get("teams", {}).get("home", {}).get("name", "")
-            )
-            away_team = (
-                data.get("away_team")
-                or data.get("teams", {}).get("away", {}).get("name", "")
-            )
+            ht = data.get("home_team") or data.get("teams", {}).get("home", {})
+            at = data.get("away_team") or data.get("teams", {}).get("away", {})
+            home_team = ht.get("name", "") if isinstance(ht, dict) else str(ht)
+            away_team = at.get("name", "") if isinstance(at, dict) else str(at)
             if not home_team or not away_team:
                 continue
 
-            home_goals = data.get("home_goals") or data.get("goals", {}).get("home")
-            away_goals = data.get("away_goals") or data.get("goals", {}).get("away")
+            score = data.get("score", {}) or {}
+            home_goals = (
+                data.get("home_goals")
+                or data.get("goals", {}).get("home")
+                or score.get("home")
+            )
+            away_goals = (
+                data.get("away_goals")
+                or data.get("goals", {}).get("away")
+                or score.get("away")
+            )
 
             xg = xg_lookup.get(match_id, {})
             home_xg = xg.get("home_xg")
