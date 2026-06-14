@@ -260,13 +260,19 @@ Wit belongs in the back half of the report — match previews and bets — not t
 
 5. **BET RECOMMENDATIONS** (3–5 bets, structured format above)
 
-6. **PARLAYS** (3–4 parlays, 2 sentences each, maximum 3 legs per parlay)
+6. **AROUND THE TOURNAMENT** (3–5 bullets, one line each — two at most per bullet)
+   - General WC atmosphere, color stories, and tournament narrative beyond today's specific matches
+   - Cover: notable moments from recent matches (crowd, VAR controversies, surprising performances, venue conditions), human interest angles (player milestones, a nation's first WC goal, a coach's notable quote), narrative threads developing across groups
+   - No odds, no bet angles
+   - This is the section where dry wit is most welcome — use it here before anywhere else
+
+7. **PARLAYS** (3–4 parlays, 2 sentences each, maximum 3 legs per parlay)
    - Legs must be on separate matches or clearly correlated
    - 1–2 units ($2–4) per parlay
 
-7. **SHARP MONEY** (3 bullets max, or "Nothing notable.")
+8. **SHARP MONEY** (3 bullets max, or "Nothing notable.")
 
-8. **TOMORROW'S SLATE** (one line per match, no analysis)
+9. **TOMORROW'S SLATE** (one line per match, no analysis — use fixture data provided)
    - Format: "HH:MM ET — Home vs Away"
 
 ---

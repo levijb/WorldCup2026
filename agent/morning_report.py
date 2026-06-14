@@ -123,6 +123,30 @@ def fetch_fixtures_today() -> list:
     return fixtures
 
 
+def fetch_fixtures_tomorrow() -> list:
+    """Derive tomorrow's WC fixtures from the odds cache. Capped at 8 matches."""
+    try:
+        cache = json.loads(ODDS_CACHE_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return []
+    tomorrow_et = now_et().date() + timedelta(days=1)
+    fixtures = []
+    for match in cache.get("matches", []):
+        try:
+            commence = match["commence_time"]
+            kickoff_dt = datetime.fromisoformat(commence.replace("Z", "+00:00"))
+            if kickoff_dt.astimezone(timezone(ET_OFFSET)).date() != tomorrow_et:
+                continue
+            fixtures.append({
+                "home_team": match["home_team"],
+                "away_team": match["away_team"],
+                "commence_time": commence,
+            })
+        except (KeyError, ValueError):
+            continue
+    return fixtures[:8]
+
+
 def fetch_recent_results_via_search(client) -> str:
     """Search for recent WC 2026 match results via web search."""
     try:
@@ -133,8 +157,8 @@ def fetch_recent_results_via_search(client) -> str:
             messages=[{
                 "role": "user",
                 "content": (
-                    "Search for: 'World Cup 2026 match results scores'. "
-                    "Return a concise bullet-point list of results from the last 2 days only. "
+                    "Search for: 'World Cup 2026 match results last 48 hours scores'. "
+                    "Return a concise bullet-point list of completed match results from the last 48 hours only. "
                     "Format each result as: 'Date: Team A score-score Team B'. No commentary."
                 ),
             }],
@@ -262,6 +286,7 @@ Key sharp-money pre-tournament read:
 def build_dynamic_content(
     today_str: str,
     fixtures: list,
+    fixtures_tomorrow: list,
     recent_results: str,
     odds_result: dict,
     injuries: list,
@@ -334,13 +359,28 @@ def build_dynamic_content(
             pass
     injuries_text = "\n".join(inj_lines) if inj_lines else "  No injury data available."
 
+    # Format tomorrow's slate
+    tomorrow_lines = []
+    for f in fixtures_tomorrow:
+        try:
+            kickoff_dt = datetime.fromisoformat(f["commence_time"].replace("Z", "+00:00"))
+            kickoff_et = kickoff_dt.astimezone(timezone(ET_OFFSET))
+            time_str = kickoff_et.strftime("%I:%M %p").lstrip("0") + " ET"
+            tomorrow_lines.append(f"  {time_str} — {f['home_team']} vs {f['away_team']}")
+        except (KeyError, ValueError):
+            continue
+    tomorrow_text = "\n".join(tomorrow_lines) if tomorrow_lines else "  No matches scheduled for tomorrow."
+
     return f"""## LIVE DATA — {et_now}
 
 ### Today's Fixtures ({today_str})
 {fixtures_text}
 
-### Recent Results (Last 3 Days)
+### Recent Results (Last 48 Hours)
 {results_text}
+
+### Tomorrow's Fixtures
+{tomorrow_text}
 
 ### Current DraftKings Odds
 {odds_text}
@@ -372,11 +412,13 @@ Produce the full morning briefing report in this exact order:
 
 5. **BET RECOMMENDATIONS** — 3–5 bets using the exact structured format from the system prompt.
 
-6. **PARLAYS** — 3–4 parlays, 2 sentences each, max 3 legs per parlay. Legs on separate matches or clearly correlated.
+6. **AROUND THE TOURNAMENT** — 3–5 bullets on general WC atmosphere, color stories, and tournament narrative beyond today's matches. One line per bullet, two at most. No odds, no bet angles.
 
-7. **SHARP MONEY** — 3 bullets max, or "Nothing notable."
+7. **PARLAYS** — 3–4 parlays, 2 sentences each, max 3 legs per parlay. Legs on separate matches or clearly correlated.
 
-8. **TOMORROW'S SLATE** — One line per match: "HH:MM ET — Home vs Away". No analysis, no odds.
+8. **SHARP MONEY** — 3 bullets max, or "Nothing notable."
+
+9. **TOMORROW'S SLATE** — Use the fixture data provided above. One line per match: "HH:MM ET — Home vs Away". No analysis, no odds.
 
 Use specific American odds numbers. If no strong plays exist, say so explicitly.
 """
@@ -648,6 +690,7 @@ def main() -> None:
 
     print("[FETCH] Today's fixtures (from odds cache)...")
     fixtures = fetch_fixtures_today()
+    fixtures_tomorrow = fetch_fixtures_tomorrow()
 
     print("[FETCH] Injuries...")
     injuries = fetch_injuries()
@@ -683,6 +726,7 @@ def main() -> None:
     dynamic_content = build_dynamic_content(
         today_str=today_str,
         fixtures=fixtures,
+        fixtures_tomorrow=fixtures_tomorrow,
         recent_results=recent_results,
         odds_result=odds_result,
         injuries=injuries,
