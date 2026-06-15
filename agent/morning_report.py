@@ -185,7 +185,7 @@ def fetch_injuries() -> list:
 
 
 def fetch_news_via_claude(client, today_str: str) -> str:
-    """Run a web search for today's WC news via Claude's web_search tool."""
+    """Search for match-relevant WC news: injuries, lineups, suspensions."""
     try:
         resp = client.messages.create(
             model=MODEL,
@@ -194,18 +194,42 @@ def fetch_news_via_claude(client, today_str: str) -> str:
             messages=[{
                 "role": "user",
                 "content": (
-                    f"Search for: '{today_str} World Cup 2026 news team form injury updates lineup'. "
-                    "Return a concise bullet-point summary of the most important items found, "
-                    "focused on match-relevant news, injuries, suspensions, and lineup changes."
+                    f"Search for: '{today_str} World Cup 2026 news injuries lineup team form'. "
+                    "Return a concise bullet-point summary focused on match-relevant news: "
+                    "injuries, suspensions, confirmed lineups, and form heading into today's matches."
                 ),
             }],
         )
-        # Extract text from response — tool use blocks come back with tool_result content
         text_parts = [b.text for b in resp.content if hasattr(b, "text")]
         return "\n".join(text_parts) if text_parts else "(no news retrieved)"
     except Exception as e:
         print(f"[WARN] News search failed: {e}", file=sys.stderr)
         return f"(news search unavailable: {e})"
+
+
+def fetch_atmosphere_via_claude(client, today_str: str) -> str:
+    """Search for WC color stories, atmosphere, and tournament narrative beyond match results."""
+    try:
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=800,
+            tools=[{"type": "web_search_20250305", "name": "web_search"}],
+            messages=[{
+                "role": "user",
+                "content": (
+                    f"Search for: 'World Cup 2026 stories atmosphere fans goals moments {today_str}'. "
+                    "Return 3-5 bullet points covering: crowd atmosphere, VAR controversies, "
+                    "surprising performances, player milestones, human interest angles, "
+                    "memorable goals, coach quotes, venue conditions. "
+                    "No match result summaries — only color and narrative."
+                ),
+            }],
+        )
+        text_parts = [b.text for b in resp.content if hasattr(b, "text")]
+        return "\n".join(text_parts) if text_parts else "(no atmosphere stories retrieved)"
+    except Exception as e:
+        print(f"[WARN] Atmosphere search failed: {e}", file=sys.stderr)
+        return f"(atmosphere search unavailable: {e})"
 
 
 # ── Odds Cache ─────────────────────────────────────────────────────────────────
@@ -291,6 +315,7 @@ def build_dynamic_content(
     odds_result: dict,
     injuries: list,
     news: str,
+    around_the_tournament: str,
     line_movements: str,
 ) -> str:
     """Dynamic content block: today's data — never cache this."""
@@ -395,6 +420,9 @@ Odds quota remaining: {odds_result.get('quota_remaining', 'unknown')}
 
 ### Today's News & Intelligence
 {news}
+
+### Around the Tournament (Color & Stories)
+{around_the_tournament}
 
 ---
 
@@ -711,12 +739,16 @@ def main() -> None:
             recent_results = fetch_recent_results_via_search(client)
             print("[FETCH] News via web search...")
             news = fetch_news_via_claude(client, today_str)
+            print("[FETCH] Around the tournament via web search...")
+            around_the_tournament = fetch_atmosphere_via_claude(client, today_str)
         except Exception as e:
             recent_results = f"(recent results unavailable: {e})"
             news = f"(news search unavailable: {e})"
+            around_the_tournament = f"(atmosphere search unavailable: {e})"
     else:
         recent_results = "(recent results skipped in dry-run mode)"
         news = "(news search skipped in dry-run mode)"
+        around_the_tournament = "(atmosphere search skipped in dry-run mode)"
 
     # 6. Model predictions disabled — insufficient WC data to calibrate
     model_predictions_md = ""  # Model disabled — insufficient WC data
@@ -731,6 +763,7 @@ def main() -> None:
         odds_result=odds_result,
         injuries=injuries,
         news=news,
+        around_the_tournament=around_the_tournament,
         line_movements=line_movements,
     )
 
