@@ -157,9 +157,10 @@ def fetch_recent_results_via_search(client) -> str:
             messages=[{
                 "role": "user",
                 "content": (
-                    "Search for: 'World Cup 2026 match results last 48 hours scores'. "
-                    "Return a concise bullet-point list of completed match results from the last 48 hours only. "
-                    "Format each result as: 'Date: Team A score-score Team B'. No commentary."
+                    "Search for World Cup 2026 match results from the last 2 days. "
+                    "Return completed match results as bullet points, each prefixed with the match date. "
+                    "Format: 'YYYY-MM-DD: Team A score-score Team B (Group X)'. "
+                    "Separate yesterday's matches from the day before — label each day clearly. No commentary."
                 ),
             }],
         )
@@ -401,7 +402,7 @@ def build_dynamic_content(
 ### Today's Fixtures ({today_str})
 {fixtures_text}
 
-### Recent Results (Last 48 Hours)
+### Results (Last 2 Days — dated)
 {results_text}
 
 ### Tomorrow's Fixtures
@@ -432,7 +433,12 @@ Produce the full morning briefing report in this exact order:
 
 1. **TOURNAMENT STATUS** — Current day/round, matches played, standings snapshot if relevant. 3–5 lines max.
 
-2. **YESTERDAY'S RESULTS** — One bullet per match, one line each. Score + one-sentence note if significant. If no matches yet: "No matches played yet."
+2. **RESULTS** — Completed matches from the last two days, split into subsections by day:
+   - **Yesterday** (subheading) — matches played the day before today, one bullet each: score, group, one-sentence note if significant
+   - **Day Before** (subheading) — matches played two days before today, same format
+   - Use the dates in the provided results data to assign each match to the correct subsection. Do not lump both days together.
+   - If a subsection has no matches, write "No matches." under that subheading.
+   - If no matches have been played at all yet: "No matches played yet." with no subsections.
 
 3. **TODAY'S MATCHES** — One paragraph per match (4–5 sentences). Kickoff time ET, venue, tactical setup, key injuries, one betting angle sentence. Today's matches only.
 
@@ -446,7 +452,9 @@ Produce the full morning briefing report in this exact order:
 
 8. **SHARP MONEY** — 3 bullets max, or "Nothing notable."
 
-9. **TOMORROW'S SLATE** — Use the fixture data provided above. One line per match: "HH:MM ET — Home vs Away". No analysis, no odds.
+9. **TOMORROW'S SLATE** — Use the fixture data provided above. One markdown bullet per match, each on its own line:
+   "- HH:MM ET — Home vs Away"
+   No analysis, no odds. Do not combine matches onto a single line.
 
 Use specific American odds numbers. If no strong plays exist, say so explicitly.
 """

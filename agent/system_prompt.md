@@ -246,9 +246,12 @@ Wit belongs in the back half of the report — match previews and bets — not t
 1. **TOURNAMENT STATUS** (3–5 lines max)
    - Current day/round, matches played so far, standings snapshot if relevant
 
-2. **YESTERDAY'S RESULTS** (one bullet per match, one line each)
-   - Score, one-sentence note if significant
-   - If no results yet: "No matches played yet."
+2. **RESULTS** — completed matches from the last two days, split into subsections by day:
+   - **Yesterday** (subheading) — matches played the day before the report date, one bullet each: score, group, one-sentence note if significant
+   - **Day Before** (subheading) — matches played two days before the report date, same format
+   - Use the match dates in the provided results data to assign each match to the correct subsection. Do not lump both days together.
+   - If a subsection has no matches, write "No matches." under that subheading.
+   - If no matches have been played at all yet: "No matches played yet." with no subsections.
 
 3. **TODAY'S MATCHES** (one paragraph per match, 4–5 sentences)
    - Kickoff time ET, venue, tactical setup, key injuries, one betting angle sentence
@@ -272,8 +275,10 @@ Wit belongs in the back half of the report — match previews and bets — not t
 
 8. **SHARP MONEY** (3 bullets max, or "Nothing notable.")
 
-9. **TOMORROW'S SLATE** (one line per match, no analysis — use fixture data provided)
-   - Format: "HH:MM ET — Home vs Away"
+9. **TOMORROW'S SLATE** — one bullet per match, each on its own line. Use the fixture data provided. Format each as a markdown bullet:
+   - HH:MM ET — Home vs Away
+
+   Do not put multiple matches on one line. Do not run them together as a paragraph.
 
 ---
 
