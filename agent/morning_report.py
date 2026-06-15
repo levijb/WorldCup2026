@@ -40,6 +40,9 @@ GMAIL_FROM = os.getenv("RESEND_TO_EMAIL", "")  # levijbdavis@gmail.com — reuse
 
 MODEL = "claude-sonnet-4-6"
 ET_OFFSET = timedelta(hours=-4)  # EDT (UTC-4)
+# Set this to wherever the dashboard is actually served. A local file path
+# (dashboard/index.html) is NOT clickable in email — use a hosted URL.
+DASHBOARD_URL = os.getenv("DASHBOARD_URL", "https://levijbdavis.github.io/WorldCup2026/dashboard/index.html")
 
 
 def now_et() -> datetime:
@@ -528,7 +531,12 @@ def save_report(report_text: str, today_str: str, quota_remaining: str) -> Path:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     report_path = REPORTS_DIR / f"{today_str}_morning_report.md"
     generated_at = now_et().strftime("%Y-%m-%d %H:%M ET")
-    header = f"# WC2026 Morning Report — {today_str}\n\n_Generated: {generated_at} | API quota remaining: {quota_remaining}_\n\n---\n\n"
+    header = (
+        f"# WC2026 Morning Report — {today_str}\n\n"
+        f"_Generated: {generated_at} | API quota remaining: {quota_remaining}_\n\n"
+        f"[📊 Open the live dashboard →]({DASHBOARD_URL})\n\n"
+        f"---\n\n"
+    )
     report_path.write_text(header + report_text, encoding="utf-8")
     print(f"[OK] Report saved to {report_path}")
     return report_path
@@ -566,22 +574,27 @@ def markdown_to_html(md_text: str) -> str:
     html_lines = []
     bold_re = re.compile(r"\*\*(.+?)\*\*")
     bold_repl = r'<strong style="color:#ffffff">\1</strong>'
+    link_re = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+    link_repl = r'<a href="\2" style="color:#58a6ff;text-decoration:none">\1</a>'
+
+    def inline(s: str) -> str:
+        return bold_re.sub(bold_repl, link_re.sub(link_repl, s))
+
     for line in lines:
         if line.startswith("### "):
-            line = f'<h3 style="color:#e0e0e0;margin:16px 0 4px">{bold_re.sub(bold_repl, line[4:])}</h3>'
+            line = f'<h3 style="color:#e0e0e0;margin:16px 0 4px">{inline(line[4:])}</h3>'
         elif line.startswith("## "):
-            line = f'<h2 style="color:#ffffff;margin:20px 0 6px;border-bottom:1px solid #333;padding-bottom:4px">{bold_re.sub(bold_repl, line[3:])}</h2>'
+            line = f'<h2 style="color:#ffffff;margin:20px 0 6px;border-bottom:1px solid #333;padding-bottom:4px">{inline(line[3:])}</h2>'
         elif line.startswith("# "):
-            line = f'<h1 style="color:#ffffff;margin:0 0 16px">{bold_re.sub(bold_repl, line[2:])}</h1>'
+            line = f'<h1 style="color:#ffffff;margin:0 0 16px">{inline(line[2:])}</h1>'
         elif line.strip() == "---":
             line = '<hr style="border:none;border-top:1px solid #333;margin:16px 0">'
         elif line.startswith("- ") or line.startswith("• "):
-            content = bold_re.sub(bold_repl, line[2:])
-            line = f'<li style="margin:2px 0">{content}</li>'
+            line = f'<li style="margin:2px 0">{inline(line[2:])}</li>'
         elif line.strip() == "":
             line = "<br>"
         else:
-            line = f'<p style="margin:4px 0">{bold_re.sub(bold_repl, line)}</p>'
+            line = f'<p style="margin:4px 0">{inline(line)}</p>'
         html_lines.append(line)
 
     body_content = "\n".join(html_lines)

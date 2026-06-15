@@ -2,6 +2,8 @@
 
 _Generated: 2026-06-15 01:28 ET | API quota remaining: 395_
 
+[📊 Open the live dashboard →](https://levijbdavis.github.io/WorldCup2026/dashboard/index.html)
+
 ---
 
 # WorldCup2026 Betting Intelligence — June 15, 2026
