@@ -2,10 +2,12 @@
 morning_report.py — Daily betting intelligence report generator.
 
 Usage:
-    python agent/morning_report.py                # full run
-    python agent/morning_report.py --no-email     # skip email send
-    python agent/morning_report.py --no-push      # skip git commit/push
+    python agent/morning_report.py                # generate report, save to reports/, no email
+    python agent/morning_report.py --no-push      # generate, skip git commit/push
     python agent/morning_report.py --dry-run      # print prompt, no Claude call
+    python agent/morning_report.py --send-email   # send today's saved report (review first!)
+    python agent/morning_report.py --send-email --send-date 2026-06-14  # send a past report
+    python agent/morning_report.py --no-email     # (accepted but ignored; email never auto-sends)
 """
 
 import argparse
@@ -28,7 +30,6 @@ ODDS_CACHE_PATH = ROOT / "data" / "odds_cache.json"
 BETS_PATH = ROOT / "data" / "bets.json"
 SUBSCRIBERS_PATH = ROOT / "data" / "subscribers.json"
 REPORTS_DIR = ROOT / "reports"
-MODEL_PREDICTIONS_PATH = ROOT / "data" / "processed" / "model_predictions.json"
 
 # ── Config ────────────────────────────────────────────────────────────────────
 ODDS_API_KEY = os.getenv("THE_ODDS_API_KEY", "")
@@ -481,58 +482,6 @@ def cache_upcoming_wc_odds() -> None:
         print(f"[WARN] WC odds caching skipped: {e}", file=sys.stderr)
 
 
-# ── Model Predictions ──────────────────────────────────────────────────────────
-
-def load_model_predictions_markdown() -> str:
-    """Load model predictions and format as markdown for the prompt."""
-    if not MODEL_PREDICTIONS_PATH.exists():
-        return "## MODEL PREDICTIONS\n\n(Model predictions not yet generated — run model/predictions.py first)"
-    try:
-        predictions = json.loads(MODEL_PREDICTIONS_PATH.read_text(encoding="utf-8"))
-        generated_at = predictions.get("generated_at", "unknown")
-        matches = predictions.get("predictions", [])
-        if not matches:
-            return f"## MODEL PREDICTIONS\n\nGenerated: {generated_at}\n(No predictions for today)"
-        lines = [f"## MODEL PREDICTIONS\n\nGenerated: {generated_at}\n"]
-        for pred in matches:
-            home = pred.get("home_team", "?")
-            away = pred.get("away_team", "?")
-            lines.append(f"### {home} vs {away}")
-            lines.append(f"- Model xG: {home} {pred.get('home_xg_pred', '?')} — {away} {pred.get('away_xg_pred', '?')}")
-            lines.append(
-                f"- Win probabilities: {home} {pred.get('home_win_pct', '?')}% | "
-                f"Draw {pred.get('draw_pct', '?')}% | {away} {pred.get('away_win_pct', '?')}%"
-            )
-            # Edges
-            for edge_key, label in [
-                ("home_edge", f"{home} ML edge"),
-                ("draw_edge", "Draw edge"),
-                ("away_edge", f"{away} ML edge"),
-                ("over_25_edge", "Over 2.5 edge"),
-                ("under_25_edge", "Under 2.5 edge"),
-                ("btts_edge", "BTTS Yes edge"),
-            ]:
-                edge_val = pred.get(edge_key)
-                if edge_val is not None:
-                    flag = " ← EDGE" if edge_val >= 5 else (" ← mild edge" if edge_val >= 3 else "")
-                    lines.append(f"- {label}: {edge_val:+.1f}%{flag}")
-            # Top scorelines
-            top = pred.get("top_scorelines", [])[:3]
-            if top:
-                sl_str = " | ".join(f"{s['score']} ({s['pct']}%)" for s in top)
-                lines.append(f"- Top scorelines: {sl_str}")
-            # Player props
-            props = pred.get("player_props", [])
-            if props:
-                lines.append("- Player props:")
-                for p in props:
-                    lines.append(f"  • {p.get('player')}: anytime scorer {p.get('anytime_scorer_pct', '?')}%")
-            lines.append("")
-        return "\n".join(lines)
-    except (json.JSONDecodeError, OSError, KeyError) as e:
-        return f"## MODEL PREDICTIONS\n\n(Error loading predictions: {e})"
-
-
 # ── Claude API ─────────────────────────────────────────────────────────────────
 
 def call_claude(system_prompt: str, static_context: str, dynamic_content: str) -> str:
@@ -702,14 +651,35 @@ def send_emails(report_text: str, today_str: str) -> None:
         print(f"[WARN] SMTP connection failed: {e}", file=sys.stderr)
 
 
+# ── Send Saved Report ──────────────────────────────────────────────────────────
+
+def send_saved_report(date_str: str) -> None:
+    """Read an already-saved report from disk and send it. Does NOT regenerate."""
+    report_path = REPORTS_DIR / f"{date_str}_morning_report.md"
+    if not report_path.exists():
+        print(f"[ERROR] No report found for {date_str} at {report_path}")
+        print("[ERROR] Generate it first with: python agent/morning_report.py")
+        sys.exit(1)
+    report_text = report_path.read_text(encoding="utf-8")
+    print(f"[SEND] Sending report from {report_path}")
+    send_emails(report_text, date_str)
+
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="WC2026 Morning Report Generator")
-    parser.add_argument("--no-email", action="store_true", help="Skip sending emails")
+    parser.add_argument("--no-email", action="store_true", help="(ignored) Email never auto-sends")
     parser.add_argument("--no-push", action="store_true", help="Skip git commit/push")
     parser.add_argument("--dry-run", action="store_true", help="Print prompt, skip Claude API call")
+    parser.add_argument("--send-email", action="store_true", help="Send today's saved report (no regeneration)")
+    parser.add_argument("--send-date", metavar="YYYY-MM-DD", help="Date of report to send (default: today)")
     args = parser.parse_args()
+
+    if args.send_email:
+        date_str = args.send_date if args.send_date else today_date_str()
+        send_saved_report(date_str)
+        return
 
     today_str = today_date_str()
     print(f"[START] Generating morning report for {today_str}")
@@ -758,10 +728,7 @@ def main() -> None:
         news = "(news search skipped in dry-run mode)"
         around_the_tournament = "(atmosphere search skipped in dry-run mode)"
 
-    # 6. Model predictions disabled — insufficient WC data to calibrate
-    model_predictions_md = ""  # Model disabled — insufficient WC data
-
-    # 7. Build prompt
+    # 6. Build prompt
     static_context = build_static_context()
     dynamic_content = build_dynamic_content(
         today_str=today_str,
@@ -804,11 +771,9 @@ def main() -> None:
     if not args.no_push:
         git_commit_and_push(report_path, today_str)
 
-    # 12. Send emails
-    if not args.no_email:
-        send_emails(report_text, today_str)
-
-    print(f"[DONE] Morning report complete for {today_str}")
+    print(f"[DONE] Report saved to {report_path}")
+    print(f"[NEXT] Review and edit the file, then send with:")
+    print(f"       python agent/morning_report.py --send-email")
 
 
 if __name__ == "__main__":
