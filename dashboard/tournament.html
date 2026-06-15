@@ -36,9 +36,30 @@
     gap: 8px;
   }
   .header-title { color: #fff; font-size: 16px; font-weight: 700; }
-  .header-nav { display: flex; gap: 14px; font-size: 13px; color: var(--text-muted); }
-  .header-nav a { color: var(--text-muted); }
-  .header-nav a:hover { color: var(--text-primary); text-decoration: underline; }
+  /* ── Page Toggle ── */
+  .page-toggle {
+    display: inline-flex;
+    background: var(--bg-item);
+    border-radius: 8px;
+    padding: 2px;
+    gap: 2px;
+  }
+  .page-toggle a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .page-toggle a:hover { color: var(--text-primary); }
+  .page-toggle a.active { background: #1f6feb; color: #fff; }
+  .page-toggle svg { flex-shrink: 0; }
 
   /* ── Controls ── */
   .controls {
@@ -172,10 +193,21 @@
 <body>
 
 <div class="header">
-  <span class="header-title">World Cup 2026 — Tournament Tracker</span>
-  <div class="header-nav">
-    <a href="index.html">← Dashboard</a>
-  </div>
+  <span class="header-title">World Cup 2026</span>
+  <nav class="page-toggle">
+    <a href="index.html">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <rect x="1" y="9" width="3" height="6" rx="1"/><rect x="6" y="5" width="3" height="10" rx="1"/><rect x="11" y="1" width="3" height="14" rx="1"/>
+      </svg>
+      Odds
+    </a>
+    <a href="tournament.html" class="active" aria-current="page">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 2h3v5H2zM11 2h3v5h-3z"/><path d="M5 4.5h6"/><path d="M8 7v3"/><path d="M5 13h6v-3H5z"/>
+      </svg>
+      Tournament
+    </a>
+  </nav>
 </div>
 
 <div class="controls">
