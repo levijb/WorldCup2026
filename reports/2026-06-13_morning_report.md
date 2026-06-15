@@ -55,7 +55,6 @@ Turkey come into this tournament with genuine quality in midfield — Hakan Çal
 
 **BET:** Morocco Draw No Bet — Brazil vs Morocco (Match Result DNB)
 **ODDS:** +175 (DraftKings) | Implied: 36.4%
-**MODEL EDGE:** No model edge
 **EDGE REASONING:** With Neymar and Rodrygo both unavailable, Brazil are missing two of their three most dangerous attacking players against a Morocco side that held France to a single goal in a World Cup semifinal. The -145 Brazil ML at 59.2% implied is overpriced for a squad this undermanned; DNB at +175 gives Morocco a free draw and returns value on what shapes up as a genuinely contested match. Sharp money has been fading Brazil since qualifying — this injury news only amplifies that signal.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $8 (4 units)
@@ -67,7 +66,6 @@ Turkey come into this tournament with genuine quality in midfield — Hakan Çal
 
 **BET:** Morocco +425 — Brazil vs Morocco (Match Result)
 **ODDS:** +425 (DraftKings) | Implied: 19.0%
-**MODEL EDGE:** No model edge
 **EDGE REASONING:** A smaller accompanying position on the outright Morocco win. At 19%, the market is pricing Morocco as a significant underdog against a Brazil side that realistically enters this match as more of a -115 to -125 favorite given the absences rather than -145. Opta's pre-tournament model pegged Morocco at ~1.5% to win the tournament — but they have the defensive structure and tactical discipline to win individual matches against weakened opposition.
 **RISK LEVEL:** High
 **RECOMMENDED STAKE:** $4 (2 units)
@@ -79,7 +77,6 @@ Turkey come into this tournament with genuine quality in midfield — Hakan Çal
 
 **BET:** Switzerland -1.5 — Qatar vs Switzerland (Spread)
 **ODDS:** -115 (DraftKings estimate) | Implied: ~53.5%
-**MODEL EDGE:** No model edge
 **EDGE REASONING:** Switzerland are a top-12 European side facing the worst team in the tournament, away from Qatar's home altitude and home crowd. The only question is whether Switzerland rotate early and take their foot off, but in a group-stage opener with points to establish, there's no reason to expect conservatism. Qatar's defensive structure held up at the 2022 World Cup against inferior opposition, but that game is gone — this is a cleaner mismatch.
 **RISK LEVEL:** Low
 **RECOMMENDED STAKE:** $6 (3 units)
@@ -91,7 +88,6 @@ Turkey come into this tournament with genuine quality in midfield — Hakan Çal
 
 **BET:** Switzerland Total Goals Over 3.5 — Qatar vs Switzerland
 **ODDS:** +130 (DraftKings estimate) | Implied: ~43.5%
-**MODEL EDGE:** No model edge
 **EDGE REASONING:** Over 3.5 at plus money in a match where the favorites are -450 and the opposition has no competitive tournament form. Switzerland average north of 2.0 xGF per match against comparable opposition, and Qatar's defensive frailty in open play is well-documented. Applying the IFAB VAR/penalty structural adjustment, the expected goals in this fixture trend toward 3.5+. This is the play where the expanded penalty scope rule most visibly applies.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $4 (2 units)
@@ -103,7 +99,6 @@ Turkey come into this tournament with genuine quality in midfield — Hakan Çal
 
 **BET:** Norway -475 — Iraq vs Norway (Match Result)
 **ODDS:** -475 (DraftKings) | Implied: 82.6%
-**MODEL EDGE:** No model edge
 **EDGE REASONING:** Filed here as a tomorrow's anchor for parlay context, but worth flagging now: Norway's Opta win probability (3.5%) is barely priced into tournament futures at +3100, and that value starts at the match level. Iraq at +1300 is generously priced for reasons that have nothing to do with the football — noted for completeness. Straight ML at -475 is only useful as a parlay leg given the juice.
 **RISK LEVEL:** Low
 **RECOMMENDED STAKE:** Do not bet straight. Use as parlay leg only.

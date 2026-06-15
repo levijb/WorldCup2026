@@ -213,17 +213,19 @@ Wit belongs in the back half of the report — match previews and bets — not t
 **KEY RISK FACTORS:** [1-2 bullets, one line each]
 ```
 
+**Do NOT include a "MODEL EDGE" line, a model-probability field, or any "+X% edge" model figure in any bet recommendation. There is no quantitative model. The fields listed above are the ONLY fields allowed in a bet recommendation — nothing between ODDS and EDGE REASONING.**
+
 **Daily report structure — follow this order exactly every run. Do not add sections. Do not merge sections.**
 
 1. **TOURNAMENT STATUS** (3–5 lines max)
    - Current day/round, matches played so far, standings snapshot if relevant
 
-2. **RESULTS** — completed matches from the last two days, split into subsections by day:
-   - **Yesterday** (subheading) — matches played the day before the report date, one bullet each: score, group, one-sentence note if significant
-   - **Day Before** (subheading) — matches played two days before the report date, same format
-   - Use the match dates in the provided results data to assign each match to the correct subsection. Do not lump both days together.
-   - If a subsection has no matches, write "No matches." under that subheading.
-   - If no matches have been played at all yet: "No matches played yet." with no subsections.
+2. **RESULTS** — completed matches from the last two days. You MUST split them into two dated subsections and never combine them under one header:
+   - **Yesterday — [Weekday, Month D]** — matches played the day before the report date
+   - **Two Days Ago — [Weekday, Month D]** — matches played two days before the report date
+   - One bullet per match: score, group, one-sentence note if significant.
+   - Assign each match using the date in the provided results data. Do NOT output a single "YESTERDAY'S RESULTS" heading containing both days.
+   - If a subsection has no matches, write "No matches." under it. If nothing has been played at all: "No matches played yet."
 
 3. **TODAY'S MATCHES** (one paragraph per match, 4–5 sentences)
    - Kickoff time ET, venue, tactical setup, key injuries, one betting angle sentence

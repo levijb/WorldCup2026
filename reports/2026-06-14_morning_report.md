@@ -54,7 +54,6 @@ Monterrey's moderate altitude introduces an aerobic tax that neither side has ne
 
 **BET:** Japan Draw No Bet — Netherlands vs. Japan (Match Result - DNB)
 **ODDS:** Approximately +145 implied from current H2H (Japan +255, converted to DNB pricing) | Implied: ~40.8%
-**MODEL EDGE:** No model edge — qualitative play only
 **EDGE REASONING:** The Netherlands are missing four significant squad players including their first-choice right back, center back, defensive midfielder, and one of their most creative attackers. Japan are not a team that requires favourable conditions to cause upsets — they beat Germany and Spain from the group stage in 2022. The 210-cent drift from Netherlands -105 to +105 is one of the larger pre-match line moves on the board today and points directly at sharp money that has done the squad math. DNB protects the stake on the draw while capturing the upset price.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $8 (4 units)
@@ -66,7 +65,6 @@ Monterrey's moderate altitude introduces an aerobic tax that neither side has ne
 
 **BET:** Japan ML — Netherlands vs. Japan (Match Result)
 **ODDS:** +255 (DraftKings) | Implied: 28.2%
-**MODEL EDGE:** No model edge — qualitative play only
 **EDGE REASONING:** For those comfortable with the outright rather than the DNB, Japan at +255 represents a price that hasn't fully absorbed the cumulative injury damage to Netherlands. A depleted Dutch side against Japan's structured, counter-pressing system in a tournament opener — where neither side will be at maximum cohesion — creates genuine upset potential beyond what 28% implied probability captures. The pre-tournament Opta baseline had Japan at ~2% to win the tournament; winning this specific match against a half-fit Netherlands is considerably more probable than that suggests.
 **RISK LEVEL:** High
 **RECOMMENDED STAKE:** $4 (2 units)
@@ -78,7 +76,6 @@ Monterrey's moderate altitude introduces an aerobic tax that neither side has ne
 
 **BET:** Under 2.5 Goals — Sweden vs. Tunisia (Total Goals)
 **ODDS:** Approximately -115 (standard market pricing; confirm on DraftKings) | Implied: ~53.5%
-**MODEL EDGE:** No model edge
 **EDGE REASONING:** Two defensive-minded sides playing their opening group match at moderate altitude in Monterrey. Tournament opener caution, combined with the structural under-edge at altitude venues (reduced aerobic output, more conservative approach in second halves), points toward a low-scoring contest. Neither Sweden nor Tunisia are goal-prolific sides — both typically build from defensive solidity. The IFAB rule changes add a baseline +0.15 to 0.20 xG adjustment, which is factored into the price recommendation; the net read still favors the under here.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
@@ -90,7 +87,6 @@ Monterrey's moderate altitude introduces an aerobic tax that neither side has ne
 
 **BET:** Ivory Coast ML — Ivory Coast vs. Ecuador (Match Result)
 **ODDS:** +225 (DraftKings) | Implied: 30.8%
-**MODEL EDGE:** No model edge
 **EDGE REASONING:** Ivory Coast have shortened 35 cents since opening (from +260 to +225), which is a meaningful sharp signal in a match with no dominant public lean. The African sides have consistently offered value in major tournaments and Ivory Coast carry genuine forward quality. Ecuador are solid but have not been convincing against top-tier opposition, and at +225 the Ivorians are priced closer to a coin-flip underdog than their actual probability warrants.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
@@ -102,7 +98,6 @@ Monterrey's moderate altitude introduces an aerobic tax that neither side has ne
 
 **BET:** Draw — Ivory Coast vs. Ecuador (Match Result)
 **ODDS:** +185 (DraftKings) | Implied: 35.1%
-**MODEL EDGE:** No model edge
 **EDGE REASONING:** If the Ivory Coast ML feels like too concentrated a bet, the draw at +185 captures the structural group-stage reality — two evenly matched sides, opening match nerves, and no dominant favourite. Historically, draws are underpriced in group-stage openers between comparable sides, and the true probability here is closer to 30-32% than the market's 35.1% suggests, making this marginal. At +185 it pays reasonably well and acts as a partial hedge alongside the Ivory Coast ML if splitting the exposure.
 **RISK LEVEL:** Low
 **RECOMMENDED STAKE:** $4 (2 units)

@@ -434,18 +434,18 @@ Produce the full morning briefing report in this exact order:
 
 1. **TOURNAMENT STATUS** — Current day/round, matches played, standings snapshot if relevant. 3–5 lines max.
 
-2. **RESULTS** — Completed matches from the last two days, split into subsections by day:
-   - **Yesterday** (subheading) — matches played the day before today, one bullet each: score, group, one-sentence note if significant
-   - **Day Before** (subheading) — matches played two days before today, same format
-   - Use the dates in the provided results data to assign each match to the correct subsection. Do not lump both days together.
-   - If a subsection has no matches, write "No matches." under that subheading.
-   - If no matches have been played at all yet: "No matches played yet." with no subsections.
+2. **RESULTS** — Completed matches from the last two days. You MUST split them into two dated subsections and never combine them under one header:
+   - **Yesterday — [Weekday, Month D]** — matches played the day before today
+   - **Two Days Ago — [Weekday, Month D]** — matches played two days before today
+   - One bullet per match: score, group, one-sentence note if significant.
+   - Assign each match using the date in the provided results data. Do NOT output a single "YESTERDAY'S RESULTS" heading containing both days.
+   - If a subsection has no matches, write "No matches." under it. If nothing has been played at all: "No matches played yet."
 
 3. **TODAY'S MATCHES** — One paragraph per match (4–5 sentences). Kickoff time ET, venue, tactical setup, key injuries, one betting angle sentence. Today's matches only.
 
 4. **NEWS & INJURIES** — 3–5 bullets, one line each. Only items relevant to today's matches.
 
-5. **BET RECOMMENDATIONS** — 3–5 bets using the exact structured format from the system prompt.
+5. **BET RECOMMENDATIONS** — 3–5 bets using the exact structured format from the system prompt. Do not include a MODEL EDGE line or any model/edge-percentage field — the allowed fields are BET, ODDS, EDGE REASONING, RISK LEVEL, RECOMMENDED STAKE, KEY RISK FACTORS only.
 
 6. **AROUND THE TOURNAMENT** — 3–5 bullets on general WC atmosphere, color stories, and tournament narrative beyond today's matches. One line per bullet, two at most. No odds, no bet angles.
 

@@ -14,16 +14,21 @@ Tournament Day 5. Group stage is underway across all groups, with most sides hav
 
 ---
 
-## 2. YESTERDAY'S RESULTS
+## 2. RESULTS
+
+**Yesterday — Saturday, June 14**
 
 - **Germany 7–1 Curaçao (Group E):** Germany opened in emphatic fashion; Musiala and the front line looked sharp after months of injury concern.
 - **Côte d'Ivoire 1–0 Ecuador (Group E):** Slim margin, but Ivory Coast's defensive discipline was the story — Ecuador struggled to create.
 - **Netherlands 2–2 Japan (Group F):** Netherlands' injury-depleted squad dropped points immediately; Japan drew despite the Mitoma absence.
 - **Sweden 5–1 Tunisia (Group F):** Sweden announced themselves early — five goals against a side that held Brazil to a draw two days prior says something about Tunisia's defensive fragility.
-- **Haiti 0–1 Scotland (Group C):** Scotland did what was required. No drama.
-- **Australia 2–0 Türkiye (Group D):** Comfortable Australian win; Türkiye looked flat.
+
+**Two Days Ago — Friday, June 13**
+
 - **Switzerland 1–1 Qatar (Group B):** Switzerland dropped two points they should have taken — Qatar will be happier with this result.
 - **Brazil 1–1 Morocco (Group C):** Brazil's depleted squad failed to beat Morocco in their opener. Given Rodrygo's ACL and Militão's absence, the performance matched expectations — poor ones.
+- **Haiti 0–1 Scotland (Group C):** Scotland did what was required. No drama.
+- **Australia 2–0 Türkiye (Group D):** Comfortable Australian win; Türkiye looked flat.
 
 ---
 
@@ -58,7 +63,6 @@ An intriguing opener for two sides who rarely get this kind of global stage. Ira
 
 **BET:** Spain -3.5 (or equivalent total line) — Spain vs Cape Verde (Spread/Handicap)
 **ODDS:** Consult live spread market; Spain -1400 ML implied at 93.3%
-**MODEL EDGE:** No model edge — quantitative model unavailable; recommendation based on market structure and qualitative factors
 **EDGE REASONING:** Spain -1400 is unplayable on the ML, but the spread market is where value lives. Cape Verde are disciplined but lack the quality to contain Spain's midfield rotation for 90 minutes in Atlanta heat — once Spain find the opener, Cape Verde's pressing intensity drops materially. Yamal's availability (even at limited minutes) preserves Spain's attacking threat. A three-goal margin is a realistic floor for a full-strength Spain side against AFCON-level opposition.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $4 (2 units)
@@ -70,7 +74,6 @@ An intriguing opener for two sides who rarely get this kind of global stage. Ira
 
 **BET:** Draw — Belgium vs Egypt (Match Result)
 **ODDS:** +295 (DraftKings) | Implied: 25.3%
-**MODEL EDGE:** No model edge — directional assessment based on historical patterns and market structure
 **EDGE REASONING:** Belgium have a well-documented history of unconvincing tournament openers, and Egypt's compact defensive shape is precisely the type that produces early-group stalemates. The +295 draw price implies 25.3% probability against a structural base rate for draws in this type of fixture (strong European side vs. disciplined African opponent) that sits closer to 30-32%. That's a 5-7 point gap worth taking at a meaningful price.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
@@ -82,7 +85,6 @@ An intriguing opener for two sides who rarely get this kind of global stage. Ira
 
 **BET:** Uruguay ML — Saudi Arabia vs Uruguay (Match Result)
 **ODDS:** -215 (DraftKings) | Implied: 68.3%
-**MODEL EDGE:** No model edge — recommendation based on Opta baseline and qualifying form
 **EDGE REASONING:** Uruguay's tournament win probability from Opta sits well above Saudi Arabia's, and their CONMEBOL qualifying form — achieved against the world's most competitive confederation — justifies the price. Valverde's engine in midfield and Núñez's physical presence up top are legitimate weapons; Saudi Arabia showed little in their last World Cup that warrants anything above +500 against a proper South American side. The -215 is not generous but it reflects genuine probability accurately — this is a standard play on the correct side, not a value hunt.
 **RISK LEVEL:** Low
 **RECOMMENDED STAKE:** $6 (3 units)
@@ -94,7 +96,6 @@ An intriguing opener for two sides who rarely get this kind of global stage. Ira
 
 **BET:** Iran ML — Iran vs New Zealand (Match Result)
 **ODDS:** -105 (DraftKings) | Implied: 51.2%
-**MODEL EDGE:** No model edge — recommendation based on confederation quality differential and market mispricing
 **EDGE REASONING:** Iran at -105 — essentially even money — against New Zealand is a structural undervaluation. New Zealand qualified through OFC, the weakest FIFA confederation; Iran finished in the top tier of Asian qualification against genuinely competitive opposition. The overnight drift in Iran's line from -120 to -105 looks like public underdog money on New Zealand rather than a sharp signal. Getting Iran at a near-coinflip price when they are meaningfully the better side by any objective measure is a clean spot.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $8 (4 units)
@@ -106,7 +107,6 @@ An intriguing opener for two sides who rarely get this kind of global stage. Ira
 
 **BET:** Over 2.5 Goals — Spain vs Cape Verde (Total)
 **ODDS:** Consult live total market; expect -130 to -150 range at standard books
-**MODEL EDGE:** No model edge
 **EDGE REASONING:** Spain's possession-based attack against a side likely to defend deep creates a timing issue, but the quality gap here is too large to sustain a low-scoring match for 90 minutes. The IFAB penalty expansion and VAR scope mean an additional 0.15-0.20 expected goals are structurally built into every match — relevant here as Spain will generate volume in the box. Atlanta heat in a noon kickoff may slightly suppress the pace of play, but Spain's technical game is less affected by heat than press-dependent sides.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $4 (2 units)

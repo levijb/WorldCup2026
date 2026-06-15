@@ -185,6 +185,17 @@
     display: block;
   }
 
+  /* ── Group Schedule ── */
+  #group-schedule { padding: 0 16px 24px; }
+  #group-schedule .sched-title { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 8px 0 10px; }
+  #group-schedule .sched-day { font-size: 12px; font-weight: 700; color: var(--accent-blue); margin: 16px 0 6px; }
+  #group-schedule table.sched { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  #group-schedule table.sched th { text-align: left; padding: 6px 10px; color: var(--text-dim); font-weight: 600; font-size: 11px; border-bottom: 1px solid var(--bg-item); }
+  #group-schedule table.sched td { padding: 6px 10px; border-bottom: 1px solid var(--bg-item); color: var(--text-primary); white-space: nowrap; }
+  #group-schedule table.sched tr:last-child td { border-bottom: none; }
+  #group-schedule .sched-score { color: var(--accent-green); font-weight: 600; }
+  #group-schedule .sched-upcoming { color: var(--text-dim); }
+
   @media (max-width: 600px) {
     #groups-view { grid-template-columns: 1fr; padding: 10px; }
   }
@@ -223,6 +234,8 @@
   <div class="loading">Loading group standings...</div>
 </div>
 
+<div id="group-schedule"></div>
+
 <div id="bracket-view">
   <div class="loading">Loading bracket...</div>
 </div>
@@ -246,6 +259,21 @@ const TEAM_FLAGS = {
   'Argentina': '🇦🇷', 'Algeria': '🇩🇿', 'Austria': '🇦🇹', 'Jordan': '🇯🇴',
   'Portugal': '🇵🇹', 'DR Congo': '🇨🇩', 'Uzbekistan': '🇺🇿', 'Colombia': '🇨🇴',
   'England': '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 'Croatia': '🇭🇷', 'Ghana': '🇬🇭', 'Panama': '🇵🇦',
+};
+
+// Pre-tournament FIFA World Ranking (final ranking heading into WC2026).
+// Italy (#12) is absent — they did not qualify.
+const TEAM_RANKINGS = {
+  'France': 1, 'Spain': 2, 'Argentina': 3, 'England': 4, 'Portugal': 5,
+  'Brazil': 6, 'Netherlands': 7, 'Morocco': 8, 'Belgium': 9, 'Germany': 10,
+  'Croatia': 11, 'Colombia': 13, 'Senegal': 14, 'Mexico': 15, 'USA': 16,
+  'Uruguay': 17, 'Japan': 18, 'Switzerland': 19, 'Iran': 21, 'Turkey': 22,
+  'Ecuador': 23, 'Austria': 24, 'South Korea': 25, 'Australia': 27, 'Algeria': 28,
+  'Egypt': 29, 'Canada': 30, 'Norway': 31, 'Panama': 33, 'Ivory Coast': 34,
+  'Sweden': 38, 'Paraguay': 40, 'Czech Republic': 41, 'Scotland': 43, 'Tunisia': 44,
+  'DR Congo': 46, 'Uzbekistan': 50, 'Qatar': 55, 'Iraq': 57, 'South Africa': 60,
+  'Saudi Arabia': 61, 'Jordan': 63, 'Bosnia & Herzegovina': 65, 'Cape Verde': 69,
+  'Ghana': 74, 'Curaçao': 82, 'Haiti': 83, 'New Zealand': 85,
 };
 
 // Knockout round labels as they appear in openfootball data
@@ -375,6 +403,7 @@ function computeStandings(groupName) {
   return Object.entries(tally).map(([name, s]) => ({
     name,
     flag: TEAM_FLAGS[name] || '',
+    rank: TEAM_RANKINGS[name] ?? null,
     p: s.p, w: s.w, d: s.d, l: s.l,
     gf: s.gf, ga: s.ga,
     gd: s.gf - s.ga,
@@ -419,12 +448,13 @@ function renderGroups() {
         <tbody>`;
 
     rows.forEach((t, idx) => {
-      const rank = idx + 1;
-      const status = qualStatus(rank, t.pts, t.p, rows.length);
+      const pos = idx + 1;
+      const status = qualStatus(pos, t.pts, t.p, rows.length);
       const flagStr = t.flag ? `<span style="font-size:15px;margin-right:4px">${t.flag}</span>` : '';
+      const rankStr = t.rank ? `<span style="color:var(--text-dim);font-size:11px;margin-right:5px;font-variant-numeric:tabular-nums">#${t.rank}</span>` : '';
       html += `<tr>
         <td><span class="qual-dot qual-${status}"></span></td>
-        <td><span style="white-space:nowrap">${flagStr}<span style="font-weight:500;color:var(--text-primary)">${t.name}</span></span></td>
+        <td><span style="white-space:nowrap">${rankStr}${flagStr}<span style="font-weight:500;color:var(--text-primary)">${t.name}</span></span></td>
         <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
         <td>${t.gf}</td><td>${t.ga}</td>
         <td>${t.gd >= 0 ? '+' : ''}${t.gd}</td>
@@ -436,6 +466,46 @@ function renderGroups() {
   }
 
   container.innerHTML = html || '<div class="loading">No group data available yet.</div>';
+  renderGroupSchedule();
+}
+
+function renderGroupSchedule() {
+  const container = document.getElementById('group-schedule');
+  const games = allMatches.filter(m => m.group);
+  if (!games.length) { container.innerHTML = ''; return; }
+
+  const byDate = {};
+  for (const m of games) {
+    (byDate[m.date] = byDate[m.date] || []).push(m);
+  }
+  const dates = Object.keys(byDate).sort();
+
+  let html = '<div class="sched-title">Group Stage Schedule</div>';
+  for (const d of dates) {
+    const rows = byDate[d].sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+    const dayLabel = new Date(d + 'T12:00:00Z').toLocaleDateString('en-US',
+      { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
+    html += `<div class="sched-day">${dayLabel}</div>
+      <table class="sched">
+        <thead><tr><th>Time</th><th>Match</th><th>Group</th><th>Location</th><th>Result</th></tr></thead>
+        <tbody>`;
+    for (const m of rows) {
+      const f1 = TEAM_FLAGS[m.team1] || '', f2 = TEAM_FLAGS[m.team2] || '';
+      const ft = m.score?.ft;
+      const result = Array.isArray(ft)
+        ? `<span class="sched-score">${ft[0]}–${ft[1]}</span>`
+        : `<span class="sched-upcoming">—</span>`;
+      html += `<tr>
+        <td>${m.time || 'TBD'}</td>
+        <td>${f1} ${m.team1} v ${f2} ${m.team2}</td>
+        <td>${(m.group || '').replace('Group ', 'Grp ')}</td>
+        <td>${m.ground || 'TBD'}</td>
+        <td>${result}</td>
+      </tr>`;
+    }
+    html += `</tbody></table>`;
+  }
+  container.innerHTML = html;
 }
 
 // ── Render Bracket ────────────────────────────────────────────────────────────
@@ -488,6 +558,7 @@ function renderBracket() {
 // ── View Switching ─────────────────────────────────────────────────────────────
 function showView(view) {
   document.getElementById('groups-view').style.display = view === 'groups' ? 'grid' : 'none';
+  document.getElementById('group-schedule').style.display = view === 'groups' ? 'block' : 'none';
   document.getElementById('bracket-view').style.display = view === 'bracket' ? 'block' : 'none';
   document.getElementById('btn-groups').className = view === 'groups' ? 'active' : '';
   document.getElementById('btn-bracket').className = view === 'bracket' ? 'active' : '';
