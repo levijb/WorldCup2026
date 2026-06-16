@@ -13,7 +13,7 @@ _Generated: 2026-06-16 00:06 ET | API quota remaining: 62_
 
 ## TOURNAMENT STATUS
 
-Day 5 of the group stage. Fourteen matches have been played across Groups D through H, with the first full round of fixtures nearly complete. Germany's 7-1 demolition of Curaçao and Sweden's 5-1 win over Tunisia were the headline scorelines, though Spain's 0-0 draw with Cabo Verde and Belgium's dropped points against Egypt are the more consequential results. Groups I and J open today, meaning Argentina and France play their first matches of the tournament.
+Day 5 of the group stage. Germany's 7-1 demolition of Curaçao and Sweden's 5-1 win over Tunisia were the headline scorelines, though more consequential are Spain's 0-0 draw vs Cabo Verde and Belgium's 1-1 draw vs Egypt are the results. Groups I and J open today, with Argentina and France finally playing their opening matches. We also get to see Haaland's opening performance with Norway.
 
 ---
 
@@ -21,18 +21,18 @@ Day 5 of the group stage. Fourteen matches have been played across Groups D thro
 
 **Two Days Ago — Sunday, June 14**
 
-- Australia 2–0 Türkiye (Group D) — Australia with a statement win; Türkiye's early exit narrative begins early.
-- Germany 7–1 Curaçao (Group E) — The scoreline flatters Curaçao only slightly; Germany arrived.
-- Netherlands 2–2 Japan (Group F) — A point dropped for the depleted Dutch; Japan's 2-2 draw is already an overperformance.
-- Ivory Coast 1–0 Ecuador (Group E) — Tight, scrappy; Ecuador will need to win their next two.
-- Sweden 5–1 Tunisia (Group F) — Ayari's debut goal the human highlight; Sweden look sharp in attack.
+- Australia 2–0 Türkiye (Saturday midnight) (Group D) — Australia with a big win; Türkiye in trouble.
+- Germany 7–1 Curaçao (Group E) — Curaçao fans were not dissapointed.
+- Netherlands 2–2 Japan (Group F) — Great result for Japan's. Dutch had key player's out. One of the top games so far.
+- Ivory Coast 1–0 Ecuador (Group E) — Tight, scrappy; Ivory Coast win with clutch 90 min goal. Ecuador will need to win against Germany. 
+- Sweden 5–1 Tunisia (Group F) — Sweden look sharp in attack, but Tunsia didn't make it look difficult. 
 
 **Yesterday — Monday, June 15**
 
-- Spain 0–0 Cabo Verde (Group H) — Spain's slow-start tournament habit is alive and well. Cabo Verde defended diligently; Yamal's hamstring restriction may have been a factor.
-- Belgium 1–1 Egypt (Group G) — Belgium drop two points they had no business dropping. Egypt equalized late and will feel they could have nicked it.
-- Saudi Arabia 1–1 Uruguay (Group H) — A surprise point for Saudi Arabia. Uruguay looked below the level needed to contend.
-- Iran 2–2 New Zealand (Group G) — New Zealand equalized twice. Group G is already chaotic.
+- Spain 0–0 Cabo Verde (Group H) — HUGE game for Cabo Verde. Spainn disapoints - it's slow-start tournament habit is alive. Cabo Verde defended diligently, wonderful performance by their keeper. He went from 44k to 5.3M Instagram followers.
+- Belgium 1–1 Egypt (Group G) — Belgium drop two points they should not have.
+- Saudi Arabia 1–1 Uruguay (Group H) — A surprise point for Saudi Arabia. Uruguay looked below the level needed to contend; they had 27 shots and 10 on target.
+- Iran 2–2 New Zealand (Group G) — New Zealand equalized twice. Group G is already chaotic. Another great game to watch.
 
 ---
 
@@ -40,7 +40,7 @@ Day 5 of the group stage. Fourteen matches have been played across Groups D thro
 
 **France vs Senegal — 3:00 PM ET | MetLife Stadium, NJ (Group I)**
 
-France open as significant favorites at -200, though this is a Senegal side with Mané fit and motivated after missing 2022 entirely. Deschamps will likely set up in a compact 4-3-3, leaning on Mbappé's pace against Senegal's high defensive line, with Griezmann pulling strings in the half-space. Saliba's return to training is encouraging; Koundé is a monitor but expected to start. Senegal are not the type of African side that simply defends for 90 minutes — they press, they transition, and with Mané leading the line this is a game France can win but not sleepwalk through. The -200 is priced correctly for the result market, but France's tendency to control rather than dominate suggests the under has some structural backing.
+France open as significant favorites at -200, though this is a Senegal side with Mané fit and motivated after missing 2022 entirely. Deschamps will likely set up in a compact 4-3-3, leaning on Mbappé's pace against Senegal's high defensive line, with Griezmann pulling strings in the half-space. Saliba's return to training is encouraging; Koundé is a monitor but expected to start. Senegal are not the type of African side that simply defends for 90 minutes — they press, they transition, and with Mané leading the line this is a game France should win but can't sleepwalk. The -200 is priced correctly for the result market, but France's tendency to control rather than dominate suggests the under has some structural backing.
 
 **Iraq vs Norway — 6:00 PM ET | Gillette Stadium, Foxborough (Group I)**
 
@@ -48,11 +48,11 @@ Norway are 84% implied favorites at -525, and in this case the market is largely
 
 **Argentina vs Algeria — 9:00 PM ET | Arrowhead Stadium, Kansas City (Group J)**
 
-This is the match carrying the most narrative weight today. Argentina open as -245 favorites but with genuine question marks: Messi's hamstring is being managed, Tagliafico is out, Balerdi has been replaced by the less-tested Senesi, and the defending champion fade pattern sits in the background. Algeria are not without threat — Bensebaini's ankle concern is worth monitoring, but their qualification campaign showed defensive solidity and dangerous counter-attacking transitions. The Arrowhead crowd will be split, with a large South American diaspora in Kansas City offset by Algerian support. Algeria at +750 is not a "bet on Algeria to win" play, but the draw at +360 is worth examining — Argentina's depleted backline, Messi on managed minutes, and the structural defending-champion-opener pattern all point toward a closer match than the spread implies.
+This is the match carrying the most narrative weight today. Argentina open as -245 favorites but with genuine question marks: Messi's hamstring is being managed, Tagliafico is out, Balerdi has been replaced by the less-tested Senesi, and the defending champion fade pattern sits in the background. Algeria are not without threat — Bensebaini's ankle concern is worth monitoring, but their qualification campaign showed defensive solidity and dangerous counter-attacking transitions. The Arrowhead crowd will be split, with a large South American diaspora in Kansas City offset by Algerian support. Algeria at +750 is not a good bet, but the draw at +360 is worth examining — Argentina's depleted backline, Messi on managed minutes, and the structural defending-champion-opener pattern all point toward a closer match than the spread implies.
 
 **Austria vs Jordan — 12:00 AM ET | (Group K, tomorrow's slate bleeds into tonight)**
 
-This kicks off at midnight ET, technically the bridge to tomorrow's report. Austria are -280 favorites over a Jordan side that will be organized and deeply defensive. Jordan have no realistic path to winning this on merit but can frustrate. The late-night kickoff limits liquidity and live-betting action. No strong angles here; the prices are roughly efficient.
+This kicks off at midnight ET, technically the bridge to tomorrow's report. Austria are -280 favorites over a Jordan side that will be organized and deeply defensive. Jordan have no realistic path to winning this on merit but can frustrate. No strong angles here; the prices are roughly efficient.
 
 ---
 
@@ -70,7 +70,7 @@ This kicks off at midnight ET, technically the bridge to tomorrow's report. Aust
 
 ---
 
-**BET:** Algeria Draw — Argentina vs Algeria (Match Result)
+**BET:** Draw — Argentina vs Algeria
 **ODDS:** +360 (DraftKings) | Implied: 21.7%
 **EDGE REASONING:** Argentina's defensive unit is meaningfully disrupted — Tagliafico and Balerdi both absent, Senesi making his first competitive appearance at this level. Messi on restricted minutes reduces the creative ceiling that usually breaks defensive opponents open. Algeria are a disciplined, counter-attacking side who drew on Bensebaini's set-piece delivery as a key weapon, and even with him doubtful, their tactical shape can absorb a depleted Argentina back four. The defending champion opener pattern carries structural weight: four of the last five holders have been held or eliminated in their first match, and the draw at +360 is approximately double what it would be priced for a fully fit Argentina side facing comparable opposition.
 **RISK LEVEL:** Medium
@@ -81,7 +81,7 @@ This kicks off at midnight ET, technically the bridge to tomorrow's report. Aust
 
 ---
 
-**BET:** Under 2.5 Goals — France vs Senegal (Total Goals)
+**BET:** Under 2.5 Goals — France vs Senegal 
 **ODDS:** (estimate -115 to -120; check DraftKings game page) | Implied: ~54%
 **EDGE REASONING:** France's tournament openers have trended toward controlled, low-scoring affairs — Deschamps prioritizes structural security over entertainment. Senegal have the defensive personnel and tactical discipline to limit transitions, and with key Senegal attacking options in uncertain fitness (Diao, Gueye), their output may be reduced. The IFAB rule change adjustment (+0.15–0.20 xG for penalties) applies, but this is a match featuring two well-drilled defensive units rather than a high-pace open game. Under 2.5 at standard juice is near fair value; lean under if it's available at -110 or better.
 **RISK LEVEL:** Medium
@@ -92,7 +92,7 @@ This kicks off at midnight ET, technically the bridge to tomorrow's report. Aust
 
 ---
 
-**BET:** Norway -1.5 — Iraq vs Norway (Spread)
+**BET:** Norway Spread -1.5 — Iraq vs Norway 
 **ODDS:** (estimate -145 to -160; confirm on DraftKings) | Implied: ~59–62%
 **EDGE REASONING:** Norway -525 on the money line is unplayable for a straight win bet, but the spread at -1.5 offers a route to extract value from what should be a significant quality mismatch. Haaland against an Iraqi defensive structure that was among the weakest in the Asian qualifying campaign is the clearest mismatch on today's card. Norway's pressing game at Foxborough in comfortable conditions suits their physical style, and Iraq carrying weaknesses in transition defending will be exposed by Norway's wide runs and second-ball aggression. Two-goal wins feel like the median outcome here.
 **RISK LEVEL:** Medium
@@ -103,7 +103,7 @@ This kicks off at midnight ET, technically the bridge to tomorrow's report. Aust
 
 ---
 
-**BET:** France to Win — France vs Senegal (Match Result)
+**BET:** France to Win — France vs Senegal
 **ODDS:** -200 (DraftKings) | Implied: 66.7%
 **EDGE REASONING:** Against weaker opposition this line would be unplayable, but Senegal's Opta-level pedigree and Mané's return make this a legitimate test — meaning -200 is pricing a genuinely superior team correctly rather than inflating a mismatch. France's squad depth at every line is the best in today's slate, and Deschamps will approach this as a controlled win rather than an open game. At -200, you need France to win roughly 2-in-3 times; their actual probability is closer to 68–70% given squad quality and Senegal's fitness concerns. Small positive edge.
 **RISK LEVEL:** Low
@@ -114,7 +114,7 @@ This kicks off at midnight ET, technically the bridge to tomorrow's report. Aust
 
 ---
 
-**BET:** Norway to Score in Both Halves — Iraq vs Norway (Both Halves)
+**BET:** Norway to Score in Both Halves — Iraq vs Norway
 **ODDS:** (estimate +120 to +140; confirm DraftKings) | Implied: ~42–45%
 **EDGE REASONING:** Norway's physical superiority should translate to goals across both halves rather than clustering late, and Iraq will not be able to absorb Norwegian pressure for a full 90 minutes. With Haaland, Sörloth, and Odegaard in attack, Norway generate volume — they're not a side that scores once and parks. If you can find this at +130 or better, the implied probability undervalues what should be a dominant performance across the full match.
 **RISK LEVEL:** Medium
@@ -122,6 +122,17 @@ This kicks off at midnight ET, technically the bridge to tomorrow's report. Aust
 **KEY RISK FACTORS:**
 - Norway go 2-0 up early and rotate heavily in the second half, settling for the result
 - Iraq score first and Norway spend the first half chasing rather than pressing their natural game
+
+---
+
+**BET:** Austria -1.5 Spread — Austria vs Jordan 
+**ODDS:** -105 (DraftKings) | Implied: 51.2%
+**EDGE REASONING:** Austria -280 on the money line is dead money, but the spread at -1.5 is essentially a coin flip in the market's eyes — and that undervalues what Rangnick's side should do here. Austria have won nine of their last eleven, including a 5-1 over Ghana and clean sheets against South Korea and Tunisia in the buildup. Jordan are on a five-match winless run, their leading scorer is unavailable, and the replacement hasn't found the net since January. This is a first-ever World Cup match for Jordan against a side whose gegenpressing system is specifically designed to suffocate teams that sit deep and then concede in clusters once the structure breaks. Baumgartner's thigh injury is a loss, but Alaba has been passed fit and the squad depth is more than sufficient to cover. A two-goal margin is the most likely winning scoreline, not the ceiling.
+**RISK LEVEL:** Medium
+**RECOMMENDED STAKE:** $6 (3 units)
+**KEY RISK FACTORS:**
+- Jordan's Asian Cup final pedigree means they can organize for 60+ minutes — if the opener doesn't come until late, -1.5 is dead
+- Midnight ET kickoff in Santa Clara; Austria may manage intensity knowing they have Argentina next
 
 ---
 
@@ -160,8 +171,10 @@ Combined estimate: approximately +300–350 (3-leg). The chalk parlay, included 
 
 ---
 
+
 ## TOMORROW'S SLATE
 
+Wednesday, June 17
 - 12:00 AM ET — Austria vs Jordan
 - 1:00 PM ET — Portugal vs DR Congo
 - 4:00 PM ET — England vs Croatia
