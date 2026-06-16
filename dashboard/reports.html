@@ -174,7 +174,12 @@ async function loadReports() {
       return { name: f.name, url: f.html_url, raw: f.download_url, preview };
     }));
     container.innerHTML = items.map(f => {
-      const date = f.name.replace('_morning_report.md', '').replace('_live_', ' live ');
+      const rawDate = f.name.replace('_morning_report.md', '').replace('_live_', ' live ');
+      const dateMatch = rawDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      const date = dateMatch
+        ? new Date(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}T12:00:00Z`).toLocaleDateString('en-US',
+            { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }) + rawDate.slice(dateMatch[0].length)
+        : rawDate;
       return `<div class="report-item">
         <div class="report-date"><a href="${f.raw}" target="_blank">${date}</a></div>
         <div class="report-preview">${f.preview}</div>
