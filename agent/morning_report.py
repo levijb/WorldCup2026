@@ -42,7 +42,7 @@ MODEL = "claude-sonnet-4-6"
 ET_OFFSET = timedelta(hours=-4)  # EDT (UTC-4)
 # Set this to wherever the dashboard is actually served. A local file path
 # (dashboard/index.html) is NOT clickable in email — use a hosted URL.
-DASHBOARD_URL = os.getenv("DASHBOARD_URL", "https://levijbdavis.github.io/WorldCup2026/dashboard/index.html")
+DASHBOARD_URL = os.getenv("DASHBOARD_URL", "https://levijb.github.io/WorldCup2026/dashboard/index.html")
 
 
 def now_et() -> datetime:

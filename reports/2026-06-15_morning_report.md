@@ -2,7 +2,7 @@
 
 _Generated: 2026-06-15 23:25 ET | API quota remaining: 65_
 
-[📊 Open the live dashboard →](https://levijbdavis.github.io/WorldCup2026/dashboard/index.html)
+[📊 Open the live dashboard →](https://levijb.github.io/WorldCup2026/dashboard/index.html)
 
 ---
 
