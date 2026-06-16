@@ -22,7 +22,7 @@ Personal FIFA World Cup 2026 betting intelligence system — daily AI-generated 
 ## Setup
 
 ```bash
-git clone https://github.com/levijbdavis/WorldCup2026.git
+git clone https://github.com/levijb/WorldCup2026.git
 cd WorldCup2026
 pip install -r requirements.txt
 ```

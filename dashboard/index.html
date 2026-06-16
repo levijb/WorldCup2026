@@ -378,17 +378,23 @@
     <span id="quota-display">Quota: —</span>
     <span id="last-updated-header" style="font-size:12px;color:var(--text-dim)">—</span>
     <nav class="page-toggle">
-      <a href="index.html" class="active" aria-current="page">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <rect x="1" y="9" width="3" height="6" rx="1"/><rect x="6" y="5" width="3" height="10" rx="1"/><rect x="11" y="1" width="3" height="14" rx="1"/>
-        </svg>
-        Odds
-      </a>
       <a href="tournament.html">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M2 2h3v5H2zM11 2h3v5h-3z"/><path d="M5 4.5h6"/><path d="M8 7v3"/><path d="M5 13h6v-3H5z"/>
         </svg>
         Tournament
+      </a>
+      <a href="reports.html">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 2h7l3 3v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><path d="M5 6h6M5 9h6M5 12h4"/>
+        </svg>
+        Reports
+      </a>
+      <a href="index.html" class="active" aria-current="page">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <rect x="1" y="9" width="3" height="6" rx="1"/><rect x="6" y="5" width="3" height="10" rx="1"/><rect x="11" y="1" width="3" height="14" rx="1"/>
+        </svg>
+        Odds
       </a>
     </nav>
     <a class="header-api-link" href="#" onclick="showConfigBanner(); return false;">API Key</a>
@@ -405,7 +411,6 @@
 <div class="tabs">
   <button class="tab-btn active" onclick="switchTab('today', this)">Today</button>
   <button class="tab-btn" onclick="switchTab('tracker', this)">Bet Tracker</button>
-  <button class="tab-btn" onclick="switchTab('reports', this)">Reports</button>
 </div>
 
 <!-- TODAY TAB -->
@@ -479,17 +484,9 @@
   </div>
 </div>
 
-<!-- REPORTS TAB -->
-<div id="tab-reports" class="tab-content">
-  <div class="card">
-    <div class="card-title">Morning Reports</div>
-    <div id="reports-container"><div class="loading">Loading reports list...</div></div>
-  </div>
-</div>
-
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
-const GITHUB_USER = 'levijbdavis';
+const GITHUB_USER = 'levijb';
 const GITHUB_REPO = 'WorldCup2026';
 const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main`;
 const ODDS_API_BASE = 'https://api.the-odds-api.com/v4';
@@ -514,7 +511,6 @@ document.addEventListener('DOMContentLoaded', () => {
   checkApiKey();
   loadOdds(false);
   loadBets();
-  loadReports();
   loadTomorrow();
   startCountdown();
 });
@@ -990,45 +986,6 @@ function sortTable(col) {
   if (sortCol === col) sortDir *= -1;
   else { sortCol = col; sortDir = -1; }
   applyFilters();
-}
-
-// ── Reports ───────────────────────────────────────────────────────────────────
-async function loadReports() {
-  const container = document.getElementById('reports-container');
-  try {
-    const resp = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/reports`);
-    if (resp.status === 403 || resp.status === 429) {
-      container.innerHTML = '<div class="error-msg">GitHub rate limit reached &mdash; try again in a minute.</div>';
-      return;
-    }
-    if (!resp.ok) throw new Error('Could not reach GitHub API');
-    const files = await resp.json();
-    if (!Array.isArray(files)) throw new Error('Unexpected response from GitHub API');
-    const mdFiles = files.filter(f => f.name.endsWith('.md')).sort((a, b) => b.name.localeCompare(a.name));
-    if (!mdFiles.length) {
-      container.innerHTML = '<span style="color:var(--text-dim);display:block;padding:14px;">No reports yet.</span>';
-      return;
-    }
-    const items = await Promise.all(mdFiles.map(async f => {
-      let preview = '';
-      try {
-        const r = await fetch(f.download_url);
-        const text = await r.text();
-        const lines = text.split('\n').filter(l => l.trim() && !l.startsWith('#') && !l.startsWith('_'));
-        preview = lines[0]?.substring(0, 120) || '';
-      } catch (_) {}
-      return { name: f.name, url: f.html_url, raw: f.download_url, preview };
-    }));
-    container.innerHTML = items.map(f => {
-      const date = f.name.replace('_morning_report.md', '').replace('_live_', ' live ');
-      return `<div class="report-item">
-        <div class="report-date"><a href="${f.raw}" target="_blank">${date}</a></div>
-        <div class="report-preview">${f.preview}</div>
-      </div>`;
-    }).join('');
-  } catch (e) {
-    container.innerHTML = `<div class="error-msg">Could not list reports: ${e.message}</div>`;
-  }
 }
 
 // ── Countdown ─────────────────────────────────────────────────────────────────

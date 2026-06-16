@@ -206,17 +206,23 @@
 <div class="header">
   <span class="header-title">World Cup 2026</span>
   <nav class="page-toggle">
-    <a href="index.html">
-      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <rect x="1" y="9" width="3" height="6" rx="1"/><rect x="6" y="5" width="3" height="10" rx="1"/><rect x="11" y="1" width="3" height="14" rx="1"/>
-      </svg>
-      Odds
-    </a>
     <a href="tournament.html" class="active" aria-current="page">
       <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M2 2h3v5H2zM11 2h3v5h-3z"/><path d="M5 4.5h6"/><path d="M8 7v3"/><path d="M5 13h6v-3H5z"/>
       </svg>
       Tournament
+    </a>
+    <a href="reports.html">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 2h7l3 3v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><path d="M5 6h6M5 9h6M5 12h4"/>
+      </svg>
+      Reports
+    </a>
+    <a href="index.html">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <rect x="1" y="9" width="3" height="6" rx="1"/><rect x="6" y="5" width="3" height="10" rx="1"/><rect x="11" y="1" width="3" height="14" rx="1"/>
+      </svg>
+      Odds
     </a>
   </nav>
 </div>
@@ -274,6 +280,26 @@ const TEAM_RANKINGS = {
   'DR Congo': 46, 'Uzbekistan': 50, 'Qatar': 55, 'Iraq': 57, 'South Africa': 60,
   'Saudi Arabia': 61, 'Jordan': 63, 'Bosnia & Herzegovina': 65, 'Cape Verde': 69,
   'Ghana': 74, 'Curaçao': 82, 'Haiti': 83, 'New Zealand': 85,
+};
+
+// Stadium name for each openfootball `ground` (city) value used in group-stage matches.
+const VENUE_STADIUMS = {
+  'Atlanta': 'Mercedes-Benz Stadium',
+  'Boston (Foxborough)': 'Gillette Stadium',
+  'Dallas (Arlington)': 'AT&T Stadium',
+  'Guadalajara (Zapopan)': 'Estadio Akron',
+  'Houston': 'NRG Stadium',
+  'Kansas City': 'Arrowhead Stadium',
+  'Los Angeles (Inglewood)': 'SoFi Stadium',
+  'Mexico City': 'Estadio Azteca',
+  'Miami (Miami Gardens)': 'Hard Rock Stadium',
+  'Monterrey (Guadalupe)': 'Estadio BBVA',
+  'New York/New Jersey (East Rutherford)': 'MetLife Stadium',
+  'Philadelphia': 'Lincoln Financial Field',
+  'San Francisco Bay Area (Santa Clara)': "Levi's Stadium",
+  'Seattle': 'Lumen Field',
+  'Toronto': 'BMO Field',
+  'Vancouver': 'BC Place',
 };
 
 // Knockout round labels as they appear in openfootball data
@@ -498,8 +524,8 @@ function renderGroupSchedule() {
       html += `<tr>
         <td>${m.time || 'TBD'}</td>
         <td>${f1} ${m.team1} v ${f2} ${m.team2}</td>
-        <td>${(m.group || '').replace('Group ', 'Grp ')}</td>
-        <td>${m.ground || 'TBD'}</td>
+        <td>${m.group || ''}</td>
+        <td>${m.ground ? `${m.ground} — ${VENUE_STADIUMS[m.ground] || ''}`.replace(/ — $/, '') : 'TBD'}</td>
         <td>${result}</td>
       </tr>`;
     }
