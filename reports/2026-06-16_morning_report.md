@@ -1,182 +1,150 @@
 # WC2026 Morning Report — 2026-06-16
 
-_Generated: 2026-06-16 00:06 ET | API quota remaining: 62_
+_Generated: 2026-06-16 12:05 ET | API quota remaining: 47_
 
 [📊 Open the live dashboard →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)
 
 ---
 
-# FIFA World Cup 2026 — Morning Briefing
-### Tuesday, June 16, 2026
+# World Cup 2026 — Morning Briefing | Tuesday, June 16
 
 ---
 
 ## TOURNAMENT STATUS
 
-Day 5 of the group stage. Germany's 7-1 demolition of Curaçao and Sweden's 5-1 win over Tunisia were the headline scorelines, though more consequential are Spain's 0-0 draw vs Cabo Verde and Belgium's 1-1 draw vs Egypt are the results. Groups I and J open today, with Argentina and France finally playing their opening matches. We also get to see Haaland's opening performance with Norway.
+Day 6 of the group stage. Fourteen matches have been completed across ten groups, with the tournament still in its opening round of fixtures. Groups I and J play today, while several other groups are in various states of completion after mixed results yesterday — notably Spain held to a draw by Cabo Verde in what was the most significant result of the opening week. The bracket remains genuinely open.
 
 ---
 
 ## RESULTS
 
-**Two Days Ago — Sunday, June 14**
-
-- Australia 2–0 Türkiye (Saturday midnight) (Group D) — Australia with a big win; Türkiye in trouble.
-- Germany 7–1 Curaçao (Group E) — Curaçao fans were not dissapointed.
-- Netherlands 2–2 Japan (Group F) — Great result for Japan's. Dutch had key player's out. One of the top games so far.
-- Ivory Coast 1–0 Ecuador (Group E) — Tight, scrappy; Ivory Coast win with clutch 90 min goal. Ecuador will need to win against Germany. 
-- Sweden 5–1 Tunisia (Group F) — Sweden look sharp in attack, but Tunsia didn't make it look difficult. 
-
 **Yesterday — Monday, June 15**
 
-- Spain 0–0 Cabo Verde (Group H) — HUGE game for Cabo Verde. Spainn disapoints - it's slow-start tournament habit is alive. Cabo Verde defended diligently, wonderful performance by their keeper. He went from 44k to 5.3M Instagram followers.
-- Belgium 1–1 Egypt (Group G) — Belgium drop two points they should not have.
-- Saudi Arabia 1–1 Uruguay (Group H) — A surprise point for Saudi Arabia. Uruguay looked below the level needed to contend; they had 27 shots and 10 on target.
-- Iran 2–2 New Zealand (Group G) — New Zealand equalized twice. Group G is already chaotic. Another great game to watch.
+- Spain 0-0 Cabo Verde (Group H) — The headline result of the tournament so far. Spain, the pre-tournament favorite, failed to unlock a well-organized Cabo Verde side. Lamine Yamal's status worth monitoring.
+- Belgium 1-1 Egypt (Group G) — Belgium drop points in a match they were expected to control. Egypt's defensive resilience evident.
+- Saudi Arabia 1-1 Uruguay (Group H) — Uruguay's group now complicated after Spain's draw; three teams potentially level on points after Matchday 1.
+- Iran 2-2 New Zealand (Group G) — New Zealand twice came from behind to level, or vice versa; Iran's defensive issues apparent.
+
+**Two Days Ago — Sunday, June 14**
+
+No matches. (Per available results data, confirmed match records begin June 15.)
 
 ---
 
 ## TODAY'S MATCHES
 
-**France vs Senegal — 3:00 PM ET | MetLife Stadium, NJ (Group I)**
+**France vs. Senegal — Group I | 3:00 PM ET | MetLife Stadium, NJ**
+France open their campaign as tournament co-favorites against a Senegal side missing Ismaila Sarr, Assane Diao, and two defensive options through injury — a meaningful reduction in their attacking threat and wide coverage. William Saliba is fit after back concerns, and Mbappé captains a side that should have no structural excuse for a poor result here. Senegal qualified unbeaten through their group but face a different level of opponent in MetLife. France at -215 is priced about right for a win but the draw at +360 is the interesting line — public money will hammer the France ML and the price reflects it.
 
-France open as significant favorites at -200, though this is a Senegal side with Mané fit and motivated after missing 2022 entirely. Deschamps will likely set up in a compact 4-3-3, leaning on Mbappé's pace against Senegal's high defensive line, with Griezmann pulling strings in the half-space. Saliba's return to training is encouraging; Koundé is a monitor but expected to start. Senegal are not the type of African side that simply defends for 90 minutes — they press, they transition, and with Mané leading the line this is a game France should win but can't sleepwalk. The -200 is priced correctly for the result market, but France's tendency to control rather than dominate suggests the under has some structural backing.
+**Iraq vs. Norway — Group I | 6:00 PM ET | Gillette Stadium (Boston), MA**
+Norway enter as heavy favorites at -450 and Haaland's arrival at the World Cup stage is the narrative everyone in Group I is built around. Iraq, returning to the World Cup for the first time since 1986, have a full squad available after an airport incident involving striker Aymen Hussein was resolved without issue. Graham Arnold's side will be organized and motivated but outclassed in quality — the question is whether the margin matches the price. At -450, a Norway win is already pricing in near-certainty; the more interesting market is the total and the spread.
 
-**Iraq vs Norway — 6:00 PM ET | Gillette Stadium, Foxborough (Group I)**
+**Argentina vs. Algeria — Group J | 9:00 PM ET | Venue TBC**
+The defending champions open against Algeria, who reached this tournament as African qualification dark horses and will approach this with a defensive structure designed to frustrate. Argentina at -230 is a reasonable price for a side of their quality, but the defending champion structural fade applies here — expectations will outrun execution, especially in a first group match where rotational questions linger. Algeria at +700 is too long for a side capable of making this uncomfortable; the draw at +350 reflects genuine possibility if Argentina are flat.
 
-Norway are 84% implied favorites at -525, and in this case the market is largely right. Iraq are capable of organization but their ceiling is a competitive first half followed by concession once fatigue and quality disparity assert themselves. Haaland is the obvious focal point, but Norway's width and pressing intensity present problems for a side that ranked among the weaker qualifiers in the Asian confederation. At -525 Norway ML has no value — the price to pay for this kind of certainty is too steep. The more interesting angle is the goal market, where a Norway win with goals at both ends is plausible given Iraq's willingness to commit men forward when chasing. Venue note: Foxborough in mid-June should be comfortable conditions, no heat or altitude factor.
-
-**Argentina vs Algeria — 9:00 PM ET | Arrowhead Stadium, Kansas City (Group J)**
-
-This is the match carrying the most narrative weight today. Argentina open as -245 favorites but with genuine question marks: Messi's hamstring is being managed, Tagliafico is out, Balerdi has been replaced by the less-tested Senesi, and the defending champion fade pattern sits in the background. Algeria are not without threat — Bensebaini's ankle concern is worth monitoring, but their qualification campaign showed defensive solidity and dangerous counter-attacking transitions. The Arrowhead crowd will be split, with a large South American diaspora in Kansas City offset by Algerian support. Algeria at +750 is not a good bet, but the draw at +360 is worth examining — Argentina's depleted backline, Messi on managed minutes, and the structural defending-champion-opener pattern all point toward a closer match than the spread implies.
-
-**Austria vs Jordan — 12:00 AM ET | (Group K, tomorrow's slate bleeds into tonight)**
-
-This kicks off at midnight ET, technically the bridge to tomorrow's report. Austria are -280 favorites over a Jordan side that will be organized and deeply defensive. Jordan have no realistic path to winning this on merit but can frustrate. No strong angles here; the prices are roughly efficient.
+**Austria vs. Jordan — Group J | 11:59 PM ET / Midnight ET | Venue TBC**
+Austria, ranked comfortably above Jordan in every measurable metric, are -275 favorites in a match that should serve as a routine opening win. Jordan's path to qualification was creditable but they arrive as the group's clear weakest side. Austria's pressing system, under Ralf Rangnick's setup, should overwhelm a Jordan team that will struggle to hold the ball. At -275, the win price is not generous — the spread or total markets offer better value than the ML.
 
 ---
 
 ## NEWS & INJURIES
 
-- Messi is managing a hamstring issue; Scaloni expected to limit his minutes or bring him off the bench — monitor team news closer to 9:00 PM.
-- Tagliafico (calf) and Balerdi (calf) both out for Argentina's opener; Senesi starts at left-back in a reshuffled defensive unit.
-- Mané is fit for Senegal after missing the 2022 World Cup entirely — his motivation and form make France's defensive task more demanding than the odds suggest.
-- Koundé (muscular) is listed as a doubt for France but projected to start; any late withdrawal reshapes France's right-side defensive setup.
-- Bensebaini (ankle) doubtful for Algeria — watch for team news pre-match; his absence weakens Algeria's left-flank threat significantly.
+- Senegal are without Ismaila Sarr, Assane Diao, Cheikh Sabaly, and Ismail Jakobs — their injury list is substantial and removes genuine attacking and wide-defensive quality.
+- William Saliba is fit for France after back concerns; Eduardo Camavinga and Lucas Chevalier remain out.
+- Mbappé carries a thigh issue into the tournament but is expected to start and captain France.
+- Iraq's Aymen Hussein was briefly held at Chicago O'Hare on arrival but has been cleared — no availability concern.
+- No injury concerns reported for Norway or Austria ahead of their respective fixtures.
 
 ---
 
 ## BET RECOMMENDATIONS
 
----
-
-**BET:** Draw — Argentina vs Algeria
-**ODDS:** +360 (DraftKings) | Implied: 21.7%
-**EDGE REASONING:** Argentina's defensive unit is meaningfully disrupted — Tagliafico and Balerdi both absent, Senesi making his first competitive appearance at this level. Messi on restricted minutes reduces the creative ceiling that usually breaks defensive opponents open. Algeria are a disciplined, counter-attacking side who drew on Bensebaini's set-piece delivery as a key weapon, and even with him doubtful, their tactical shape can absorb a depleted Argentina back four. The defending champion opener pattern carries structural weight: four of the last five holders have been held or eliminated in their first match, and the draw at +360 is approximately double what it would be priced for a fully fit Argentina side facing comparable opposition.
-**RISK LEVEL:** Medium
+**BET:** France -215 — France vs. Senegal (Match Result / Moneyline)
+**ODDS:** -215 (DraftKings) | Implied: 68.3%
+**EDGE REASONING:** Senegal arrive missing four significant players including Sarr, and while they are a disciplined qualifying unit, they are a materially weaker side in this configuration. France's 13.0% tournament win probability reflects a side operating near the top of the global hierarchy; -215 on a weakened opponent at a neutral venue is not overpriced. The public will back France regardless, but the underlying injury situation to Senegal's attack justifies the price rather than just reflecting it.
+**RISK LEVEL:** Low
 **RECOMMENDED STAKE:** $8 (4 units)
 **KEY RISK FACTORS:**
-- Messi starts and plays 70+ minutes; Argentina's quality differential asserts immediately
-- Bensebaini clears fitness and Algeria's set-piece threat is fully operational, either direction
+- Mbappé's thigh issue could limit sharpness; France slow starters historically in Game 1
+- MetLife crowd neutral — no home advantage dynamic to add
 
 ---
 
-**BET:** Under 2.5 Goals — France vs Senegal 
-**ODDS:** (estimate -115 to -120; check DraftKings game page) | Implied: ~54%
-**EDGE REASONING:** France's tournament openers have trended toward controlled, low-scoring affairs — Deschamps prioritizes structural security over entertainment. Senegal have the defensive personnel and tactical discipline to limit transitions, and with key Senegal attacking options in uncertain fitness (Diao, Gueye), their output may be reduced. The IFAB rule change adjustment (+0.15–0.20 xG for penalties) applies, but this is a match featuring two well-drilled defensive units rather than a high-pace open game. Under 2.5 at standard juice is near fair value; lean under if it's available at -110 or better.
+**BET:** Norway -1.5 — Iraq vs. Norway (Spread)
+**ODDS:** Approximately -130 to -145 (DraftKings — check current spread line) | Implied: ~56-59%
+**EDGE REASONING:** Iraq's return to the World Cup is a genuine sporting moment, but Norway at -450 on the ML creates almost no value — the spread is where the edge lives. Haaland and Ødegaard against a side making their first appearance in 40 years, with Norway fully fit and motivated to signal tournament intent. A -1.5 cover at a price near pick-em or slight lay is structurally sound — Norway's attacking quality against this level of opposition should produce a multi-goal margin.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
 **KEY RISK FACTORS:**
-- Mané scores early and France chase the game in the second half, opening the match up
-- VAR-awarded penalty in either direction shifts the game state and inflates the total
+- Norway's opening-game nerves are a real historical pattern; they have underperformed in big moments before
+- Iraq's full squad and organized defensive shape could keep it tighter than expected into the hour mark
 
 ---
 
-**BET:** Norway Spread -1.5 — Iraq vs Norway 
-**ODDS:** (estimate -145 to -160; confirm on DraftKings) | Implied: ~59–62%
-**EDGE REASONING:** Norway -525 on the money line is unplayable for a straight win bet, but the spread at -1.5 offers a route to extract value from what should be a significant quality mismatch. Haaland against an Iraqi defensive structure that was among the weakest in the Asian qualifying campaign is the clearest mismatch on today's card. Norway's pressing game at Foxborough in comfortable conditions suits their physical style, and Iraq carrying weaknesses in transition defending will be exposed by Norway's wide runs and second-ball aggression. Two-goal wins feel like the median outcome here.
-**RISK LEVEL:** Medium
-**RECOMMENDED STAKE:** $6 (3 units)
-**KEY RISK FACTORS:**
-- Iraq score early, Norway press chaotically and it stays 1-1 or 2-1 at 90
-- Haaland is rested or withdrawn after a goal — Norway coast without pressing the margin further
-
----
-
-**BET:** France to Win — France vs Senegal
-**ODDS:** -200 (DraftKings) | Implied: 66.7%
-**EDGE REASONING:** Against weaker opposition this line would be unplayable, but Senegal's Opta-level pedigree and Mané's return make this a legitimate test — meaning -200 is pricing a genuinely superior team correctly rather than inflating a mismatch. France's squad depth at every line is the best in today's slate, and Deschamps will approach this as a controlled win rather than an open game. At -200, you need France to win roughly 2-in-3 times; their actual probability is closer to 68–70% given squad quality and Senegal's fitness concerns. Small positive edge.
-**RISK LEVEL:** Low
-**RECOMMENDED STAKE:** $6 (3 units)
-**KEY RISK FACTORS:**
-- Mané in full flight against a France side that hasn't yet found tournament rhythm
-- Koundé forced off early; France's right-back position becomes a structural liability
-
----
-
-**BET:** Norway to Score in Both Halves — Iraq vs Norway
-**ODDS:** (estimate +120 to +140; confirm DraftKings) | Implied: ~42–45%
-**EDGE REASONING:** Norway's physical superiority should translate to goals across both halves rather than clustering late, and Iraq will not be able to absorb Norwegian pressure for a full 90 minutes. With Haaland, Sörloth, and Odegaard in attack, Norway generate volume — they're not a side that scores once and parks. If you can find this at +130 or better, the implied probability undervalues what should be a dominant performance across the full match.
+**BET:** Draw +350 — France vs. Senegal (Match Result)
+**ODDS:** +350 (DraftKings) | Implied: 22.2%
+**EDGE REASONING:** This is a small hedge/value play rather than a primary position. Spain were held 0-0 by Cabo Verde yesterday — the pattern of tournament favorites stumbling in Game 1 is statistically persistent, and France have a history of unimpressive opening performances. Mbappé is carrying a knock, France have two players unavailable, and Senegal's defensive organization through qualifying was genuinely strong (three goals conceded in ten matches). The true probability of a draw is closer to 26-28%; at +350 (implied 22.2%), there is a mild overlay.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $4 (2 units)
 **KEY RISK FACTORS:**
-- Norway go 2-0 up early and rotate heavily in the second half, settling for the result
-- Iraq score first and Norway spend the first half chasing rather than pressing their natural game
+- Senegal's attacking injuries are severe enough to limit their threat significantly
+- France's squad depth means even a below-par performance should create enough chances
 
 ---
 
-**BET:** Austria -1.5 Spread — Austria vs Jordan 
-**ODDS:** -105 (DraftKings) | Implied: 51.2%
-**EDGE REASONING:** Austria -280 on the money line is dead money, but the spread at -1.5 is essentially a coin flip in the market's eyes — and that undervalues what Rangnick's side should do here. Austria have won nine of their last eleven, including a 5-1 over Ghana and clean sheets against South Korea and Tunisia in the buildup. Jordan are on a five-match winless run, their leading scorer is unavailable, and the replacement hasn't found the net since January. This is a first-ever World Cup match for Jordan against a side whose gegenpressing system is specifically designed to suffocate teams that sit deep and then concede in clusters once the structure breaks. Baumgartner's thigh injury is a loss, but Alaba has been passed fit and the squad depth is more than sufficient to cover. A two-goal margin is the most likely winning scoreline, not the ceiling.
+**BET:** Austria -1.5 — Austria vs. Jordan (Spread)
+**ODDS:** Approximately -120 to -135 (DraftKings — verify current line) | Implied: ~55-57%
+**EDGE REASONING:** Austria under Rangnick play an intense pressing system that punishes sides unable to build out under pressure — Jordan will face that problem acutely. At -275 on the ML, the win alone offers no value; the -1.5 spread at a near-even price is where Austria's quality advantage expresses itself. Jordan conceded 12 goals in their final six qualifiers, suggesting they are vulnerable to sustained attacking pressure from quality opposition.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
 **KEY RISK FACTORS:**
-- Jordan's Asian Cup final pedigree means they can organize for 60+ minutes — if the opener doesn't come until late, -1.5 is dead
-- Midnight ET kickoff in Santa Clara; Austria may manage intensity knowing they have Argentina next
+- Late kickoff and tournament-opening nerves could see Austria start cautiously before asserting control
+- Austria have shown inconsistency in opening fixtures historically under Rangnick
+
+---
+
+**BET:** Argentina vs. Algeria — Draw +350 (small play)
+**ODDS:** +350 (DraftKings) | Implied: 22.2%
+**EDGE REASONING:** The defending champion structural fade is the primary driver here — Argentina's first tournament game as holders, playing against a defensively disciplined Algeria side at a late evening kickoff. The true probability of a draw in this fixture is likely around 25-27%, and +350 offers genuine overlay. This is not a primary position against Argentina winning outright, but the pattern of defending champions underperforming in their tournament opener is documented and +350 compensates accordingly.
+**RISK LEVEL:** High
+**RECOMMENDED STAKE:** $4 (2 units)
+**KEY RISK FACTORS:**
+- Argentina's individual quality — Messi, Di María, Álvarez — is sufficient to break down most defenses
+- Algeria may be set up to defend and frustrate but lack the quality to hold a full 90 minutes against this attack
 
 ---
 
 ## AROUND THE TOURNAMENT
 
-- Spain's 0-0 with Cabo Verde is the most alarming result of the opening round on paper — though the team that beat England to a European Championship last summer going scoreless against a 160,000-person island nation does beg the question of how many first-round draws this squad has budgeted for.
-
-- The Yasin Ayari moment — a Sweden debut goal, immediately followed by sujoud on the Monterrey pitch, from a player with a Tunisian father and Moroccan mother who told the press his father always wanted him to play for Sweden — is the early human story of this tournament, and it deserves the attention it's getting.
-
-- Curaçao have become the unofficial neutrals' team of Week One: population 160,000, first World Cup, and they pulled a goal back against Germany at 68,000-seat capacity NRG Stadium. That one goal, already mythologized on the island, will outlast the scoreline.
-
-- Iran and New Zealand combining for four goals in a group stage opener in what was supposed to be a tight, conservative match is a gentle reminder that the IFAB penalty rule changes are already influencing game states — New Zealand's equalizer came from the spot.
-
-- The atmosphere across North American venues in the opening days has been genuinely striking — MetLife, Arrowhead, and Gillette are not exactly neutral grounds, and today's France-Senegal and Argentina-Algeria fixtures will test whether those stadiums can generate the kind of partisan electricity usually reserved for European and South American venues.
+- The Azteca hosted its third World Cup opening ceremony, which is either the most appropriate tribute to football's history or evidence that tournament organizers simply ran out of ideas — either way, the stadium sounded exactly like you'd want a World Cup to sound.
+- Scotland's 1-0 win over Haiti ended a 36-year wait for a World Cup victory. The Tartan Army, who treat international tournaments with the optimism of people who know exactly what's coming but choose hope anyway, apparently wore the full kit to Gillette Stadium and made enough noise for a side of 5 million.
+- Iraq's return to the World Cup after 40 years drew supporters from across the diaspora to Boston. The scenes at Logan Airport — Arabic conversations, overcrowded baggage claim, supporters who had flown from three continents — were a reminder of what the expanded format can do that a 32-team tournament never could.
+- Curaçao, population 157,000, apparently scored a goal at a World Cup. The island is smaller than most cities hosting matches. This fact requires no editorial comment.
+- Spain's draw with Cabo Verde has done more to animate the tournament market in 24 hours than any result so far — the pre-tournament favorite dropping two points immediately opens the group and justifies every piece of sharp skepticism about their -1000 match pricing against lesser opposition.
 
 ---
 
 ## PARLAYS
 
-**Parlay 1: France ML + Norway -1.5**
-Combined estimate: approximately +160–170 (2-leg). France controlling a Senegal side missing key personnel and Norway winning by multiple goals against Iraq represents two of the cleaner expected outcomes on today's card. Two units ($4).
+**Parlay 1 — Favorites Cover**
+France ML (-215) + Austria -1.5 (approx. -130). Combined estimate: approximately +130 to +150. Both sides are material quality advantages over depleted or outclassed opponents; stacking the wins asks only that the two favorites do what their squads suggest they should. $4 (2 units).
 
-**Parlay 2: Draw Argentina vs Algeria + Under 2.5 France vs Senegal**
-Combined estimate: approximately +800–850 (2-leg). These two plays correlate thematically — both are arguments for tighter, more defensively structured matches than the market expects. The combined payout is generous given both have legitimate standalone cases. One unit ($2).
+**Parlay 2 — Margins Matter**
+Norway -1.5 (approx. -135) + Austria -1.5 (approx. -130). Combined estimate: approximately +175 to +195. Two pressing-intensive European sides against opponents who will struggle to handle structured high-intensity attacks — Norway's first World Cup appearance in decades comes against a side making their first appearance in four decades. $4 (2 units).
 
-**Parlay 3: Norway to Win + France to Win + Argentina to Win**
-Combined estimate: approximately +300–350 (3-leg). The chalk parlay, included as the "sleep well" option — three favorites on a day where the value plays are in alternative markets. The Argentina leg is the leak given the squad disruption, so consider this only if Messi is confirmed to start. One unit ($2).
+**Parlay 3 — Draw Hunters (Contrarian)**
+France Draw +350 + Argentina Draw +350. Combined estimate: approximately +1800 to +2000. A speculative ticket on the defending champion fade and the France-as-slow-starters pattern both expressing simultaneously in the same day's fixtures. The legs are correlated by theme rather than outcome — if one hits, it likely means the tournament is behaving exactly as the historical patterns suggest. $2 (1 unit).
 
 ---
 
 ## SHARP MONEY
 
-- Bosnia & Herzegovina shortened from +500 to +475 against Switzerland — modest movement but coming without a clear injury trigger, suggesting some position-building on Bosnia. Not a strong signal yet; worth watching if it moves further.
-- The Spain vs Saudi Arabia draw tightening from +1000 to +950 is notable given Spain's 0-0 opener. Public is starting to hedge the "Spain sleep through groups" narrative, and the market is responding to ticket volume rather than sharp action. Fade this move.
-- Uruguay vs Cabo Verde saw Cape Verde shorten from +700 to +650 and the draw from +340 to +320 — likely a reaction to Saudi Arabia's point against Uruguay rather than meaningful sharp positioning. Uruguay's performance level is being revised downward across the book.
+- France's handle on the ML will be enormous — almost entirely public money given the name value. No sharp signal behind the France ML; the value, if any, sits on the draw or on Senegal points.
+- Norway at -450 on the ML is a public favorite driven by Haaland recognition. Sharp angles are on the spread, not the ML; the -450 win price generates near-zero Kelly value regardless of true probability.
+- No significant line movements reported from yesterday's cache. The Argentina and France opens have not moved materially, suggesting books are comfortable with current pricing and no major sharp syndicate action has been flagged.
 
 ---
 
-
 ## TOMORROW'S SLATE
 
-Wednesday, June 17
-- 12:00 AM ET — Austria vs Jordan
-- 1:00 PM ET — Portugal vs DR Congo
-- 4:00 PM ET — England vs Croatia
-- 7:00 PM ET — Ghana vs Panama
-- 10:00 PM ET — Uzbekistan vs Colombia
+No matches have been confirmed in the provided fixture data for June 17. Check back for an updated schedule as the group stage fixture list is published.
