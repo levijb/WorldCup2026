@@ -236,6 +236,7 @@ Wit belongs in the back half of the report — match previews and bets — not t
    - One line each
 
 5. **BET RECOMMENDATIONS** (3–5 bets, structured format above)
+   Every match listed in TODAY'S MATCHES must be evaluated for bet recommendations — including late-night kickoffs. Do not dismiss a match with "no strong angles" without the same specific analysis (odds, edge reasoning, risk factors) applied to every other match. If a late-night match genuinely has no edge, explain why in one sentence referencing specific odds, but still evaluate it.
 
 6. **AROUND THE TOURNAMENT** (3–5 bullets, one line each — two at most per bullet)
    - General WC atmosphere, color stories, and tournament narrative beyond today's specific matches

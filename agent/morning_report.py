@@ -448,7 +448,7 @@ Produce the full morning briefing report in this exact order:
 
 4. **NEWS & INJURIES** — 3–5 bullets, one line each. Only items relevant to today's matches.
 
-5. **BET RECOMMENDATIONS** — 3–5 bets using the exact structured format from the system prompt. Do not include a MODEL EDGE line or any model/edge-percentage field — the allowed fields are BET, ODDS, EDGE REASONING, RISK LEVEL, RECOMMENDED STAKE, KEY RISK FACTORS only.
+5. **BET RECOMMENDATIONS** — 3–5 bets using the exact structured format from the system prompt. Do not include a MODEL EDGE line or any model/edge-percentage field — the allowed fields are BET, ODDS, EDGE REASONING, RISK LEVEL, RECOMMENDED STAKE, KEY RISK FACTORS only. Evaluate ALL matches in the Today's Fixtures list above for bet angles — including any late-night (midnight–3 AM ET) kickoffs. Do not skip or dismiss any match without specific analysis.
 
 6. **AROUND THE TOURNAMENT** — 3–5 bullets on general WC atmosphere, color stories, and tournament narrative beyond today's matches. One line per bullet, two at most. No odds, no bet angles.
 
