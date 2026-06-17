@@ -152,7 +152,7 @@ Estimated combined odds: approximately +900. All three legs carry individual log
 
 ## 9. TOMORROW'S SLATE
 
-- 12:00 PM ET — Czech Republic vs. South Africa
-- 3:00 PM ET — Switzerland vs. Bosnia & Herzegovina
-- 6:00 PM ET — Canada vs. Qatar
-- 9:00 PM ET — Mexico vs. South Korea
+- 1:00 PM ET — Portugal vs. DR Congo
+- 4:00 PM ET — England vs. Croatia
+- 7:00 PM ET — Ghana vs. Panama
+- 10:00 PM ET — Uzbekistan vs. Columbia
