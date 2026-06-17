@@ -1,153 +1,155 @@
-# World Cup Morning Report 
-Tuesday June 17, 2026
+# WC2026 Morning Report — 2026-06-17
 
-[Live dashboard link →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)
+_Generated: 2026-06-17 10:33 ET | API quota remaining: 41_
+
+[📊 Open the live dashboard →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)
+
+---
+
+# WorldCup2026 Betting Intelligence — Day 7 Morning Briefing
+### Wednesday, June 17, 2026
 
 ---
 
 ## 1. TOURNAMENT STATUS
 
-Day 7 of the group stage. Groups I and J concluded their first matchday yesterday, with France, Norway, Argentina, and Austria all winning. Today opens Group K (Portugal, DR Congo, Colombia, Uzbekistan) and Group L (England, Croatia, Ghana, Panama) — four matches across three countries, ranging from Houston at 1 PM to Mexico City at 10 PM. Last four teams to play their first match.
+Day 7 of the group stage. Six of the twelve groups have now seen at least one round of fixtures. The tournament's early headline is Messi's hat-trick against Algeria on Tuesday — his 200th Argentina cap, and a reminder that the defending champions remain dangerous regardless of what the structural fade narrative says. Four matches on the card today across Groups K and L, completing the first round of fixtures for both. Austria's 3–1 result over Jordan (Group J) is confirmed from early Wednesday ET scheduling and is reflected in the results below.
 
 ---
 
 ## 2. RESULTS
 
-**Yesterday — Monday, June 16**
-- France 3–1 Senegal (Group I) — France had lazy start but woke up in the 2nd half; Senegal looked good, great goal in 90'+5, only to be followed by a 30 yard banger from Mbappé in 90+6'. Mabappé now has 14 World Cup goals, in third behind Muller and Messi with 16.
-- Norway 4–1 Iraq (Group I) — Halland scores 2 goals in his World cup debut; Iraq offered little resistance.
-- Argentina 3–0 Algeria (Group J) — Messi (GOAT) with the hat-trick! Brigning him to 16 World Cup goals (Tied 1st). Argentina looked crisp, great play up the middle. 
-- Austria 3–1 Jordan (Group J) — Austria will be fun to watch, midfield often stays high opening up for counter-attacks. Jordan's first ever World Cup appearance.
+**Yesterday — Tuesday, June 16**
 
+- France 3–1 Senegal (Group I) — France opened with a convincing win; the depth of their attacking output early in the tournament is a data point worth noting.
+- Norway 4–1 Iraq (Group I) — Haaland-led demolition job; Norway's pre-tournament value case just got louder.
+- Argentina 3–0 Algeria (Group J) — Messi hat-trick on his 200th cap. Whatever structural fade you had on Argentina, you just ate it in game one.
+- Austria 3–1 Jordan (Group J) — Austria's group-stage form backs their odds in a respectable Group J.
+
+**Two Days Ago — Monday, June 15**
+
+No matches listed in the provided results data for June 15.
 
 ---
 
 ## 3. TODAY'S MATCHES
 
-**Portugal vs. DR Congo — 1:00 PM ET | NRG Stadium, Houston | Group K**
-Portugal open as heavy favorites at -330 against a DR Congo side making a statement of their own just by being here. Houston's heat and humidity will be a factor — afternoon kickoff in late June, expect temperatures approaching 100°F, which historically compresses second-half intensity and suits Portugal's technical, controlled style over any physical African press. The Ronaldo question is ever-present: he's available, he'll start, and he'll want to impose himself immediately, though reported training ground friction is a background note worth watching across the tournament. DR Congo are no pushovers — they're organized defensively and will frustrate — but Portugal's squad depth at every position is simply a different category. The line drifting from -360 to -330 is a mild caution flag; the draw shortening to +450 suggests some money anticipating a closer-than-expected first half.
+**Portugal vs DR Congo — Group K | NRG Stadium, Houston | 1:00 PM ET**
+Portugal open as heavy favorites at -380 in a Houston afternoon kickoff — heat index will be relevant, though neither side is particularly pace-dependent in a way that changes the outcome here. The significant pre-match news is the confirmed absence of Rúben Dias, opening a defensive gap that Gonçalo Inácio will be asked to fill. DR Congo are not without quality going forward, and Portugal's defensive line without Dias carries more uncertainty than the -380 price implies. The Ronaldo disciplinary watch remains active; nothing confirmed today but his yellow card accumulation situation bears monitoring match-to-match. If Portugal keep a clean sheet and control possession, the result is predictable — the question is whether Dias's absence shows up in the scoreline.
 
-**England vs. Croatia — 4:00 PM ET | AT&T Stadium, Arlington, TX | Group L**
-This group has history — the 2018 World Cup semifinal matchup, England's Euro 2020 final win, a generally unpleasant relationship between these two sets of fans. England come in at -135, which is a modest price for a side with considerably more quality than a Croatia team running a 40-year-old Modrić as a centerpiece. Tino Livramento is out for the tournament with a calf injury, and Bukayo Saka carries an Achilles concern — he's expected to play, but any limitation on Saka meaningfully dents England's right side. Croatia will sit, compress, and make this ugly; they've reached the semifinals at the last two World Cups by grinding — they know exactly what they're doing. AT&T Stadium in Arlington runs controlled temperature indoors, so no heat-based advantage either way. The betting angle here is total goals: Croatia are built to make this match difficult, and England historically start slowly in major tournament openers.
+**England vs Croatia — Group L | AT&T Stadium, Dallas | 4:00 PM ET**
+England come in as -145 favorites and the better-resourced side by a distance, but Croatia arrive carrying the tournament pedigree and one significant threat: Luka Modric, still operating at 40, who will look to dictate tempo against England's midfield. The injury picture favors England's opponents more than the line suggests — Croatia are missing Perisic and Kovacic (fitness uncertain), while England are without Livramento (ruled out for the tournament) and carrying a minor Saka doubt. England's strength running through Rice and Bellingham in a double pivot should win the midfield battle, but Croatia at +425 offers legitimate upset value if Modric gets time and England's defensive cover is stretched. Dallas heat in an afternoon kickoff adds a second-half fatigue element that historically narrows margins.
 
-**Ghana vs. Panama — 7:00 PM ET | BMO Field, Toronto | Group L**
-The second Group L match of the day, played at a neutral outdoor venue in Canada — temperature controlled relative to the Texas heat, which removes that particular variable. Ghana opened as +120 favorites and have drifted to +135, suggesting mild market skepticism about their attacking output; the draw has shortened from +235 to +220. Panama are a defensively compact, counterattacking side who have shown they can frustrate and absorb — they're not here by accident. Ghana have talent in attack but have historically been inconsistent at translating it into wins; this is the kind of match where the better team on paper fails to cover. The total is where the edge lives: both teams are likely to be cautious in a match where a draw isn't the worst outcome for either, and Toronto in the evening is a controlled environment.
+**Ghana vs Panama — Group L | BMO Field, Toronto | 7:00 PM ET**
+The Group L evening match is the most genuinely open fixture on today's slate — Ghana (+135), Panama (+225), Draw (+220) suggests bookmakers effectively see three nearly equal outcomes. Neither side carries significant tactical sophistication or a clear structural edge; this is a match decided by set pieces, individual moments, and who wants it more on the night. Panama are a disciplined defensive unit who will make Ghana work; Ghana's attacking threat runs through their wide players and any set-piece situations. The draw price at +220 looks like the most mathematically interesting option in a match where neither side is strongly motivated to overextend.
 
-**Uzbekistan vs. Colombia — 10:00 PM ET | Estadio Azteca, Mexico City | Group K**
-The late-night fixture is the most analytically interesting one on today's slate. Colombia are -275 favorites but face a structural obstacle that the odds don't fully price: the Azteca sits at 7,300 feet. Colombia are a sea-level team; Uzbekistan have Central Asian altitude familiarity and may benefit physiologically here. The line movement on Colombia has been fairly static, suggesting the market knows the altitude factor but hasn't dramatically corrected for it. Uzbekistan at +850 is a long shot, but the draw at +390 is the number worth looking at — Colombia may control possession but find finishing at altitude more difficult than expected. Colombia's tournament pedigree is the overriding edge, but this is not a spot to be heavily laying -275 in thin air.
+**Uzbekistan vs Colombia — Group K | Levi's Stadium, San Francisco | 10:00 PM ET**
+Colombia open as -270 favorites against a side making their World Cup debut, and the price is essentially correct — Uzbekistan are outmatched in quality at virtually every position. Colombia's squad depth, pressing structure, and transitional threat make them the clear value even at a price that offers limited return. The late-night ET kickoff at Levi's in the Bay Area means a neutral crowd with no particular atmospheric advantage for either side. The relevant betting question is not whether Colombia win but whether the margin covers any spread or whether there's a totals angle given Colombia's attacking output in qualifying. This is a match Colombia should control without excessive urgency.
 
 ---
 
 ## 4. NEWS & INJURIES
 
-- Tino Livramento (England) is out for the tournament; Trevor Chalobah drafted in as replacement and not expected to feature today.
-- Bukayo Saka carries an Achilles concern but is expected to start against Croatia — monitor for warmup reports.
-- Duje Caleta-Car (Croatia) missed both warm-up friendlies but is back in training and expected to be available.
-- Portugal vs. DR Congo kicks off at NRG Stadium in Houston — afternoon heat and humidity will be significant; first-half pace likely elevated, second-half fatigue a real factor.
-- Uzbekistan vs. Colombia is played at Estadio Azteca (7,300 ft altitude) — Colombia should be treated as altitude-impaired favorites despite the paper quality gap.
+- Rúben Dias ruled out for Portugal; Gonçalo Inácio expected to start in central defense against DR Congo.
+- Tino Livramento ruled out of the entire tournament for England; Trevoh Chalobah called up as emergency replacement.
+- Bukayo Saka (Achilles) carries a minor fitness doubt for England but is expected to be available.
+- Mateo Kovacic fitness uncertain for Croatia; Ivan Perisic confirmed absent. Modric remains the fulcrum.
+- Ronaldo yellow card accumulation situation remains unresolved — no disciplinary action confirmed today, but monitor before wagering on any Portugal knockout line.
 
 ---
 
 ## 5. BET RECOMMENDATIONS
 
----
-
-**BET:** Under 2.5 — England vs. Croatia (Total Goals)
-**ODDS:** -115 (DraftKings) | Implied: 53.5%
-**EDGE REASONING:** Croatia's entire tournament identity for the last eight years has been defensive organization and making matches ugly — they held Germany to 1-1 at Euro 2024 and are built to frustrate. England historically start major tournaments slowly; their 3-0 warmup against Costa Rica is noise. AT&T Stadium's controlled indoor environment removes heat as a pace accelerator, and the IFAB rule adjustment of +0.15 xG for unders still keeps this number comfortable. Croatia conceded only four goals across eight qualifying matches.
-**RISK LEVEL:** Low
-**RECOMMENDED STAKE:** $8 (4 units)
-**KEY RISK FACTORS:**
-- Saka at full capacity opens England's right side in a way Croatia cannot handle; a fast start changes everything
-- England may be significantly better than 2018 Croatia, and a blowout erases the under
-
----
-
-**BET:** Draw — Ghana vs. Panama (+220)
+**BET:** Draw — Ghana vs Panama (Match Result)
 **ODDS:** +220 (DraftKings) | Implied: 31.2%
-**EDGE REASONING:** Ghana have drifted to +135 favorites in a match neither side can afford to lose dramatically, which historically produces conservative, low-scoring group-stage openers. Panama are compact and disciplined; Ghana have the talent but not the consistency to be laying negative money against a side this organized. The draw at +220 offers genuine value — the market's implied 31.2% sits below the true structural probability of this fixture type, which historically trends closer to 35-38% for evenly matched group-stage openers.
+**EDGE REASONING:** The three-way market here is remarkably compressed, with the draw implied at 31.2% against a true probability that sits at least equal to that given how evenly matched these sides are on paper and on form. Panama are a defensively structured unit who have shown no consistent attacking output at this level; Ghana's best performances come when given space to counter, which Panama will deny. Group-stage draws are structurally undervalued by a public that defaults to backing the "better" team, and there is no clear better team here. The +220 price on a genuine coin-flip three-way market represents real value.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
 **KEY RISK FACTORS:**
-- Ghana's attacking quality may be too much for Panama across 90 minutes if they find an early goal
-- Panama have limited offensive threat to hold a lead or force a game state that produces a draw
+- Ghana have individual quality capable of winning this outright inside 70 minutes
+- Panama are capable of nicking a goal from a set piece and defending it
 
 ---
 
-**BET:** Portugal ML — Portugal vs. DR Congo (-330)
-**ODDS:** -330 (DraftKings) | Implied: 76.7%
-**EDGE REASONING:** The drift from -360 to -330 looks like public hesitation rather than a genuine sharp fade; Portugal's squad quality is a tier above DR Congo's regardless of conditions. Houston heat should actually flatten DR Congo's pressing intensity in the second half — the physical African press style historically degrades in extreme heat faster than Portugal's technical, possession-based game. At -330 this isn't a value play on paper, but for bankroll-appropriate small stakes it's the most reliable result on today's slate.
+**BET:** England -1.5 — England vs Croatia (Spread)
+**ODDS:** -115 (DraftKings, estimated from H2H context)
+**EDGE REASONING:** Croatia are missing their two most important outfield players in Perisic and Kovacic, and even Modric at 40 cannot carry a depleted midfield for 90 minutes against England's Rice-Bellingham axis in Dallas heat. England beat Costa Rica 3–0 in their opener; Croatia's squad is thinner than it has been at any major tournament in the Modric era. A one-goal margin at full-time is the floor for England here, and the -1.5 line on a team this dominant against this level of opposition warrants a stake. The heat concern cuts both ways, but England's squad depth to rotate through substitutions is materially greater.
+**RISK LEVEL:** Medium
+**RECOMMENDED STAKE:** $6 (3 units)
+**KEY RISK FACTORS:**
+- Saka fitness doubt reduces England's attacking width and threat on the right
+- Croatia are experienced at protecting a deficit and grinding out results — a 1–0 England win buries this bet
+
+---
+
+**BET:** Colombia -1.5 — Uzbekistan vs Colombia (Spread)
+**ODDS:** -145 (DraftKings, estimated)
+**EDGE REASONING:** Uzbekistan are making their World Cup debut against a Colombia side that finished with genuine attacking momentum through CONMEBOL qualifying and boast James Rodríguez, Díaz, and Córdoba across a dynamic front line. The debut-tournament effect on defensive organization is real, but it typically produces more caution, not more goals — Colombia's ability to press and exploit hesitation should produce a multi-goal margin. A -1.5 spread on Colombia here is backed by the quality gap, the venue neutrality, and the late kickoff removing any crowd-atmosphere offset.
 **RISK LEVEL:** Low
-**RECOMMENDED STAKE:** $4 (2 units)
-**KEY RISK FACTORS:**
-- DR Congo can be defensively stubborn and organized; this could easily be a 1-0 grind
-- Ronaldo's reported camp friction, if it surfaces as a selection or attitude issue, disrupts Portugal's rhythm
-
----
-
-**BET:** Draw — Uzbekistan vs. Colombia (+390)
-**ODDS:** +390 (DraftKings) | Implied: 20.4%
-**EDGE REASONING:** Colombia are legitimate tournament contenders at -275, but the Azteca's 7,300-foot altitude is a genuine equalizer. Uzbekistan have Central Asian altitude familiarity and will be organized and motivated in their tournament opener; Colombia, sea-level acclimatized, historically struggle to convert chances at altitude — the aerobic cost of pressing in thin air is measurable. At +390, the draw is priced as unlikely; the true probability in altitude-adjusted conditions is closer to 27-30%, making this the most structurally underpriced number on the board today.
-**RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
 **KEY RISK FACTORS:**
-- Colombia's individual quality — Díaz, Arias, Sinisterra — may simply be too much at any altitude
-- Uzbekistan have limited history in high-pressure tournament openers; nerves could open the match early
+- Colombia have no obvious motivation to overextend with a full group schedule ahead
+- Uzbekistan's debut organization could keep this tighter than expected through 60 minutes
 
 ---
 
-**BET:** England -1.5 — England vs. Croatia (Spread)
-**ODDS:** +145 (estimated, DraftKings) | Implied: ~40.8%
-**EDGE REASONING:** England at -135 moneyline implies a clear favorite, but the spread at +145 represents real value if you believe England's quality gap is substantial enough to produce a multi-goal win — which it may be against a Croatia side running on Modrić's final tournament legs. England's squad is younger, faster, and better constructed than any version they've fielded in recent memory; Croatia's path to a result involves keeping this tight, and a late Bellingham or Kane goal after Croatia tire is a realistic scenario that wins the spread bet. This is a lean rather than a conviction play.
+**BET:** Portugal to Win and Over 2.5 Goals — Portugal vs DR Congo (Match Result + Total)
+**ODDS:** approximately -145 (DraftKings, estimated combination)
+**EDGE REASONING:** The IFAB expanded VAR rule structurally inflates penalty frequency, and Houston heat at a 1 PM kickoff historically opens up second-half space as defenses tire. Portugal have the attacking personnel — Félix, Leão, Ronaldo — to punish a DR Congo defensive unit that will be without the organizational anchor of a settled back line. Dias's absence removes one concern about a clean sheet that might otherwise suppress total goals; DR Congo are capable of a scrappy goal, making Over 2.5 more likely than a Portugal shutout alone. The combination at estimated -145 price gives better value than either leg in isolation.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $4 (2 units)
 **KEY RISK FACTORS:**
-- Croatia at major tournaments are historically allergic to losing by two; they will fight for a consolation
-- Saka injury concern, if he's limited or withdrawn, reduces England's cutting edge significantly
+- Houston heat can suppress second-half attacking tempo — Portugal may sit on a 1–0 lead
+- Dias absence is manageable but an early Portugal defensive error could prompt a conservative tactical shift
+
+---
+
+**BET:** England vs Croatia — Under 2.5 Goals
+**ODDS:** -120 (DraftKings, estimated)
+**EDGE REASONING:** Croatia without Kovacic and Perisic are not a side that creates goals prolifically — they survive on structure and Modric's distribution. England's first-match 3–0 against Costa Rica flatters them slightly; Croatia, even depleted, are not Costa Rica. The historical pattern of conservative European sides keeping group-stage openers tight is relevant here, and the structural Under adjustment for knockout-style disciplined opponents holds even in the group stage when one side has significant defensive absentees on the other bench. Under 2.5 is the play when neither side has a high-volume attacking floor.
+**RISK LEVEL:** Medium
+**RECOMMENDED STAKE:** $4 (2 units)
+**KEY RISK FACTORS:**
+- Expanded VAR scope increases penalty probability — one spot kick changes a 1–0 into a 2–1 quickly
+- England could exploit Croatia's reduced midfield cover with early goals that open the game up
 
 ---
 
 ## 6. AROUND THE TOURNAMENT
 
-- Messi turned 38 this week and scored a hat-trick in Kansas City; Erling Haaland apparently watched from his Snapchat and called him "a madman," which is the most succinct match report written so far.
-- Morocco's Brahim Díaz threaded a defense-splitting pass to set up what may be the goal of the tournament's opening week — four years after their Qatar semifinal run, the Atlas Lions are making a compelling argument that they've actually improved.
-- The VAR room controversy — a single camera shot of an official appearing to gesture with an upside-down 'OK' sign — became the first genuine off-pitch scandal of the tournament; broadcasters have since stopped cutting to the VAR panel on television, which is one way to solve the problem.
-- France's 3-1 win over Senegal was the kind of performance that reminds you why sharp money is piling on at +475; clinical, controlled, and utterly unhurried.
-- Norway's 4-1 demolition of Iraq suggests Haaland has arrived in good shape, which is relevant to approximately everyone with a Norway futures ticket and definitely to Iraq's goalkeeper.
+- Messi's hat-trick against Algeria was his 200th Argentina cap and made him the oldest World Cup hat-trick scorer in history — a title he took from Ronaldo, which will not have gone unnoticed in Portugal's training camp.
+- The Azteca becomes the first stadium to host World Cup matches across three editions (1970, 1986, 2026), and by all accounts it delivered on the occasion — 87,000 fans and an opening ceremony that actually justified the hype for once.
+- Norway's 4–1 over Iraq was not a surprise on paper but confirms the Haaland-led side are functioning as a genuine unit, not just a one-man show. Group I is already shaping up as the most analytically interesting group of the tournament.
+- Yasin Ayari scoring twice for Sweden while visibly restraining his celebrations against Tunisia — his father is Tunisian — was quietly one of the most human moments of the opening week, largely buried under the Messi coverage it deserved to outlast.
+- France 3–1 Senegal is the result that should focus attention: a fully functioning, apparently motivated French side at the top of Group I is a problem for everyone remaining in the bracket, and +475 on the outright is starting to look short.
 
 ---
 
 ## 7. PARLAYS
 
-**Parlay 1: Double — England Under 2.5 + Ghana/Panama Draw**
-Estimated combined odds: approximately +380. Two matches built around conservative tactical setups and historically draw-friendly group-stage dynamics; the England under is the anchor and the Ghana/Panama draw is the longer-odds upside leg.
-**RECOMMENDED STAKE:** $4 (2 units)
+**Parlay 1 — The Structure Play**
+England -1.5 + Colombia -1.5. Both sides are significantly superior to their opponents on paper, both are missing key opposition personnel, and the spread prices reflect markets that are not fully accounting for the quality gaps. Estimated combined odds: approximately +165. This is a legitimate two-leg parlay grounded in the same analytical framework applied to each individual bet.
 
-**Parlay 2: Double — Portugal ML + Colombia/Uzbekistan Draw**
-Estimated combined odds: approximately +550. Portugal as the reliable leg backing Colombia failing to cover their paper superiority at altitude; two outcomes that are individually logical but combine well as a value-oriented hedge across the same group.
-**RECOMMENDED STAKE:** $4 (2 units)
+**Parlay 2 — The Draw Hunter**
+Ghana vs Panama Draw + Under 2.5 in England vs Croatia. Two separate structural angles — the compressed three-way market producing draw value in Toronto, and the depleted-Croatia defensive setup suppressing goals in Dallas. Estimated combined odds: approximately +380. The legs are on separate matches and are not correlated, which is the correct way to build a two-game parlay.
 
-**Parlay 3: Double — England -1.5 + Portugal ML**
-Estimated combined odds: approximately +300. Portugal's group-stage opener against a team with significantly less quality, combined with England to win by two or more against a Croatia side that is aging and limited offensively — two of the higher-probability outcomes on today's slate packaged for modest upside.
-**RECOMMENDED STAKE:** $2 (1 unit)
-
-**Parlay 4: Three-Leg — England Under 2.5 + Colombia/Uzbekistan Draw + Ghana/Panama Draw**
-Estimated combined odds: approximately +900. All three legs carry individual logic; stringing them together is speculative but the underlying reasoning on each is sound. One unit only — this is a lottery ticket with structural backing.
-**RECOMMENDED STAKE:** $2 (1 unit)
+**Parlay 3 — Group K Dominance**
+Portugal to win and Over 2.5 + Colombia to win by 2+. If both tournament favorites in Group K perform as expected against outclassed opposition, this parlay pays out at approximately +275. The risk is Portugal sitting on a lead after a Dias defensive wobble; the reward is both group favorites covering the spread in their opening fixtures.
 
 ---
 
 ## 8. SHARP MONEY
 
-- Argentina's line shortened to -180 for their future Group J matches after Messi's hat-trick; the Austria-Argentina futures line (Austria drifting to +550) suggests sharp money is increasing exposure on Argentina advancing, not just winning the group.
-- France shortened to -1100 against Iraq — a 200-cent move — which is the sharpest single-match line movement in the data. Professional money adding to France futures post their Senegal performance.
-- Senegal shortened from -255 to -320 against Iraq for their group stage second fixture, with Iraq drifting to +950; sharp money is reading Senegal's loss to France as a false negative and backing them heavily to bounce back.
+- Norway +3100 outright pre-tournament looked like the smart play before a ball was kicked; a 4–1 opening win against Iraq has not moved that number as much as the performance warranted. Still the best value on the board for tournament futures if you have not already placed it.
+- No significant reverse line movement detected on today's fixtures as of the morning report.
+- USA public money will be enormous when they kick off — track the opening line carefully against Turkey; if the USA ML opens at -150 and moves to -180 purely on ticket volume without handle following, that is a fade signal.
 
 ---
 
 ## 9. TOMORROW'S SLATE
 
-- 1:00 PM ET — Portugal vs. DR Congo
-- 4:00 PM ET — England vs. Croatia
-- 7:00 PM ET — Ghana vs. Panama
-- 10:00 PM ET — Uzbekistan vs. Columbia
+No matches are currently listed in the fixture data provided for June 18.
+
+---
+
+*Lines cited are DraftKings as of report generation. Estimated spread and combination odds should be confirmed before wagering. Houston afternoon heat and Dallas early-evening kickoffs are live conditions — monitor for any late team news before Portugal and England kickoffs.*
