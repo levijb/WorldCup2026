@@ -155,4 +155,4 @@ Estimated combined odds: approximately +900. All three legs carry individual log
 - 12:00 PM ET — Czech Republic vs. South Africa
 - 3:00 PM ET — Switzerland vs. Bosnia & Herzegovina
 - 6:00 PM ET — Canada vs. Qatar
-- 9:00 PM ET — Mexico vs. South Korea<!-- collision-test-marker -->
+- 9:00 PM ET — Mexico vs. South Korea
