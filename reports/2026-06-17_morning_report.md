@@ -12,30 +12,28 @@ _Generated: 2026-06-17 02:27 ET | API quota remaining: 44_
 
 ## 1. TOURNAMENT STATUS
 
-Day 7 of the group stage. Fourteen matches have been completed across Groups A through J. Groups I and J concluded their first matchday yesterday, with France, Norway, Argentina, and Austria all winning. Today opens Group K (Portugal, DR Congo, Colombia, Uzbekistan) and Group L (England, Croatia, Ghana, Panama) — four matches across four countries, ranging from Houston at 1 PM to Mexico City at 10 PM. No eliminations yet; no teams have clinched advancement.
+Day 7 of the group stage. Groups I and J concluded their first matchday yesterday, with France, Norway, Argentina, and Austria all winning. Today opens Group K (Portugal, DR Congo, Colombia, Uzbekistan) and Group L (England, Croatia, Ghana, Panama) — four matches across three countries, ranging from Houston at 1 PM to Mexico City at 10 PM. Last four teams to play their first match.
 
 ---
 
 ## 2. RESULTS
 
-**Yesterday — Tuesday, June 17**
-No matches. (June 17 fixtures were scheduled for today; see Today's Matches below.)
+**Yesterday — Monday, June 16**
+- France 3–1 Senegal (Group I) — France had lazy start but woke up in the 2nd half; Senegal looked good, great goal in 90'+5, only to be followed by a 30 yard banger from Mbappé in 90+6'. Mabappé now has 14 World Cup goals, in third behind Muller and Messi with 16.
+- Norway 4–1 Iraq (Group I) — Halland scores 2 goals in his World cup debut; Iraq offered little resistance.
+- Argentina 3–0 Algeria (Group J) — Messi (GOAT) with the hat-trick! Brigning him to 16 World Cup goals (Tied 1st). Argentina looked crisp, great play up the middle. 
+- Austria 3–1 Jordan (Group J) — Austria will be fun to watch, midfield often stays high opening up for counter-attacks. Jordan's first ever World Cup appearance.
 
-**Two Days Ago — Monday, June 16**
-- France 3–1 Senegal (Group I) — France opened with a comfortable win; Senegal's early tournament promise tested early.
-- Norway 4–1 Iraq (Group I) — Norway's attacking depth on full display; Iraq offered little resistance.
-- Argentina 3–0 Algeria (Group J) — Messi scored a hat-trick in Kansas City; Argentina's defending-champion curse apparently on notice.
-- Austria 3–1 Jordan (Group J) — Austria opened Group J with a statement; Jordan's defense proved porous.
 
 ---
 
 ## 3. TODAY'S MATCHES
 
 **Portugal vs. DR Congo — 1:00 PM ET | NRG Stadium, Houston | Group K**
-Portugal open as heavy favorites at -330 against a DR Congo side making a statement of their own just by being here. Houston's heat and humidity will be a factor — afternoon kickoff in late June, expect real-feel temperatures approaching 100°F, which historically compresses second-half intensity and suits Portugal's technical, controlled style over any physical African press. The Ronaldo question is ever-present: he's available, he'll start, and he'll want to impose himself immediately, though reported training ground friction is a background note worth watching across the tournament. DR Congo are no pushovers — they're organized defensively and will frustrate — but Portugal's squad depth at every position is simply a different category. The line drifting from -360 to -330 is a mild caution flag; the draw shortening to +450 suggests some money anticipating a closer-than-expected first half.
+Portugal open as heavy favorites at -330 against a DR Congo side making a statement of their own just by being here. Houston's heat and humidity will be a factor — afternoon kickoff in late June, expect temperatures approaching 100°F, which historically compresses second-half intensity and suits Portugal's technical, controlled style over any physical African press. The Ronaldo question is ever-present: he's available, he'll start, and he'll want to impose himself immediately, though reported training ground friction is a background note worth watching across the tournament. DR Congo are no pushovers — they're organized defensively and will frustrate — but Portugal's squad depth at every position is simply a different category. The line drifting from -360 to -330 is a mild caution flag; the draw shortening to +450 suggests some money anticipating a closer-than-expected first half.
 
 **England vs. Croatia — 4:00 PM ET | AT&T Stadium, Arlington, TX | Group L**
-This group has history — the 2018 World Cup semifinal, England's Euro 2020 final win, a generally unpleasant relationship between these two sets of fans. England come in at -135, which is a modest price for a side with considerably more quality than a Croatia team running a 40-year-old Modrić as a centerpiece. Tino Livramento is out for the tournament with a calf injury, and Bukayo Saka carries an Achilles concern — he's expected to play, but any limitation on Saka meaningfully dents England's right side. Croatia will sit, compress, and make this ugly; they've reached the semifinals at the last two World Cups by grinding — they know exactly what they're doing. AT&T Stadium in Arlington runs controlled temperature indoors, so no heat-based advantage either way. The betting angle here is total goals: Croatia are built to make this match difficult, and England historically start slowly in major tournament openers.
+This group has history — the 2018 World Cup semifinal matchup, England's Euro 2020 final win, a generally unpleasant relationship between these two sets of fans. England come in at -135, which is a modest price for a side with considerably more quality than a Croatia team running a 40-year-old Modrić as a centerpiece. Tino Livramento is out for the tournament with a calf injury, and Bukayo Saka carries an Achilles concern — he's expected to play, but any limitation on Saka meaningfully dents England's right side. Croatia will sit, compress, and make this ugly; they've reached the semifinals at the last two World Cups by grinding — they know exactly what they're doing. AT&T Stadium in Arlington runs controlled temperature indoors, so no heat-based advantage either way. The betting angle here is total goals: Croatia are built to make this match difficult, and England historically start slowly in major tournament openers.
 
 **Ghana vs. Panama — 7:00 PM ET | BMO Field, Toronto | Group L**
 The second Group L match of the day, played at a neutral outdoor venue in Canada — temperature controlled relative to the Texas heat, which removes that particular variable. Ghana opened as +120 favorites and have drifted to +135, suggesting mild market skepticism about their attacking output; the draw has shortened from +235 to +220. Panama are a defensively compact, counterattacking side who have shown they can frustrate and absorb — they're not here by accident. Ghana have talent in attack but have historically been inconsistent at translating it into wins; this is the kind of match where the better team on paper fails to cover. The total is where the edge lives: both teams are likely to be cautious in a match where a draw isn't the worst outcome for either, and Toronto in the evening is a controlled environment.
