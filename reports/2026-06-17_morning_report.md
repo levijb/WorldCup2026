@@ -1,4 +1,5 @@
-# Tuesday June 17, 2026 WC2026 Morning Report — 2026-06-17
+# World Cup Morning Report 
+Tuesday June 17, 2026
 
 [Live dashboard link →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)
 
