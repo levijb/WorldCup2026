@@ -184,4 +184,3 @@ WorldCup2026/
 ├── .env.example                # Key template
 └── requirements.txt
 ```
-
