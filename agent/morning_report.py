@@ -559,59 +559,10 @@ def git_commit_and_push(report_path: Path, today_str: str) -> None:
         subprocess.run(["git", "add", str(report_path)], cwd=str(ROOT), check=True)
         commit_msg = f"report: {today_str} morning briefing"
         subprocess.run(["git", "commit", "-m", commit_msg], cwd=str(ROOT), check=True)
+        subprocess.run(["git", "push"], cwd=str(ROOT), check=True)
+        print(f"[OK] Committed and pushed: {commit_msg}")
     except subprocess.CalledProcessError as e:
         print(f"[WARN] Git operation failed: {e}", file=sys.stderr)
-        return
-
-    branch = (
-        subprocess.run(
-            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-            cwd=str(ROOT), capture_output=True, text=True,
-        ).stdout.strip()
-        or "main"
-    )
-
-    # The commit above is safe locally regardless of what happens below — push
-    # collisions must never lose the report, only fail to publish it.
-    for attempt in (1, 2):
-        subprocess.run(["git", "fetch", "origin"], cwd=str(ROOT), check=True)
-        behind = subprocess.run(
-            ["git", "rev-list", "--count", f"HEAD..origin/{branch}"],
-            cwd=str(ROOT), capture_output=True, text=True,
-        )
-        if int(behind.stdout.strip() or "0") > 0:
-            print(f"[GIT] Local is behind origin/{branch}; rebasing before push.")
-            rebase = subprocess.run(
-                ["git", "pull", "--rebase", "origin", branch],
-                cwd=str(ROOT), capture_output=True, text=True,
-            )
-            if rebase.returncode != 0:
-                subprocess.run(["git", "rebase", "--abort"], cwd=str(ROOT))
-                print(
-                    f"[ERROR] Rebase conflict syncing with origin/{branch}. "
-                    f"Report '{commit_msg}' was generated and committed locally but NOT "
-                    f"pushed. Manual resolution required: git pull --rebase origin {branch}",
-                    file=sys.stderr,
-                )
-                return
-            print(f"[GIT] Rebase onto origin/{branch} succeeded.")
-
-        push = subprocess.run(["git", "push"], cwd=str(ROOT), capture_output=True, text=True)
-        if push.returncode == 0:
-            print(f"[OK] Committed and pushed: {commit_msg}")
-            return
-
-        if attempt == 1:
-            print(
-                f"[GIT] Push rejected, retrying fetch/rebase/push once: {push.stderr.strip()}",
-                file=sys.stderr,
-            )
-        else:
-            print(
-                f"[ERROR] Push failed after retry. Report '{commit_msg}' is committed "
-                f"locally but NOT pushed to origin/{branch}: {push.stderr.strip()}",
-                file=sys.stderr,
-            )
 
 
 # ── Email Sending ─────────────────────────────────────────────────────────────
