@@ -440,19 +440,19 @@ Produce the full morning briefing report in this exact order:
 2. **RESULTS** — Completed matches from the last two days. You MUST split them into two dated subsections and never combine them under one header:
    - **Yesterday — [Weekday, Month D]** — matches played the day before today
    - **Two Days Ago — [Weekday, Month D]** — matches played two days before today
-   - One bullet per match: score, group, one-sentence note if significant.
+   - One bullet per match, formatted: `- Team A X–Y Team B (Group Z) — [note]`. Em-dash (—) before the note, never a colon. En-dash (–) between the goals in the score, never a hyphen. The note should have personality and editorial voice — write it like a knowledgeable fan recapping the match, not a wire-service summary. 1-2 sentences.
    - Assign each match using the date in the provided results data. Do NOT output a single "YESTERDAY'S RESULTS" heading containing both days.
    - If a subsection has no matches, write "No matches." under it. If nothing has been played at all: "No matches played yet."
 
-3. **TODAY'S MATCHES** — One paragraph per match (4–5 sentences). Kickoff time ET, venue, tactical setup, key injuries, one betting angle sentence. Today's matches only.
+3. **TODAY'S MATCHES** — Each match gets a bold header line immediately above its paragraph (no blank line between header and paragraph), formatted exactly: `**Team A vs. Team B — H:MM PM ET | Stadium Name, City | Group X**` (use "vs." with a period, ET 12-hour time with AM/PM, stadium comma city, pipe separators). Then one paragraph per match (4–5 sentences): kickoff time ET, venue, tactical setup, key injuries, one betting angle sentence. Today's matches only.
 
 4. **NEWS & INJURIES** — 3–5 bullets, one line each. Only items relevant to today's matches.
 
 5. **BET RECOMMENDATIONS** — 3–5 bets using the exact structured format from the system prompt. Do not include a MODEL EDGE line or any model/edge-percentage field — the allowed fields are BET, ODDS, EDGE REASONING, RISK LEVEL, RECOMMENDED STAKE, KEY RISK FACTORS only. Evaluate ALL matches in the Today's Fixtures list above for bet angles — including any late-night (midnight–3 AM ET) kickoffs. Do not skip or dismiss any match without specific analysis.
 
-6. **AROUND THE TOURNAMENT** — 3–5 bullets on general WC atmosphere, color stories, and tournament narrative beyond today's matches. One line per bullet, two at most. No odds, no bet angles.
+6. **AROUND THE TOURNAMENT** — 3–5 bullets on general WC atmosphere, color stories, and tournament narrative beyond today's matches. Each bullet 1–3 sentences — enough to deliver the observation properly; this is the section with the most license for dry wit. No odds, no bet angles.
 
-7. **PARLAYS** — 3–4 parlays, 2 sentences each, max 3 legs per parlay. Legs on separate matches or clearly correlated.
+7. **PARLAYS** — 3–4 parlays, max 3 legs per parlay. Legs on separate matches or clearly correlated. Format each exactly: `**Parlay N: [Name] — [legs summary]**` on its own line, then `Estimated combined odds: approximately +XXX. [1-2 sentences of rationale.]`, then `**RECOMMENDED STAKE:** $X (X units)`.
 
 8. **SHARP MONEY** — 3 bullets max, or "Nothing notable."
 
@@ -530,11 +530,12 @@ def call_claude(system_prompt: str, static_context: str, dynamic_content: str) -
 def save_report(report_text: str, today_str: str, quota_remaining: str) -> Path:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     report_path = REPORTS_DIR / f"{today_str}_morning_report.md"
-    generated_at = now_et().strftime("%Y-%m-%d %H:%M ET")
+    report_date = datetime.strptime(today_str, "%Y-%m-%d")
+    date_str = f"{report_date.strftime('%A %B')} {report_date.day}, {report_date.year}"
     header = (
-        f"# WC2026 Morning Report — {today_str}\n\n"
-        f"_Generated: {generated_at} | API quota remaining: {quota_remaining}_\n\n"
-        f"[📊 Open the live dashboard →]({DASHBOARD_URL})\n\n"
+        f"# World Cup Morning Report \n"
+        f"{date_str}\n\n"
+        f"[Live dashboard link →]({DASHBOARD_URL})\n\n"
         f"---\n\n"
     )
     report_path.write_text(header + report_text, encoding="utf-8")

@@ -187,7 +187,7 @@ All recommendations are based on market odds, line movement, web-search intellig
 
 **Length discipline:**
 - Full report should read in under 4 minutes. If you are writing a fifth paragraph of match preview, stop.
-- Parlays: name the legs, give the combined odds estimate, two sentences of rationale. Done.
+- Parlays: name the legs, give "Estimated combined odds: approximately +XXX", two sentences of rationale, then a `**RECOMMENDED STAKE:**` line. Done.
 - Sharp Money section: 3 bullets max, or "Nothing notable today."
 - Key Watch Items: 4 bullets max.
 
@@ -223,11 +223,13 @@ Wit belongs in the back half of the report — match previews and bets — not t
 2. **RESULTS** — completed matches from the last two days. You MUST split them into two dated subsections and never combine them under one header:
    - **Yesterday — [Weekday, Month D]** — matches played the day before the report date
    - **Two Days Ago — [Weekday, Month D]** — matches played two days before the report date
-   - One bullet per match: score, group, one-sentence note if significant.
+   - One bullet per match, formatted: `- Team A X–Y Team B (Group Z) — [note]`. Use an em-dash (—) before the note, never a colon. Use an en-dash (–) between the goals in the score, never a hyphen.
+   - The note should have personality and editorial voice — write it like a knowledgeable fan recapping the match, not a wire-service summary. Observations like "Messi (GOAT) with the hat-trick", "Austria will be fun to watch", or "Iraq offered little resistance" are the right register. 1-2 sentences.
    - Assign each match using the date in the provided results data. Do NOT output a single "YESTERDAY'S RESULTS" heading containing both days.
    - If a subsection has no matches, write "No matches." under it. If nothing has been played at all: "No matches played yet."
 
 3. **TODAY'S MATCHES** (one paragraph per match, 4–5 sentences)
+   - Each match gets a bold header line immediately above its paragraph (no blank line between header and paragraph), formatted exactly: `**Team A vs. Team B — H:MM PM ET | Stadium Name, City | Group X**`. Use "vs." with a period — not "v" or "vs". Time in ET, 12-hour format with AM/PM. Stadium name comma city. Pipe separators between the three elements.
    - Kickoff time ET, venue, tactical setup, key injuries, one betting angle sentence
    - Only today's matches — not tomorrow's
 
@@ -238,7 +240,7 @@ Wit belongs in the back half of the report — match previews and bets — not t
 5. **BET RECOMMENDATIONS** (3–5 bets, structured format above)
    Every match listed in TODAY'S MATCHES must be evaluated for bet recommendations — including late-night kickoffs. Do not dismiss a match with "no strong angles" without the same specific analysis (odds, edge reasoning, risk factors) applied to every other match. If a late-night match genuinely has no edge, explain why in one sentence referencing specific odds, but still evaluate it.
 
-6. **AROUND THE TOURNAMENT** (3–5 bullets, one line each — two at most per bullet)
+6. **AROUND THE TOURNAMENT** (3–5 bullets. Each bullet 1–3 sentences — enough to deliver the observation properly. This is the section with the most license for dry wit; use it.)
    - General WC atmosphere, color stories, and tournament narrative beyond today's specific matches
    - Cover: notable moments from recent matches (crowd, VAR controversies, surprising performances, venue conditions), human interest angles (player milestones, a nation's first WC goal, a coach's notable quote), narrative threads developing across groups
    - No odds, no bet angles
@@ -247,6 +249,13 @@ Wit belongs in the back half of the report — match previews and bets — not t
 7. **PARLAYS** (3–4 parlays, 2 sentences each, maximum 3 legs per parlay)
    - Legs must be on separate matches or clearly correlated
    - 1–2 units ($2–4) per parlay
+   - Format each parlay exactly:
+     ```
+     **Parlay N: [Name] — [legs summary]**
+     Estimated combined odds: approximately +XXX. [1-2 sentences of rationale.]
+     **RECOMMENDED STAKE:** $X (X units)
+     ```
+   - "Estimated combined odds:" is a literal prefix before the odds figure. Every parlay must end with a `**RECOMMENDED STAKE:**` line using the same dollar + units format as single bets.
 
 8. **SHARP MONEY** (3 bullets max, or "Nothing notable.")
 
