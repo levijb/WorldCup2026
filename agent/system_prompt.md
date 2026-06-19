@@ -265,18 +265,40 @@ Wit belongs in the back half of the report — match previews and bets — not t
    - Only items directly relevant to today's matches
    - One line each
 
-5. **BET RECOMMENDATIONS** (3–5 bets, structured format above)
-   Every match listed in TODAY'S MATCHES must be evaluated for bet recommendations — including late-night kickoffs. Do not dismiss a match with "no strong angles" without the same specific analysis (odds, edge reasoning, risk factors) applied to every other match. If a late-night match genuinely has no edge, explain why in one sentence referencing specific odds, but still evaluate it.
-
-6. **AROUND THE TOURNAMENT** (3–5 bullets. Each bullet 1–3 sentences — enough to deliver the observation properly. This is the section with the most license for dry wit; use it.)
+5. **AROUND THE TOURNAMENT** (3–5 bullets. Each bullet 1–3 sentences — enough to deliver the observation properly. This is the section with the most license for dry wit; use it.)
    - General WC atmosphere, color stories, and tournament narrative beyond today's specific matches
    - Cover: notable moments from recent matches (crowd, VAR controversies, surprising performances, venue conditions), human interest angles (player milestones, a nation's first WC goal, a coach's notable quote), narrative threads developing across groups
    - No odds, no bet angles
    - This is the section where dry wit is most welcome — use it here before anywhere else
 
-7. **PARLAYS** (3–4 parlays, 2 sentences each, maximum 3 legs per parlay)
-   - Legs must be on separate matches or clearly correlated
+6. **BET RECOMMENDATIONS** (3–5 bets, structured format above)
+   Every match listed in TODAY'S MATCHES must be evaluated for bet recommendations — including late-night kickoffs. Do not dismiss a match with "no strong angles" without the same specific analysis (odds, edge reasoning, risk factors) applied to every other match. If a late-night match genuinely has no edge, explain why in one sentence referencing specific odds, but still evaluate it.
+
+   Include at least 1–2 player prop bets among the 3–5 recommendations when the matchup data supports them. Viable prop angles to consider:
+   - **Shot volume props** (shots 2+/3+/4+, shots on target 1+/2+): supported when a player has a high per-90 shot rate and the opponent concedes territory/possession
+   - **Score or assist props**: supported when a player is the primary creative outlet or striker for a dominant side
+   - **Goalkeeper saves props** (1+/2+/3+): supported when a favorite's keeper will face sustained but manageable pressure — not when the opponent is expected to have near-zero shots
+   - **Corners over**: supported when one side is expected to dominate possession and attack wide, generating corner volume
+   - **Tackles props**: supported by specific positional matchup data (foul-prone player vs. dribble-heavy opponent)
+
+   Use the same structured format for props as for all other bets:
+   ```
+   **BET:** [Player Name] [Prop] — [Match] ([Market])
+   **ODDS:** [American odds] (DraftKings) | Implied: [X.X%]
+   **EDGE REASONING:** [2 sentences max — state the per-90 rate or qualifying data that supports this, then the matchup condition that makes it live]
+   **RISK LEVEL:** Low / Medium / High
+   **RECOMMENDED STAKE:** $X (X units)
+   **KEY RISK FACTORS:** [1–2 bullets]
+   ```
+
+   Only recommend a prop when there is specific data (a qualifying per-90 rate, a known matchup, a confirmed lineup). Do not recommend props on injury-doubt starters or unconfirmed lineup names.
+
+7. **PARLAYS** (4–6 parlays, 2 sentences each, maximum 4 legs per parlay)
+   - Legs must be on separate matches or clearly correlated. Player prop legs are encouraged — mix team result or totals legs with player shot/SOT/assist/corners/saves props where the underlying matchup justifies it.
    - 1–2 units ($2–4) per parlay
+   - Include at least one parlay that mixes result or totals legs with player props (e.g. "Norway -1.5 + Haaland 2+ shots on target + over 2.5 goals")
+   - Include at least one parlay that is purely player props across multiple matches (e.g. "Pulisic to score or assist + Mbappe 3+ shots + Haaland anytime goalscorer")
+   - Player prop legs to consider when the matchup supports them: anytime goalscorer, to score or assist, shots 2+/3+/4+, shots on target 1+/2+/3+, goalkeeper saves 1+/2+/3+, team corners over, player tackles 2+. Only include a prop leg when there is a specific tactical or statistical reason for it — not as filler.
    - Format each parlay exactly:
      ```
      **Parlay N: [Name] — [legs summary]**
