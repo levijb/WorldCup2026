@@ -13,6 +13,7 @@ Usage:
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone, timedelta
@@ -40,6 +41,7 @@ GMAIL_FROM = os.getenv("RESEND_TO_EMAIL", "")  # levijbdavis@gmail.com — reuse
 
 MODEL = "claude-sonnet-4-6"
 ET_OFFSET = timedelta(hours=-4)  # EDT (UTC-4)
+OPENFOOTBALL_URL = "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json"
 # Set this to wherever the dashboard is actually served. A local file path
 # (dashboard/index.html) is NOT clickable in email — use a hosted URL.
 DASHBOARD_URL = os.getenv("DASHBOARD_URL", "https://levijb.github.io/WorldCup2026/dashboard/tournament.html")
@@ -128,27 +130,73 @@ def fetch_fixtures_today() -> list:
 
 
 def fetch_fixtures_tomorrow() -> list:
-    """Derive tomorrow's WC fixtures from the odds cache. Capped at 8 matches."""
+    """Fetch tomorrow's WC fixtures. Tries odds cache first, falls back to openfootball.
+
+    The odds cache only pulls matches within a 3-day lookahead window and can lag or
+    miss games when run at odd hours — if it has nothing for tomorrow, openfootball
+    (the same feed the dashboard uses) gives Claude real venue/group data instead of
+    letting it guess from web search.
+    """
+    tomorrow_et = now_et().date() + timedelta(days=1)
+
+    # --- primary: odds cache ---
     try:
         cache = json.loads(ODDS_CACHE_PATH.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, OSError):
-        return []
-    tomorrow_et = now_et().date() + timedelta(days=1)
-    fixtures = []
-    for match in cache.get("matches", []):
-        try:
-            commence = match["commence_time"]
-            kickoff_dt = datetime.fromisoformat(commence.replace("Z", "+00:00"))
-            if kickoff_dt.astimezone(timezone(ET_OFFSET)).date() != tomorrow_et:
+        fixtures = []
+        for match in cache.get("matches", []):
+            try:
+                commence = match["commence_time"]
+                kickoff_dt = datetime.fromisoformat(commence.replace("Z", "+00:00"))
+                if kickoff_dt.astimezone(timezone(ET_OFFSET)).date() != tomorrow_et:
+                    continue
+                fixtures.append({
+                    "home_team": match["home_team"],
+                    "away_team": match["away_team"],
+                    "commence_time": commence,
+                })
+            except (KeyError, ValueError):
                 continue
-            fixtures.append({
-                "home_team": match["home_team"],
-                "away_team": match["away_team"],
-                "commence_time": commence,
-            })
-        except (KeyError, ValueError):
-            continue
-    return fixtures[:8]
+        if fixtures:
+            print(f"[FIXTURES] Tomorrow: {len(fixtures)} from odds cache")
+            return fixtures[:8]
+    except (json.JSONDecodeError, OSError):
+        pass
+
+    # --- fallback: openfootball ---
+    print("[FIXTURES] Odds cache empty for tomorrow — falling back to openfootball")
+    try:
+        resp = requests.get(OPENFOOTBALL_URL, timeout=10)
+        resp.raise_for_status()
+        wc = resp.json()
+        fixtures = []
+        for m in wc.get("matches", []):
+            try:
+                match_date = m.get("date")
+                if not match_date or datetime.strptime(match_date, "%Y-%m-%d").date() != tomorrow_et:
+                    continue
+                # Convert openfootball's "HH:MM UTC±N" venue-local time to a UTC commence_time string
+                time_match = re.match(r"(\d{1,2}):(\d{2})\s*UTC([+-]\d+)", m.get("time", ""))
+                if time_match:
+                    hh, mm, offset = int(time_match.group(1)), int(time_match.group(2)), int(time_match.group(3))
+                    utc_dt = datetime(tomorrow_et.year, tomorrow_et.month, tomorrow_et.day,
+                                       hh - offset, mm, tzinfo=timezone.utc)
+                    commence = utc_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+                else:
+                    commence = f"{match_date}T00:00:00Z"
+                fixtures.append({
+                    "home_team": m.get("team1", "TBD"),
+                    "away_team": m.get("team2", "TBD"),
+                    "commence_time": commence,
+                    "ground": m.get("ground", ""),
+                    "group": m.get("group", ""),
+                })
+            except (KeyError, ValueError):
+                continue
+        print(f"[FIXTURES] Tomorrow: {len(fixtures)} from openfootball fallback")
+        return fixtures[:8]
+    except Exception as e:
+        print(f"[WARN] openfootball fallback failed: {e}")
+        return []
 
 
 def fetch_recent_results_via_search(client) -> str:
@@ -396,9 +444,15 @@ def build_dynamic_content(
             kickoff_dt = datetime.fromisoformat(f["commence_time"].replace("Z", "+00:00"))
             kickoff_et = kickoff_dt.astimezone(timezone(ET_OFFSET))
             time_str = kickoff_et.strftime("%I:%M %p").lstrip("0") + " ET"
-            tomorrow_lines.append(f"  {time_str} — {f['home_team']} vs {f['away_team']}")
         except (KeyError, ValueError):
-            continue
+            time_str = "TBD"
+        ground = f.get("ground", "")
+        group = f.get("group", "")
+        suffix = ""
+        if ground or group:
+            parts = [p for p in (ground, group) if p]
+            suffix = f" ({', '.join(parts)})"
+        tomorrow_lines.append(f"  {time_str} — {f['home_team']} vs {f['away_team']}{suffix}")
     tomorrow_text = "\n".join(tomorrow_lines) if tomorrow_lines else "  No matches scheduled for tomorrow."
 
     return f"""## LIVE DATA — {et_now}

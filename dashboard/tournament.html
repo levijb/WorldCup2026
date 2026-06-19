@@ -152,6 +152,22 @@
   }
   .bracket-slot.winner { color: var(--accent-green); font-weight: 600; border-color: var(--accent-green); }
   .bracket-slot.tbd { color: var(--text-dim); font-style: italic; }
+  .bracket-venue {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    margin: 2px 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 147px;
+  }
+  .bracket-date {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: center;
+    margin: 0 4px 4px;
+  }
   .final-header {
     background: #1f2937;
     border: 2px solid var(--accent-amber);
@@ -394,6 +410,9 @@ function buildBracketData() {
       team2: m.team2 || 'TBD',
       score: played ? `${ft[0]}–${ft[1]}` : null,
       winner,
+      ground: m.ground || null,
+      date: m.date || null,
+      time: m.time || null,
     });
   }
 }
@@ -568,17 +587,25 @@ function renderBracket() {
       const t2 = m?.team2 || 'TBD';
       const score = m?.score || null;
       const winner = m?.winner || null;
+      const venue = m?.ground ? `${VENUE_STADIUMS[m.ground] || m.ground}` : null;
+      const kickoff = (m?.time && m?.date) ? fmtVenueTimeToET(m.time, m.date) : null;
+      const dateLabel = m?.date ? new Date(m.date + 'T12:00:00Z').toLocaleDateString('en-US',
+        { month: 'short', day: 'numeric', timeZone: 'UTC' }) : null;
 
       if (round.id === 'final' && i === 0) {
         html += `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:auto;">
           <div class="final-header">FINAL</div>
           <div class="bracket-slot ${t1 === winner ? 'winner' : t1 === 'TBD' ? 'tbd' : ''}">${t1}${score ? ` ${score.split('–')[0]}` : ''}</div>
           <div class="bracket-slot ${t2 === winner ? 'winner' : t2 === 'TBD' ? 'tbd' : ''}" style="margin-top:2px">${t2}${score ? ` ${score.split('–')[1]}` : ''}</div>
+          ${venue ? `<div class="bracket-venue">${venue}</div>` : ''}
+          ${(dateLabel && kickoff) ? `<div class="bracket-date">${dateLabel} · ${kickoff.split(' / ')[0]}</div>` : ''}
         </div>`;
       } else {
         html += `<div class="bracket-match">
           <div class="bracket-slot ${t1 === winner ? 'winner' : t1 === 'TBD' ? 'tbd' : ''}">${t1}${score ? ` ${score.split('–')[0]}` : ''}</div>
           <div class="bracket-slot ${t2 === winner ? 'winner' : t2 === 'TBD' ? 'tbd' : ''}" style="margin-top:2px">${t2}${score ? ` ${score.split('–')[1]}` : ''}</div>
+          ${venue ? `<div class="bracket-venue">${venue}</div>` : ''}
+          ${(dateLabel && kickoff) ? `<div class="bracket-date">${dateLabel} · ${kickoff.split(' / ')[0]}</div>` : ''}
         </div>`;
       }
     }
