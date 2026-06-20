@@ -5,168 +5,169 @@ Saturday June 20, 2026
 
 ---
 
-Day 9. Four matches on the board today, none of them trivial — Germany open against Ivory Coast, Netherlands try to hold their squad together against Sweden, and Ecuador welcome the tournament's most charming first-timer.
+Day 10. Netherlands are injury-depleted, Germany are in Toronto, and Japan play at midnight in Monterrey.
 
 ---
 
 ## TOURNAMENT STATUS
 
-Day 9 of 39. The group stage is fully underway with Groups A through D having completed their first matchday. Yesterday's slate finished all eight Group A–D openers, meaning the table picture in each group is now clear after one round. Groups E and F begin today with four matches: Netherlands vs. Sweden, Germany vs. Ivory Coast, Ecuador vs. Curaçao, and Tunisia vs. Japan. No teams are through yet — everyone has everything to play for.
+Day 10 of the group stage. Four matches today spanning Groups E and F, with the late kickoff — Tunisia vs. Japan at midnight ET from Monterrey — the most analytically interesting of the slate. Group E is already taking shape after Switzerland's 4–1 dismantling of Bosnia and Canada's 6–0 stroll past Qatar. Germany's opening match today effectively sets their trajectory. Group F features a Netherlands side walking wounded into a Houston afternoon.
 
 ---
 
 ## RESULTS
 
-**Yesterday — Friday, June 19**
+**Yesterday — Thursday, June 19**
 
-- Mexico 1–0 South Korea (Group A) — Functional rather than impressive from Mexico, who'll take the three points and not ask questions about the margin.
-- Czechia 1–1 South Africa (Group A) — The 81st-minute penalty awarded after a VAR handball review on Sulc drew howls of controversy; South Africa will feel they nicked something, Czechia will feel they lost it.
-- Switzerland 4–1 Bosnia and Herzegovina (Group B) — Bosnia offered a pulse for about twenty minutes, then Switzerland reminded everyone why they are a genuine dark horse in this tournament.
-- Canada 6–0 Qatar (Group B) — Training exercise by halftime; Qatar showed up, which was about the full extent of their ambition.
-- Morocco 1–0 Scotland (Group C) — Morocco grind out wins the way other teams grind through qualifying — methodically, joylessly, and effectively.
-- Brazil 3–0 Haiti (Group C) — Comfortable enough, though Raphinha going off injured in the first half is the story the Seleção would rather not be telling. More on that below.
-- United States 2–0 Australia (Group D) — Seattle delivered the atmosphere; the USMNT delivered the result without Pulisic, which is either reassuring or masks a problem depending on who you ask.
-- Türkiye 0–1 Paraguay (Group D) — Türkiye are eliminated. That was fast.
+- USA 2–0 Australia (Group D) — The home crowd got what it came for; line moved accordingly, and the public cleaned up.
+- Scotland 0–1 Morocco (Group C) — Morocco winning ugly; Scotland offered very little, which is historically on-brand.
+- Brazil 3–0 Haiti (Group C) — Emphatic enough, though the injury list gathering around this squad makes the margin feel less reassuring than it looks.
+- Türkiye 0–1 Paraguay (Group D) — A result that will recalibrate several future lines; Turkey's star-studded reputation took a quiet hit.
 
-**Two Days Ago — Thursday, June 18**
+**Two Days Ago — Wednesday, June 18**
 
-No matches.
+- Czechia 1–1 South Africa (Group A) — A share of the points that flatters South Africa and slightly frustrates Czechia's early ambitions.
+- Switzerland 4–1 Bosnia and Herzegovina (Group B) — Switzerland came to work; Bosnia had no answer after the first twenty minutes.
+- Canada 6–0 Qatar (Group B) — Six goals, two red cards for Qatar, and the first indication that Canada with Davies back is a genuinely different team.
+- Mexico 1–0 South Korea (Group A) — Narrow, scrappy, and exactly what Mexico needed on home soil at Azteca.
 
 ---
 
 ## TODAY'S MATCHES
 
-**Netherlands vs. Sweden — 1:00 PM ET | MetLife Stadium, East Rutherford | Group F**
-The most instructive match of the day, almost entirely because of what Netherlands are missing. Timber, Simons, De Ligt, De Vrij, and Schouten are all absent — that's two first-choice centre-backs, the creative engine from midfield, and two other key rotation figures gone in one blow. Sweden, meanwhile, are a disciplined, compact 4-4-2 unit under Jon Dahl Tomasson who will have watched the Netherlands' injury news and decided the draw is perfectly acceptable. Netherlands are priced at -140, which implies roughly 58% probability — generous for a side held together with medical tape and optimism. The line hasn't moved, which suggests the market has absorbed the injury news but hasn't fully penalised it. Draw at +300 offers real value here; Sweden are competent enough on the counter to make Netherlands pay for the gaps in central defence.
+**Netherlands vs. Sweden — 1:00 PM ET | NRG Stadium, Houston | Group F**
+Netherlands enter this tournament carrying enough injury concerns to fill a physio room: Xavi Simons is out with an ACL, and the pre-tournament intelligence flagged Timber and De Ligt as additional absences, meaning the Dutch are significantly below full strength in midfield and at the back. Sweden are no world-beaters, but at +380 against a visibly depleted opponent in Houston heat, they represent respectable opposition. The venue is a factor — NRG Stadium in late-June Houston is a genuine physical test, and Netherlands' lack of squad depth means their bench options are limited when legs go in the second half. At -140, Netherlands are priced as a comfortable favorite for a team that may genuinely struggle to keep a clean sheet.
 
-**Germany vs. Ivory Coast — 4:00 PM ET | SoFi Stadium, Inglewood | Group E**
-Germany open their tournament in a venue that suits their style — large, fast surface, no altitude complications, afternoon heat in LA is manageable compared to Dallas or Miami. Nagelsmann's side enter as heavy favourites at -195, and the market is broadly right — Germany's squad depth, even with the minor Tom Karl absence, dwarfs Ivory Coast's. The key tactical question is whether Germany will be patient or aggressive from the off; their historical tendency to start tournaments slowly (first-game unders have recurring value for conservative European sides) applies here. Ivory Coast without their European-based core at full fitness are beatable, but they are not a 16.7% implied-probability side — that price on +500 is attractive for a team capable of playing on the counter at pace. Germany to win and over 2.5 goals feels like the right structure if you're betting the match outright, though the under 2.5 first-half market is where the smarter money sits given Germany's tournament-opening tendencies.
+**Germany vs. Ivory Coast — 4:00 PM ET | BMO Field, Toronto | Group E**
+Germany are heavy favorites at -195, and their first-match tendency to start conservatively is well-documented — but Toronto is a neutral venue without the altitude or heat complications of the US stadiums, and Ivory Coast conceded one goal in their first showing. The line has drifted further toward Ivory Coast (+500 from +475), which could reflect mild sharp positioning on Ivory Coast or simply public money landing on Germany. Germany's injury picture is manageable — Paul Karl missing is a minor loss replaced by Ouédraogo — and their squad depth against an Ivory Coast side that typically fades in the second half of matches makes the German side structurally sound. The question is the margin and whether Germany's conservative first-game pattern keeps this tight early.
 
-**Ecuador vs. Curaçao — 8:00 PM ET | AT&T Stadium, Arlington | Group E**
-This is not a football match — it is an administrative event. Ecuador are -750 against the smallest nation ever to play a World Cup, and they should win by a margin that makes the scoreline embarrassing. The interesting betting angle here is not the result but the total: Ecuador are a functional, counter-attacking side who don't always manufacture the goal volume their favouritism suggests, and Dallas heat in the evening (still mid-80s, humid) will act as a mild drag on the pace. Curaçao, bless them, will defend deep and make Ecuador work. Total goals markets and the spread are the only plays worth considering here — the -750 ML offers nothing useful.
+**Ecuador vs. Curaçao — 8:00 PM ET | Arrowhead Stadium, Kansas City | Group E**
+This is essentially a training exercise with a scoreboard. Ecuador at -700 reflects a 100+ FIFA ranking gap, and Curaçao's presence at a World Cup is a genuine achievement they should enjoy while it lasts. The more interesting line movement here is the draw compressing from +950 to +750 — sharp positioning on Curaçao holding a result is not what this implies; it's more likely a correcting illiquidity play. Ecuador should win; the betting question is entirely about margin and whether -700 on the ML offers any viable construction for a parlay. It does not on its own.
 
-**Tunisia vs. Japan — 11:00 PM ET | Lumen Field, Seattle | Group F**
-Japan open as -185 favourites, a price that reflects their technical quality but perhaps overweights it slightly given the injury news. Endo, Mitoma, and Minamino are all absent — that strips Japan of their captain, their most dangerous wide attacker, and their link-play forward in one line. What remains is a disciplined, organised side that can still hurt teams through Kubo, Kamada, and Maeda, but they are a noticeably diminished version of the Japan that reached the knockout rounds in Qatar. Tunisia are a stubborn defensive unit — they will sit in a low block, be hard to break down, and look for one mistake to exploit. At +550, Tunisia are worth a glance not to win, but as part of a draw-cover position. Seattle's closed roof and artificial surface will negate weather variables; expect a tight, technical match with limited goals.
+**Tunisia vs. Japan — 12:00 AM ET | Estadio BBVA, Monterrey | Group F**
+The most analytically compelling match of the day, and it kicks off at midnight. Japan are -185 favorites, but they arrive without Kaoru Mitoma (hamstring) and Takumi Minamino (ACL) — two of their most dangerous attacking weapons gone before the tournament started. Tunisia have moved from +600 to +550 on the moneyline, a small but directional signal of money landing on the North African side. The venue matters: Estadio BBVA in Monterrey sits at roughly 5,100 feet of altitude, which structurally favors the team better acclimated — and while neither side is playing a home altitude advantage here, European-trained Japan players arriving from sea-level club football may feel it more than a Tunisia squad with more AFCON experience at varied conditions. Under 2.5 at Monterrey altitude deserves serious consideration.
 
 ---
 
 ## NEWS & INJURIES
 
-- Netherlands are without Timber, Simons, De Ligt, De Vrij, and Schouten — the squad depth issue is real and the -140 price doesn't adequately reflect it.
-- Japan are missing Endo (captain), Mitoma, and Minamino — three of their most important attacking contributors gone before a ball is kicked in Group F.
-- Raphinha came off with an injury against Haiti; if he misses time, Brazil's already threadbare wing options become a significant problem for their remaining group matches.
-- Christian Pulisic is confirmed out for the USA's match yesterday; his availability for future matches is the key watch item for Group D's second round.
-- Germany's Tom Karl (torn muscle, training) is out; replacement Assan Ouédraogo comes in — minor squad disruption rather than a material loss.
+- Xavi Simons (Netherlands) — ACL, out for the tournament; confirmed absence entering today's match vs. Sweden.
+- Kaoru Mitoma and Takumi Minamino (Japan) — both absent for the tournament, stripping Japan of their two most threatening wide attackers heading into tonight's match.
+- Neymar (Brazil) — back in limited training but not match-fit; no bearing on today's fixtures but relevant context for the tournament picture.
+- Rodrygo (Brazil) — ACL and meniscus, out for the year; Brazil's forward depth is materially thinner than their pre-tournament billing suggested.
+- Paul Karl (Germany) — torn thigh muscle, replaced by Ouédraogo; minor squad adjustment, not a material change to Germany's setup today.
 
 ---
 
 ## BET RECOMMENDATIONS
 
-**BET:** Draw — Netherlands vs. Sweden (Match Result)
-**ODDS:** +300 (DraftKings) | Implied: 25.0%
-**EDGE REASONING:** Netherlands are missing five significant players including both first-choice centre-backs and their primary creative midfielder. Sweden's compact defensive structure under Tomasson is built precisely to exploit the kind of disorganised side Netherlands will be today — they don't need to win, they need to not lose, and they have the personnel to manage that. At +300, the draw is underpriced for a Netherlands squad held together at the back with emergency cover.
+**BET:** Tunisia +1.5 (spread) — Tunisia vs. Japan (Match Result / Spread)
+**ODDS:** -115 (DraftKings) | Implied: 53.5%
+**EDGE REASONING:** Japan are missing both Mitoma and Minamino, reducing their attacking threat significantly — they were not a high-volume goalscoring side even at full strength. Tunisia have moved from +600 to +550 on the ML, indicating directional money, and Monterrey's altitude of ~5,100 feet structurally dampens scoring. Japan winning by two or more against a defensively organized Tunisia side without their two best attackers is a poor-value proposition at these implied odds.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $8 (4 units)
 **KEY RISK FACTORS:**
-- Netherlands still have Depay, Gakpo, and Blind to call on — they can generate enough quality to win this regardless of the absences
-- Sweden's attacking output has been limited in recent matches; a scoreless game is possible but neither side creates prolifically
+- Japan's midfield control could still generate enough volume to win comfortably even without their wide attackers
+- Tunisia's attacking output in this tournament is an unknown — if they sit deep and don't threaten, Japan can manage the game at low intensity
 
 ---
 
-**BET:** Under 2.5 Goals — Germany vs. Ivory Coast (Total Goals)
+**BET:** Under 2.5 Goals — Tunisia vs. Japan (Totals)
 **ODDS:** -115 (DraftKings) | Implied: 53.5%
-**EDGE REASONING:** Germany's historical pattern of conservative tournament openers is well-documented — they rarely blow sides away in game one, preferring to find rhythm before opening up. Under 2.5 has a structural edge at the World Cup (only 45% of matches go over this line), and the IFAB rule-change adjustment (+0.15 to expected goals) only marginally pushes the line given Germany's typical first-match caution. The first-half under in particular is where the sharper value sits, but full-match under at just -115 represents reasonable return for the probability.
+**EDGE REASONING:** Japan's two primary attacking creators are absent, and Tunisia are a disciplined, defensively organized side. Monterrey altitude adds a structural lean toward conservative football and lower stamina in the second half. The IFAB rule change adjustment (+0.15–0.20 xG for penalties/VAR) is already factored in — even with that structural inflation, this matchup has the profile of a 1–0 or 1–1 result.
+**RISK LEVEL:** Low
+**RECOMMENDED STAKE:** $8 (4 units)
+**KEY RISK FACTORS:**
+- VAR-driven penalties under new rules could manufacture goals in what would otherwise be a tight match
+- Late-game red card opens the game; one sending off turns this into a different betting market entirely
+
+---
+
+**BET:** Germany -1.5 (spread) — Germany vs. Ivory Coast (Spread)
+**ODDS:** +115 (DraftKings) | Implied: 46.5%
+**EDGE REASONING:** Germany are -195 on the ML, making -1.5 at plus money a structurally attractive conversion. Ivory Coast's first-match defensive performance kept things respectable, but their second-half durability against top European sides is a known weakness — Germany's squad depth and fitness advantage at a neutral sea-level venue in Toronto should tell in the final thirty minutes. The line movement on Ivory Coast drifting to +500 suggests no sharp interest in the African side; public money is on Germany and it's moving the number the right direction.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
 **KEY RISK FACTORS:**
-- Germany in full flow against a side with Ivory Coast's defensive gaps can absolutely produce three goals — this is a fade on their opening-match tendencies, not their quality ceiling
-- Expanded VAR scope means a penalty in either direction could inflate the total against the run of play
+- Germany's historical pattern of conservative first matches means they may not press for a second goal after going 1–0 up
+- Ivory Coast can threaten on the counter; a German red card turns this market immediately
 
 ---
 
-**BET:** Sweden Draw No Bet — Netherlands vs. Sweden (Draw No Bet)
-**ODDS:** +155 (DraftKings) | Implied: 39.2%
-**EDGE REASONING:** For bettors less comfortable with a straight draw ticket, Sweden Draw No Bet at +155 returns money on a draw and pays out on a Sweden win. Given Netherlands' injury crisis and Sweden's defensive solidity, this is essentially a bet that Netherlands do not win — a reasonable position when the team is missing its entire first-choice defensive spine. This functions as the lower-variance companion to the Draw play above; take one or the other, not both.
-**RISK LEVEL:** Medium
-**RECOMMENDED STAKE:** $4 (2 units)
-**KEY RISK FACTORS:**
-- Netherlands still hold individual quality capable of deciding matches regardless of squad disruption
-- If Netherlands' makeshift backline holds and Gakpo finds form, this loses cleanly
-
----
-
-**BET:** Japan -1.5 — Tunisia vs. Japan (Spread)
-**ODDS:** +165 (DraftKings) | Implied: 37.7%
-**EDGE REASONING:** Despite the injury losses to Endo, Mitoma, and Minamino, Japan's remaining squad — Kubo, Kamada, Maeda — carries sufficient quality to beat Tunisia by two goals against a side that will defend deep but lacks the attacking threat to punish Japan's occasional exposure. Tunisia's ceiling in this match is a 1-0 against the run of play; Japan's floor with their remaining attack is two goals. The +165 price on a -1.5 line reflects market uncertainty about Japan's injury-depleted squad but may underestimate the gulf in class over ninety minutes.
-**RISK LEVEL:** High
-**RECOMMENDED STAKE:** $4 (2 units)
-**KEY RISK FACTORS:**
-- Japan's injury losses are material — this is not the same side that topped their 2022 group
-- Tunisia have the defensive organisation to make a two-goal winning margin difficult regardless of the quality disparity
-
----
-
-**BET:** Ecuador -3.5 — Ecuador vs. Curaçao (Spread)
-**ODDS:** +110 (DraftKings) | Implied: 47.6%
-**EDGE REASONING:** Curaçao are not a football team in any competitive sense relative to Ecuador at this level — they are a historic participant. Ecuador should win this by four or more goals, and at +110 on a -3.5 line, the market is being surprisingly cautious. Dallas heat may slow the tempo, but a 4+ goal winning margin for Ecuador against the tournament's smallest nation is the base expectation, not a stretch.
+**BET:** Draw — Netherlands vs. Sweden (Match Result)
+**ODDS:** +300 (DraftKings) | Implied: 25.0%
+**EDGE REASONING:** Netherlands are priced at -140 for a side missing Simons, with Timber and De Ligt also flagged as significant absences — the true probability of a Netherlands win is closer to 50% than the implied 58.3%. Sweden at +380 is reasonable as an outright, but the draw at +300 captures the most likely outcome in a match between a depleted Netherlands and a Sweden side capable of keeping it tight. Houston heat in the second half will punish Netherlands' shallow bench harder than Sweden's.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
 **KEY RISK FACTORS:**
-- Dallas evening heat and a deep Curaçao defensive block could compress the scoreline if Ecuador struggle to break down a bus
-- Ecuador are not a free-scoring side by nature — they tend to be functional rather than clinical in front of goal
+- Netherlands may still have enough individual quality — even depleted — to find a winner against Sweden
+- Sweden's own offensive limitations make this potentially a 0–0 that winds up being a Netherlands narrow win on a set piece
+
+---
+
+**BET:** Ritsu Doan 2+ Shots — Tunisia vs. Japan (Player Props)
+**ODDS:** -120 (DraftKings) | Implied: 54.5%
+**EDGE REASONING:** With Mitoma and Minamino absent, Japan's attacking threat consolidates through fewer outlets — Doan becomes a primary ball-progressor and shot-taker from the right channel. Japan will need to create and will likely have more possession; Doan averaging over 2.5 shots per 90 at club level in a match where Japan control the ball makes 2+ shots a high-probability outcome. Tunisia will sit compact but Japan will attack with intent given the group-stage points pressure.
+**RISK LEVEL:** Medium
+**RECOMMENDED STAKE:** $4 (2 units)
+**KEY RISK FACTORS:**
+- If Japan's game plan becomes more cautious and possession-based rather than direct, shot volume distributes more broadly
+- Prop availability and limits on late-night matches can make line confirmation essential before placing
 
 ---
 
 ## AROUND THE TOURNAMENT
 
-- The Curaçao story deserves more than a footnote. A nation of 150,000 people — smaller than most European cities — has qualified for the World Cup, and the scenes in Willemstad when they reached this tournament must have been something extraordinary. They will lose today, probably heavily, and it will matter not at all to the people back home.
+- Messi turned 38 and marked his 200th Argentina cap by scoring a hat-trick and drawing level with Miroslav Klose as the World Cup's all-time leading scorer. The GOAT debate has not aged out as gracefully as he has.
 
-- Pochettino getting visibly emotional in Seattle is either a genuine human moment or masterful man-management theatre. Either way, the US crowd's effect on that match was real — Australia looked rattled in the second half in a way that had nothing to do with tactics. Whether the home-tournament atmosphere becomes an asset or a pressure point for the USMNT as the stakes rise is the storyline to watch through the knockout rounds.
+- The tournament's most quietly damning subplot: a Somali referee on FIFA's confirmed officials list was denied entry to the United States at Miami, directly contradicting FIFA's stated commitment to the tournament's inclusive mission. FIFA has not offered a meaningful response, which is more or less FIFA's standard operating posture.
 
-- The Czechia-South Africa handball controversy has reignited a debate that was never really resolved: the IFAB handball law, even after multiple revisions, still generates a penalty decision every tournament that splits opinion clean down the middle. The VAR scope expansion this year was supposed to bring clarity. Instead it has brought more reviews, more controversy, and approximately the same level of uncertainty about the correct outcome. Progress.
+- An Australian VAR official was asked to publicly deny making a white nationalist hand gesture during a broadcast. That this sentence exists in a football tournament's daily bulletin tells you something about where we are in 2026.
 
-- Brazil's 3-0 win over Haiti reads comfortably until you notice that Raphinha came off injured in the first half and the pre-existing absences of Rodrygo (ACL) and Neymar (calf) mean their attacking depth is being tested in the group stage, not the knockout rounds. They have enough quality to manage, but +875 pre-tournament odds on a side this light on wings was already questionable. That assessment has not improved.
+- Ayoub Bouaddi, the teenage Ligue 1 sensation in Morocco's squad, made an immediate impression in their opener against Scotland — the kind of debut that makes you look up a player's contract situation before the match ends. Morocco's tournament is shaping up as the most interesting defensive counter-punching story in the bracket.
 
-- Switzerland 4-1 against Bosnia is the quiet result of the opening round that deserves more attention. The Swiss are organised, technically sharp, and now sitting with three points and a +3 goal difference in a group that was always going to be contested. They are the kind of team that wins three group games, then quietly makes a quarterfinal, and everyone acts surprised.
+- Haaland's World Cup arrival was exactly as advertised: two goals, an assist, one described as "like something out of a horror film." Norway at +3100 is still there for anyone who wants to be told they were right in July.
 
 ---
 
 ## PARLAYS
 
-**Parlay 1: Conservative Upset Double — Sweden DNB + Tunisia Draw No Bet**
-Estimated combined odds: approximately +410. Both selections are predicated on superior opponents fielding severely depleted squads — Netherlands missing five key players, Japan missing three of their best forwards. Two draws or two upsets make this pay; it loses only if both depleted favourites win.
+**Parlay 1: Defensive Midnighter — Tunisia +1.5 + Under 2.5 Goals (Tunisia vs. Japan)**
+Estimated combined odds: approximately +175. Both legs point to the same underlying thesis — Japan without Mitoma and Minamino cannot generate the volume needed to win big at Monterrey altitude, and Tunisia are disciplined enough to keep this tight. Correlated legs, same match; the combination reflects high confidence in a specific match profile.
 **RECOMMENDED STAKE:** $4 (2 units)
 
 ---
 
-**Parlay 2: Goals Fade — Germany U2.5 + Tunisia vs. Japan U2.5**
-Estimated combined odds: approximately +240. Germany's tournament-opener conservatism and Japan's attacking injury losses both point toward low-scoring matches. The structural under edge at the World Cup applies to both legs, and neither match features the kind of free-scoring combination that makes over 2.5 a confident selection.
+**Parlay 2: European Power Double — Germany -1.5 + Netherlands Draw**
+Estimated combined odds: approximately +450. Germany covering the spread at plus money combined with the Netherlands draw at +300 reflects two independent assessments of European sides whose prices are slightly mispriced in opposite directions. These are separate matches on separate timelines.
+**RECOMMENDED STAKE:** $2 (1 unit)
+
+---
+
+**Parlay 3: Late Night Props — Ritsu Doan 2+ Shots + Under 2.5 Goals (Tunisia vs. Japan)**
+Estimated combined odds: approximately +160. Doan's shot volume increases in a match where Japan must attack and Tunisia will concede possession — but Japan's attacking ceiling is low enough without Mitoma that total goals stay under. Both legs are reinforced by the same injury and tactical context.
 **RECOMMENDED STAKE:** $4 (2 units)
 
 ---
 
-**Parlay 3: Heavy Favourites Cover — Ecuador -3.5 + Germany ML**
-Estimated combined odds: approximately +160. Ecuador should cover comfortably against Curaçao; Germany should win their opener against an Ivory Coast side they outclass in depth and organisation. Two reasonably confident legs at a combined price that returns something worth collecting.
-**RECOMMENDED STAKE:** $4 (2 units)
-
----
-
-**Parlay 4: Netherlands Fade + Ecuador Goals — Netherlands Draw + Ecuador Over 3.5**
-Estimated combined odds: approximately +520. Netherlands' injury crisis makes the draw legitimately plausible; Ecuador's quality advantage over Curaçao should produce a high-scoring match regardless of the heat factor. Low-probability combination with a specific analytical basis for each leg.
+**Parlay 4: Group Stage Value Trifecta — Germany ML + Tunisia +1.5 + Ecuador ML**
+Estimated combined odds: approximately +220. Germany should handle Ivory Coast; Ecuador should handle Curaçao; Tunisia holding Japan to a one-goal margin or better is the value leg. Three separate matches, three separate reasonable edges combined into a mid-priced parlay.
 **RECOMMENDED STAKE:** $2 (1 unit)
 
 ---
 
 ## SHARP MONEY
 
-- Netherlands were opened at -145 pre-tournament for group-stage matches factoring in squad depth; the -140 current price suggests the market has noted the injuries but hasn't moved the line significantly — no sharp steam in either direction yet, but the draw handle will be worth monitoring as kickoff approaches.
-- Brazil post-match odds to win the tournament have drifted slightly after the Raphinha injury news; no dramatic movement but the market is registering the accumulating injury concern.
-- No significant line movement overnight on any of today's four matches per the available data.
+- France have shortened from -1200 to -1400 against Iraq, a 200-cent move with France handle far exceeding ticket share — the sharpest signal in the next 48 hours of fixtures.
+- Tunisia's ML shortened from +600 to +550 ahead of tonight's match — a directional signal, not a steam move, but worth noting for anyone building a Tunisia position.
+- Morocco shortened from -360 to -500 against Haiti following their Scotland win; sharp action confirming the Morocco narrative that has been building since the pre-tournament period.
 
 ---
 
 ## TOMORROW'S SLATE
 
-- 12:00 PM ET — Spain vs Saudi Arabia
-- 3:00 PM ET — Belgium vs Iran
-- 6:00 PM ET — Uruguay vs Cape Verde
+- 12:00 AM ET — Tunisia vs. Japan *(carries over from today's late kickoff)*
+- 12:00 PM ET — Spain vs. Saudi Arabia
+- 3:00 PM ET — Belgium vs. Iran
+- 6:00 PM ET — Uruguay vs. Cape Verde
+- 9:00 PM ET — New Zealand vs. Egypt
