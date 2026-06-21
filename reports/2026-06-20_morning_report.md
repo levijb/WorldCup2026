@@ -5,13 +5,13 @@ Saturday June 20, 2026
 
 ---
 
-Day 10. Netherlands are injury-depleted, Germany are in Toronto, and Japan play at midnight in Monterrey.
+Day 10. USA beat Australia 2-0 yesterday. 4 more games today. Germnay vs Ivory Coast today.
 
 ---
 
 ## TOURNAMENT STATUS
 
-Day 10 of the group stage. Four matches today spanning Groups E and F, with the late kickoff — Tunisia vs. Japan at midnight ET from Monterrey — the most analytically interesting of the slate. Group E is already taking shape after Switzerland's 4–1 dismantling of Bosnia and Canada's 6–0 stroll past Qatar. Germany's opening match today effectively sets their trajectory. Group F features a Netherlands side walking wounded into a Houston afternoon.
+Day 10 of the group stage. Four matches today spanning Groups E and F, with the late kickoff — Tunisia vs. Japan at midnight ET from Monterrey — the most analytically interesting of the slate. An injury-depleted Netherlands team face Sweden at 1 pm ET - currently Sweden leads Group F with 3 points. Germany and Ivory Coast face off today at 4 pm ET, competeing for the top spot of Group E. 
 
 ---
 

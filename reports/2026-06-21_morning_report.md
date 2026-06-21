@@ -5,13 +5,9 @@ Sunday June 21, 2026
 
 ---
 
-Day 12. Five matches, including Spain doing what Spain does — except the first one already happened and Japan handled Tunisia comprehensively.
-
----
-
 ## TOURNAMENT STATUS
 
-Day 12 of the group stage. Today's slate spans five Group F, G, and H fixtures. Japan have already put four past Tunisia this morning and sit in a commanding position in Group F alongside the newly resurgent Netherlands. The Spain vs. Saudi Arabia result is either confirmed or imminent as this report goes out; the remaining three matches — Belgium vs. Iran, Uruguay vs. Cape Verde, and New Zealand vs. Egypt — are the live action to watch.
+Day 11 of the tournament. Four matches today - Spain vs. Saudi Arabia, Belgium vs. Iran, Uruguay vs. Cape Verde, and New Zealand vs. Egypt. Spain still need their first goal of the tournament following a dramatic 0-0 draw with Cape Verde. 
 
 ---
 
@@ -19,23 +15,17 @@ Day 12 of the group stage. Today's slate spans five Group F, G, and H fixtures. 
 
 **Yesterday — Saturday, June 20**
 
-- Netherlands 5–1 Sweden (Group F) — The injury-depleted Dutch apparently forgot they were supposed to be vulnerable; five goals is a statement result that will reframe their tournament odds immediately.
-- Germany 2–1 Ivory Coast (Group E) — Neuer, 40 years old and recalled from retirement, reportedly kept Germany in it during a nervy spell. Winning ugly counts.
-- Ecuador 0–0 Curaçao (Group E) — Ecuador couldn't break down a side that essentially parked the bus and held on for a point that might, improbably, matter later.
-
-**Two Days Ago — Friday, June 19**
-
-No matches.
+- Netherlands 5–1 Sweden (Group F): The injury-depleted Dutch apparently forgot they were supposed to be vulnerable; five goals is a statement result that will reframe their tournament odds immediately. Sweden did not look like the same team as when they played Tunisia.
+- Germany 2–1 Ivory Coast (Group E): Neuer, 40 years old and recalled from retirement, reportedly kept Germany in it during a nervy spell. Winning ugly counts.
+- Ecuador 0–0 Curaçao (Group E): Ecuador couldn't break down a side that essentially parked the bus and held on for a point that might, improbably, matter later. Best 0-0 draw I've seen.
+- Tunisia 0–4 Japan (Group F): Japan dominated.
 
 ---
 
 ## TODAY'S MATCHES
 
-**Tunisia vs. Japan — 12:00 AM ET | TBD | Group F**
-Already played — Japan 4–0 Tunisia. Japan's depth has absorbed the Mitoma, Endo, and Minamino absences without visible disruption. A four-goal margin against a side that was expected to offer at least some resistance is significant. Japan now sit top of Group F and have to be taken seriously as a knockout-round threat. The line for their next match will be worth watching.
-
 **Spain vs. Saudi Arabia — 12:00 PM ET | Mercedes-Benz Stadium, Atlanta | Group H**
-Spain open their tournament at altitude-adjacent Atlanta against a Saudi side that drew Cape Verde — yes, that actually happened, or something close to it based on early tournament color. The line has drifted slightly toward Spain from -1100 to -1000, which is a mild sharp signal, while Saudi Arabia shortened from +2200 to +2200, suggesting some money on the upset hedge. Spain's structure under De la Fuente is sufficiently collective that Yamal's availability matters but isn't existential — they have enough creative width to manage. The Atlanta heat is a real factor in the second half; Spain are a technical side who will not enjoy a 90-minute battle in 95-degree heat index conditions. The betting angle here is Spain win but the total — the under has structural support given the conditions and Spain's tendency to control rather than pile on.
+Spain come into this one goalless after a 0-0 draw with Cape Verde, which makes today less of a routine coronation and more of a must-deliver moment. The line has shifted slightly toward Spain — opened around -1100, now -1000 — while Saudi Arabia remain a large underdog despite drawing Uruguay 1-1 in their opener. Spain's structure under De la Fuente is sufficiently collective that Yamal's availability matters but isn't existential — they have enough creative width to manage. The Atlanta heat is a real factor in the second half; Spain are a technical side who will not enjoy a 90-minute grind in 95-degree heat index conditions. The betting angle here is Spain win but the total — the under has structural support given the conditions and Spain's historical tendency to control rather than pile on.
 
 **Belgium vs. Iran — 3:00 PM ET | SoFi Stadium, Inglewood, CA | Group G**
 Belgium are heavy favorites at -235, which implies roughly 70% true probability — that feels about right for a side with De Bruyne, Lukaku, and a functional if aging spine. Iran are compact and disciplined defensively, and they'll look to frustrate. The expanded VAR scope is worth flagging: Belgium's physicality means they'll draw contact in the box, and Iran's defensive structure invites set-piece situations. SoFi is a neutral-conditions, sea-level venue — no environmental edge either way. Belgium to win is the obvious play; the question is whether the price is worth taking at -235, which is thin.
@@ -50,11 +40,11 @@ Egypt are short favorites at -170, which implies 63% probability — steep for a
 
 ## NEWS & INJURIES
 
-- Japan are without Mitoma, Wataru Endo, and Minamino for the tournament — they beat Tunisia 4–0 anyway, which tells you something about their squad depth.
-- Brazil have lost Rodrygo (ACL) and Estêvão (hamstring) for the tournament; Neymar is managing a calf issue and missed their first match.
-- Netherlands are without Timber and Simons — and still scored five against Sweden, which makes the remaining qualifying odds on Netherlands significantly more interesting.
-- Spain's Fermín López is out with a fractured metatarsal; Yamal's availability and minutes remain worth monitoring ahead of today's Saudi Arabia match.
-- The 8-second GK rule and expanded VAR scope are generating additional set-piece restarts and penalty reviews — factor into totals analysis across all today's matches.
+- Spain's Fermín López is out with a fractured metatarsal; Yamal's availability and starting minutes remain the key watch item today against Saudi Arabia.
+- Belgium's Romelu Lukaku is not match-fit to start; Openda leads the line with Lukaku as the second-half option. Jeremy Doku had a breathing issue against Egypt and his status for today is worth monitoring.
+- Iran's Roozbeh Cheshmi, Alireza Jahanbakhsh, and Saman Ghoddos are all doubts after picking up knocks in the New Zealand draw.
+- Darwin Núñez is Uruguay's primary attacking outlet against Cape Verde; his physicality suits the Miami heat conditions better than a technical pressing side would.
+- The 8-second GK rule and expanded VAR scope continue to generate additional set-piece restarts and penalty reviews.
 
 ---
 
@@ -73,7 +63,7 @@ Egypt are short favorites at -170, which implies 63% probability — steep for a
 
 **BET:** Under 2.5 Goals — Spain vs. Saudi Arabia (Total Goals)
 **ODDS:** Estimated -115 to -125 (check live) | Implied ~53%
-**EDGE REASONING:** Spain's historically conservative group-stage approach — they manage games rather than chase scorelines — combined with Atlanta heat and the structural adjustment for IFAB rule changes still leaves the under as the play. Only 45% of World Cup matches historically go over 2.5; Spain's tactical DNA in game one typically involves patience over volume. Saudi Arabia will defend deep and cede possession, which compresses Spain's shot-to-goal conversion.
+**EDGE REASONING:** Spain managed a 0-0 draw in game one despite controlling possession against Cape Verde — their tendency to control games without forcing the scoreline is already confirmed in this tournament, not just on historical record. Atlanta heat compounds the structural case: Saudi Arabia will defend deep and compress Spain's shot-to-goal conversion, and Spain won't chase the game unnecessarily. Only 45% of World Cup matches historically go over 2.5; the conditions and Spain's tactical DNA both point under.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $4 (2 units)
 **KEY RISK FACTORS:**
@@ -146,8 +136,8 @@ Estimated combined odds: approximately +650. The New Zealand/Egypt draw at +300 
 
 ---
 
-**Parlay 4: Japan Momentum + Spain Control — Japan anytime to score next match (futures, if available) + Spain -1.5**
-Estimated combined odds: approximately +200 (adjust based on available props). Japan have four goals today and counting; their next opponent will face a fully confident side with depth across the squad. Spain -1.5 as the anchor brings the price down to a reasonable range.
+**Parlay 4: Group G Chaos — Belgium ML + New Zealand/Egypt Draw**
+Estimated combined odds: approximately +280. Belgium to win handles the more likely leg; the New Zealand/Egypt draw at +300 is the value builder. All four Group G teams are on one point and none have looked dominant — Egypt are overpriced at -170 against a New Zealand side that's shown genuine defensive organisation. Combining a high-confidence leg with a genuine value draw produces reasonable combined odds for the risk.
 **RECOMMENDED STAKE:** $2 (1 unit)
 
 ---
@@ -162,7 +152,7 @@ Estimated combined odds: approximately +200 (adjust based on available props). J
 
 ## TOMORROW'S SLATE
 
-- 1:00 PM ET — Argentina vs. Austria
-- 5:00 PM ET — France vs. Iraq
-- 8:00 PM ET — Norway vs. Senegal
-- 11:00 PM ET — Jordan vs. Algeria
+- 1:00 PM ET — Argentina vs. Austria (Group J, AT&T Stadium, Dallas)
+- 5:00 PM ET — France vs. Iraq (Group I, Lincoln Financial Field, Philadelphia)
+- 8:00 PM ET — Norway vs. Senegal (Group I, MetLife Stadium, East Rutherford)
+- 11:00 PM ET — Jordan vs. Algeria (Group J, Levi's Stadium, Santa Clara)
