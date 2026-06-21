@@ -120,7 +120,7 @@
 
   /* ── Bracket ── */
   #bracket-view { padding: 16px; display: none; overflow-x: auto; }
-  .bracket-container { display: flex; gap: 0; min-width: 900px; }
+  .bracket-container { display: flex; gap: 0; min-width: 1600px; align-items: stretch; }
   .bracket-round {
     display: flex;
     flex-direction: column;
@@ -577,54 +577,111 @@ function renderGroupSchedule() {
 // ── Render Bracket ────────────────────────────────────────────────────────────
 function renderBracket() {
   const container = document.getElementById('bracket-view');
-  let html = '<div class="bracket-container">';
 
-  for (const round of BRACKET_ROUNDS) {
-    const roundMatches = bracketData[round.id] || [];
-    html += `<div class="bracket-round">
-      <div class="bracket-round-title">${round.label}</div>
-      <div style="display:flex;flex-direction:column;justify-content:space-around;flex:1">`;
-
-    for (let i = 0; i < round.matches; i++) {
-      const m = roundMatches[i];
-      const t1 = m?.team1 || 'TBD';
-      const t2 = m?.team2 || 'TBD';
-      const score = m?.score || null;
-      const winner = m?.winner || null;
-      const venue = m?.ground ? `${VENUE_STADIUMS[m.ground] || m.ground}` : null;
-      const kickoff = (m?.time && m?.date) ? fmtVenueTimeToET(m.time, m.date) : null;
-      const dateLabel = m?.date ? new Date(m.date + 'T12:00:00Z').toLocaleDateString('en-US',
-        { month: 'short', day: 'numeric', timeZone: 'UTC' }) : null;
-
-      if (round.id === 'final' && i === 0) {
-        html += `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:auto;">
-          <div class="final-header">FINAL</div>
-          <div class="bracket-slot ${t1 === winner ? 'winner' : t1 === 'TBD' ? 'tbd' : ''}">${t1}${score ? ` ${score.split('–')[0]}` : ''}</div>
-          <div class="bracket-slot ${t2 === winner ? 'winner' : t2 === 'TBD' ? 'tbd' : ''}" style="margin-top:2px">${t2}${score ? ` ${score.split('–')[1]}` : ''}</div>
-          ${venue ? `<div class="bracket-venue">${venue}</div>` : ''}
-          ${(dateLabel && kickoff) ? `<div class="bracket-date">${dateLabel} · ${kickoff.split(' / ')[0]}</div>` : ''}
-        </div>`;
-      } else {
-        html += `<div class="bracket-match">
-          <div class="bracket-slot ${t1 === winner ? 'winner' : t1 === 'TBD' ? 'tbd' : ''}">${t1}${score ? ` ${score.split('–')[0]}` : ''}</div>
-          <div class="bracket-slot ${t2 === winner ? 'winner' : t2 === 'TBD' ? 'tbd' : ''}" style="margin-top:2px">${t2}${score ? ` ${score.split('–')[1]}` : ''}</div>
-          ${venue ? `<div class="bracket-venue">${venue}</div>` : ''}
-          ${(dateLabel && kickoff) ? `<div class="bracket-date">${dateLabel} · ${kickoff.split(' / ')[0]}</div>` : ''}
-        </div>`;
-      }
-    }
-
-    html += '</div></div>';
-
-    // Connector brackets between rounds (except after Final)
-    if (round.id !== 'final') {
-      const connectorCount = Math.ceil(round.matches / 2);
-      const connectors = Array(connectorCount).fill(
-        '<div style="flex:1;display:flex;flex-direction:column;justify-content:center"><div style="height:50%;border-top:1px solid #30363d;border-right:1px solid #30363d"></div><div style="height:50%;border-bottom:1px solid #30363d;border-right:1px solid #30363d"></div></div>'
-      ).join('');
-      html += `<div style="display:flex;flex-direction:column;align-items:stretch;width:24px;align-self:stretch;padding-top:0">${connectors}</div>`;
-    }
+  // Helper: render a single match card
+  function matchCard(m, roundId) {
+    const t1 = m?.team1 || 'TBD';
+    const t2 = m?.team2 || 'TBD';
+    const score = m?.score || null;
+    const winner = m?.winner || null;
+    const venue = m?.ground ? `${VENUE_STADIUMS[m.ground] || m.ground}` : null;
+    const kickoff = (m?.time && m?.date) ? fmtVenueTimeToET(m.time, m.date) : null;
+    const dateLabel = m?.date ? new Date(m.date + 'T12:00:00Z').toLocaleDateString('en-US',
+      { month: 'short', day: 'numeric', timeZone: 'UTC' }) : null;
+    const s1 = t1 === winner ? 'winner' : t1 === 'TBD' ? 'tbd' : '';
+    const s2 = t2 === winner ? 'winner' : t2 === 'TBD' ? 'tbd' : '';
+    return `<div class="bracket-match">
+      <div class="bracket-slot ${s1}">${t1}${score ? ` ${score.split('–')[0]}` : ''}</div>
+      <div class="bracket-slot ${s2}" style="margin-top:2px">${t2}${score ? ` ${score.split('–')[1]}` : ''}</div>
+      ${venue ? `<div class="bracket-venue">${venue}</div>` : ''}
+      ${(dateLabel && kickoff) ? `<div class="bracket-date">${dateLabel} · ${kickoff.split(' / ')[0]}</div>` : ''}
+    </div>`;
   }
+
+  // Helper: render a round column (title + evenly spaced matches)
+  function roundColumn(label, matches) {
+    const cards = matches.map(m => matchCard(m)).join('');
+    return `<div class="bracket-round">
+      <div class="bracket-round-title">${label}</div>
+      <div style="display:flex;flex-direction:column;justify-content:space-around;flex:1">${cards}</div>
+    </div>`;
+  }
+
+  // Helper: connector column — dir is 'right' (border-right) or 'left' (border-left)
+  function connectorCol(count, dir) {
+    const borderSide = dir === 'left' ? 'border-left' : 'border-right';
+    const seg = `<div style="flex:1;display:flex;flex-direction:column;justify-content:center">` +
+      `<div style="height:50%;border-top:1px solid #30363d;${borderSide}:1px solid #30363d"></div>` +
+      `<div style="height:50%;border-bottom:1px solid #30363d;${borderSide}:1px solid #30363d"></div>` +
+      `</div>`;
+    const segs = Array(count).fill(seg).join('');
+    return `<div style="display:flex;flex-direction:column;align-items:stretch;width:24px;align-self:stretch">${segs}</div>`;
+  }
+
+  const r32 = bracketData['r32'] || [];
+  const r16 = bracketData['r16'] || [];
+  const qf  = bracketData['qf']  || [];
+  const sf  = bracketData['sf']  || [];
+  const fin = bracketData['final'] || [];
+
+  // Slice each round in half for left/right sides
+  const leftR32  = Array.from({length: 8},  (_, i) => r32[i]);
+  const rightR32 = Array.from({length: 8},  (_, i) => r32[i + 8]);
+  const leftR16  = Array.from({length: 4},  (_, i) => r16[i]);
+  const rightR16 = Array.from({length: 4},  (_, i) => r16[i + 4]);
+  const leftQF   = Array.from({length: 2},  (_, i) => qf[i]);
+  const rightQF  = Array.from({length: 2},  (_, i) => qf[i + 2]);
+  const leftSF   = [sf[0]];
+  const rightSF  = [sf[1]];
+
+  // Final card
+  const fm = fin[0];
+  const ft1 = fm?.team1 || 'TBD';
+  const ft2 = fm?.team2 || 'TBD';
+  const fscore = fm?.score || null;
+  const fwinner = fm?.winner || null;
+  const fvenue = fm?.ground ? `${VENUE_STADIUMS[fm.ground] || fm.ground}` : null;
+  const fkickoff = (fm?.time && fm?.date) ? fmtVenueTimeToET(fm.time, fm.date) : null;
+  const fdateLabel = fm?.date ? new Date(fm.date + 'T12:00:00Z').toLocaleDateString('en-US',
+    { month: 'short', day: 'numeric', timeZone: 'UTC' }) : null;
+  const fs1 = ft1 === fwinner ? 'winner' : ft1 === 'TBD' ? 'tbd' : '';
+  const fs2 = ft2 === fwinner ? 'winner' : ft2 === 'TBD' ? 'tbd' : '';
+
+  const finalCol = `<div class="bracket-round" style="min-width:160px;align-items:center;justify-content:center">
+    <div class="bracket-round-title" style="width:100%">Final</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:auto;padding:8px 0">
+      <div class="final-header">FINAL</div>
+      <div class="bracket-slot ${fs1}" style="min-width:140px">${ft1}${fscore ? ` ${fscore.split('–')[0]}` : ''}</div>
+      <div class="bracket-slot ${fs2}" style="margin-top:2px;min-width:140px">${ft2}${fscore ? ` ${fscore.split('–')[1]}` : ''}</div>
+      ${fvenue ? `<div class="bracket-venue">${fvenue}</div>` : ''}
+      ${(fdateLabel && fkickoff) ? `<div class="bracket-date">${fdateLabel} · ${fkickoff.split(' / ')[0]}</div>` : ''}
+    </div>
+  </div>`;
+
+  let html = '<div class="bracket-container" style="align-items:stretch">';
+
+  // LEFT SIDE: R32 → R16 → QF → SF (connectors point right)
+  html += roundColumn('Round of 32', leftR32);
+  html += connectorCol(4, 'right');
+  html += roundColumn('Round of 16', leftR16);
+  html += connectorCol(2, 'right');
+  html += roundColumn('Quarter-Finals', leftQF);
+  html += connectorCol(1, 'right');
+  html += roundColumn('Semi-Finals', leftSF);
+  html += connectorCol(1, 'right');
+
+  // CENTER: Final
+  html += finalCol;
+
+  // RIGHT SIDE: SF → QF → R16 → R32 (connectors point left, mirrored order)
+  html += connectorCol(1, 'left');
+  html += roundColumn('Semi-Finals', rightSF);
+  html += connectorCol(2, 'left');
+  html += roundColumn('Quarter-Finals', rightQF);
+  html += connectorCol(4, 'left');
+  html += roundColumn('Round of 16', rightR16);
+  html += connectorCol(8, 'left');
+  html += roundColumn('Round of 32', rightR32);
 
   html += '</div>';
   container.innerHTML = html;
