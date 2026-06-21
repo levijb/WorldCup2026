@@ -32,10 +32,23 @@ jobs:
           git config user.name "WorldCup2026 Bot"
           git config user.email "actions@github.com"
 
+      - name: Skip if report already exists
+        run: |
+          TODAY=$(date -u +'%Y-%m-%d')
+          REPORT_PATH="reports/${TODAY}_morning_report.md"
+          git fetch origin
+          if git ls-tree -r origin/main --name-only | grep -q "^${REPORT_PATH}$"; then
+            echo "Report for ${TODAY} already exists on remote. Skipping."
+            echo "SKIP_REPORT=true" >> $GITHUB_ENV
+          else
+            echo "SKIP_REPORT=false" >> $GITHUB_ENV
+          fi
+
       - name: Run morning report
         # Generates + commits the report only. Email is NOT auto-sent.
         # After reviewing reports/YYYY-MM-DD_morning_report.md, send manually:
         #   python agent/morning_report.py --send-email
+        if: env.SKIP_REPORT == 'false'
         env:
           THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
           API_SPORTS_KEY: ${{ secrets.API_SPORTS_KEY }}

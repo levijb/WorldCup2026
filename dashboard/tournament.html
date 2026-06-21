@@ -121,7 +121,12 @@
   /* ── Bracket ── */
   #bracket-view { padding: 16px; display: none; overflow-x: auto; }
   .bracket-container { display: flex; gap: 0; min-width: 900px; }
-  .bracket-round { display: flex; flex-direction: column; justify-content: space-around; min-width: 155px; }
+  .bracket-round {
+    display: flex;
+    flex-direction: column;
+    min-width: 155px;
+    align-items: stretch;
+  }
   .bracket-round-title {
     text-align: center;
     font-size: 10px;
@@ -133,9 +138,7 @@
     background: var(--bg-card);
     border-bottom: 1px solid var(--border);
     margin-bottom: 8px;
-    position: sticky;
-    top: 0;
-    z-index: 1;
+    flex-shrink: 0;
   }
   .bracket-match { margin: 4px; }
   .bracket-slot {
@@ -579,7 +582,8 @@ function renderBracket() {
   for (const round of BRACKET_ROUNDS) {
     const roundMatches = bracketData[round.id] || [];
     html += `<div class="bracket-round">
-      <div class="bracket-round-title">${round.label}</div>`;
+      <div class="bracket-round-title">${round.label}</div>
+      <div style="display:flex;flex-direction:column;justify-content:space-around;flex:1">`;
 
     for (let i = 0; i < round.matches; i++) {
       const m = roundMatches[i];
@@ -610,15 +614,15 @@ function renderBracket() {
       }
     }
 
-    html += '</div>';
+    html += '</div></div>';
 
     // Connector brackets between rounds (except after Final)
     if (round.id !== 'final') {
       const connectorCount = Math.ceil(round.matches / 2);
       const connectors = Array(connectorCount).fill(
-        '<div style="flex:1;border-top:1px solid #30363d;border-right:1px solid #30363d;border-bottom:1px solid #30363d;margin:4px 0"></div>'
+        '<div style="flex:1;display:flex;flex-direction:column;justify-content:center"><div style="height:50%;border-top:1px solid #30363d;border-right:1px solid #30363d"></div><div style="height:50%;border-bottom:1px solid #30363d;border-right:1px solid #30363d"></div></div>'
       ).join('');
-      html += `<div style="display:flex;flex-direction:column;justify-content:space-around;width:24px;padding-top:40px">${connectors}</div>`;
+      html += `<div style="display:flex;flex-direction:column;align-items:stretch;width:24px;align-self:stretch;padding-top:0">${connectors}</div>`;
     }
   }
 

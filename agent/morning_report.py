@@ -641,14 +641,48 @@ def git_commit_and_push(report_path: Path, today_str: str) -> None:
                 cwd=str(ROOT), capture_output=True, text=True,
             )
             if rebase.returncode != 0:
-                subprocess.run(["git", "rebase", "--abort"], cwd=str(ROOT))
-                print(
-                    f"[ERROR] Rebase conflict syncing with origin/{branch}. "
-                    f"Report '{commit_msg}' was generated and committed locally but NOT "
-                    f"pushed. Manual resolution required: git pull --rebase origin {branch}",
-                    file=sys.stderr,
+                # Check which files are conflicting
+                conflict_check = subprocess.run(
+                    ["git", "diff", "--name-only", "--diff-filter=U"],
+                    cwd=str(ROOT), capture_output=True, text=True,
                 )
-                return
+                conflicting = conflict_check.stdout.strip().splitlines()
+                report_rel = str(report_path.relative_to(ROOT))
+
+                if conflicting == [report_rel]:
+                    # Only the report file conflicts — take our local version automatically
+                    subprocess.run(
+                        ["git", "checkout", "--ours", report_rel],
+                        cwd=str(ROOT), check=True,
+                    )
+                    subprocess.run(
+                        ["git", "add", report_rel],
+                        cwd=str(ROOT), check=True,
+                    )
+                    env = {**os.environ, "GIT_EDITOR": "true"}
+                    continue_result = subprocess.run(
+                        ["git", "rebase", "--continue"],
+                        cwd=str(ROOT), capture_output=True, text=True, env=env,
+                    )
+                    if continue_result.returncode == 0:
+                        print(f"[GIT] Auto-resolved report conflict; rebase continued.")
+                    else:
+                        subprocess.run(["git", "rebase", "--abort"], cwd=str(ROOT))
+                        print(
+                            f"[ERROR] Auto-resolve failed. Report committed locally but NOT pushed. "
+                            f"Run: git rebase --abort && git push --force-with-lease",
+                            file=sys.stderr,
+                        )
+                        return
+                else:
+                    # Non-report files conflicting — abort and surface for manual resolution
+                    subprocess.run(["git", "rebase", "--abort"], cwd=str(ROOT))
+                    print(
+                        f"[ERROR] Rebase conflict on non-report files: {conflicting}. "
+                        f"Manual resolution required: git pull --rebase origin {branch}",
+                        file=sys.stderr,
+                    )
+                    return
             print(f"[GIT] Rebase onto origin/{branch} succeeded.")
 
         push = subprocess.run(["git", "push"], cwd=str(ROOT), capture_output=True, text=True)
