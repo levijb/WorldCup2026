@@ -1,6 +1,6 @@
 # WorldCup2026
 
-Personal FIFA World Cup 2026 betting intelligence system — daily AI-generated reports, live odds tracking, Poisson model predictions, and a browser dashboard. Built for DraftKings with $1–20 straight bets and $1–5 parlays.
+Personal FIFA World Cup 2026 betting intelligence system — daily AI-generated report templates, live odds tracking, model predictions, and a browser tournament dashboard. Gives straight bet and parlay reccomendations. Built with Clade web and Clause Code.
 
 **Tournament:** June 11 – July 19, 2026 | USA / Mexico / Canada
 
