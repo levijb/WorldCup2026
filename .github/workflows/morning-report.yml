@@ -1,9 +1,11 @@
 name: Morning Report
 
 on:
-  schedule:
-    # 11:00 UTC = 7:00 AM EDT (UTC-4) — runs every day during the tournament
-    - cron: '0 11 * * *'
+  # Schedule disabled — report is now generated manually via --web-prompt
+  # To re-enable: uncomment the schedule block below
+  # schedule:
+  #   # 11:00 UTC = 7:00 AM EDT (UTC-4) — runs every day during the tournament
+  #   - cron: '0 11 * * *'
   workflow_dispatch:
 
 permissions:

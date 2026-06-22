@@ -1,6 +1,6 @@
 # WorldCup2026
 
-Personal FIFA World Cup 2026 betting intelligence system — daily AI-generated report templates, live odds tracking, model predictions, and a browser tournament dashboard. Gives straight bet and parlay reccomendations. 
+Personal FIFA World Cup 2026 betting intelligence system — daily AI-generated reports, live odds tracking, and a browser dashboard. Built for DraftKings and FanDuel with small-stake straight bets and parlays.
 
 Built with Clade web and Clause Code.
 
@@ -17,7 +17,7 @@ Contains prompt .md files for generating in-depth reports on teams, players, and
 - API accounts (all free tiers are sufficient):
   - [The Odds API](https://the-odds-api.com) — DraftKings live odds
   - [API-Sports](https://api-sports.io) — fixtures, scores, injuries, standings
-  - [Anthropic](https://console.anthropic.com) — Claude API for report generation
+  - [Anthropic](https://console.anthropic.com) — Claude API for report generation (optional — see `--web-prompt` below)
   - [Resend](https://resend.com) — email delivery
   - [TheStatsAPI](https://www.thestatsapi.com) — xG and historical data (7-day trial, run data_collector.py once during trial)
 
@@ -44,13 +44,36 @@ Also update `data/subscribers.json` with your email address.
 
 ## Usage
 
-### Morning Report (manual run)
+### Morning Report
+
+Two modes: API mode (calls Claude directly) or web mode (paste into claude.ai, no API tokens).
+
+**Web mode — recommended daily workflow:**
 
 ```bash
-python agent/morning_report.py              # full run — fetches data, calls Claude, emails, git pushes
-python agent/morning_report.py --no-email   # skip email
-python agent/morning_report.py --no-push    # skip git commit/push
-python agent/morning_report.py --dry-run    # print prompt only, no Claude call
+# Step 1: fetch live data and build prompt file
+python agent/morning_report.py --web-prompt
+# → reports/YYYY-MM-DD_web_prompt.txt
+
+# Step 2: open the file, copy everything, paste into claude.ai
+# Step 3: copy Claude's response into reports/YYYY-MM-DD_morning_report.md
+# Step 4: review and edit, then send
+python agent/morning_report.py --send-email
+```
+
+**API mode — calls Claude directly (requires ANTHROPIC_API_KEY):**
+
+```bash
+python agent/morning_report.py           # fetch data, call Claude API, save report
+python agent/morning_report.py --no-push # skip git commit/push
+python agent/morning_report.py --dry-run # print assembled prompt, no Claude call
+```
+
+**Send a saved report:**
+
+```bash
+python agent/morning_report.py --send-email                    # send today's report
+python agent/morning_report.py --send-email --send-date 2026-06-20  # send a past report
 ```
 
 ### Live Query (before or during a match)
@@ -95,66 +118,15 @@ Add these secrets to your repo at **Settings → Secrets → Actions**:
 | `RESEND_TO_EMAIL` | Your personal email |
 | `STATS_API_KEY` | TheStatsAPI dashboard |
 
-Once secrets are set, the morning report runs automatically at **7:00 AM ET** daily via `.github/workflows/morning-report.yml`. Trigger manually from the **Actions** tab at any time.
+The automatic 7:00 AM ET schedule is currently disabled — reports are generated manually via `--web-prompt`. To trigger a one-off API-generated report, use the **Actions** tab → **Morning Report** → **Run workflow**. To re-enable the daily schedule, uncomment the `schedule` block in `.github/workflows/morning-report.yml`.
 
 For on-demand live queries, use `.github/workflows/manual-trigger.yml` from the Actions tab — enter a match name in the input field.
 
 ---
 
-## Model Layer (Poisson + Dixon-Coles)
+## Model Layer
 
-The model uses xG data to predict match outcomes and compute edges vs. DraftKings lines.
-
-### One-time data collection (run during TheStatsAPI 7-day trial)
-
-TheStatsAPI is used **only during the 7-day trial** for bulk historical data collection. After that, daily operations use only The Odds API and API-Sports — `morning_report.py` and `live_query.py` do not call TheStatsAPI.
-
-Confirmed WC 2026 IDs: `competition_id=comp_6107`, `season_id=sn_118868`.
-
-```bash
-# Step 1: Pull team match history (fastest, do this first)
-python model/data_collector.py --teams-only
-
-# Step 2: Pull player stats
-python model/data_collector.py --players
-
-# Step 3: Pull 2018/2022 WC historical data
-python model/data_collector.py --historical
-
-# Step 4: Pull Pinnacle pre-match odds for all WC 2026 fixtures
-python model/data_collector.py --wc-odds
-
-# Step 5: Pull shotmap data for matches with xG available
-python model/data_collector.py --shotmaps
-
-# Step 6: Pull event timelines for finished WC 2026 matches
-python model/data_collector.py --timelines
-
-# Step 7: Pull per-match player stats for all cached matches
-python model/data_collector.py --match-players
-
-# Use --resume to safely re-run without re-fetching already-cached files
-python model/data_collector.py --teams-only --resume
-
-# Dry-run to see the fetch plan without making any API calls
-python model/data_collector.py --dry-run
-```
-
-### Build team ratings (after data collection)
-
-```bash
-python model/poisson_model.py
-```
-
-Ratings saved to `data/processed/team_ratings.json`.
-
-### Run daily predictions
-
-```bash
-python model/predictions.py
-```
-
-Predictions saved to `data/processed/model_predictions.json` and automatically included in the next morning report.
+The Poisson/Dixon-Coles prediction model is currently disabled — output was unreliable with limited group-stage data. Model files remain in the repo for potential re-enablement in the knockout rounds.
 
 ---
 
@@ -166,23 +138,17 @@ WorldCup2026/
 │   ├── system_prompt.md        # Claude system prompt (role, intelligence, formats)
 │   ├── morning_report.py       # Daily report generator
 │   └── live_query.py           # On-demand match query
-├── model/
-│   ├── data_collector.py       # One-time bulk data pull (TheStatsAPI)
-│   ├── poisson_model.py        # xG Poisson + Dixon-Coles model
-│   ├── player_props.py         # Player scorer/SOT/corners model
-│   └── predictions.py          # Daily orchestrator
 ├── dashboard/
 │   ├── index.html              # Odds, bets, reports dashboard
 │   └── tournament.html         # Group table + knockout bracket
 ├── data/
 │   ├── bets.json               # Bet log (edit manually)
 │   ├── subscribers.json        # Email subscribers
-│   ├── odds_cache.json         # Yesterday's odds cache (gitignored)
-│   ├── raw/                    # Raw API data (gitignored, ~1GB after collection)
-│   └── processed/              # Model outputs (committed)
-├── reports/                    # Daily .md reports (auto-committed by Actions)
+│   └── odds_cache.json         # Odds cache (gitignored)
+├── researchPrompts/            # Prompt templates for match research and betting strategy
+├── reports/                    # Daily .md reports and web prompt files
 ├── .github/workflows/
-│   ├── morning-report.yml      # Cron: 7 AM ET daily
+│   ├── morning-report.yml      # Manual trigger only (cron disabled)
 │   └── manual-trigger.yml      # workflow_dispatch with match_focus input
 ├── .env                        # Local secrets (gitignored)
 ├── .env.example                # Key template

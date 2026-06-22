@@ -8,6 +8,7 @@ Usage:
     python agent/morning_report.py --send-email   # send today's saved report (review first!)
     python agent/morning_report.py --send-email --send-date 2026-06-14  # send a past report
     python agent/morning_report.py --no-email     # (accepted but ignored; email never auto-sends)
+    python agent/morning_report.py --web-prompt   # build prompt file for Claude web (no API tokens)
 """
 
 import argparse
@@ -597,6 +598,72 @@ def save_report(report_text: str, today_str: str, quota_remaining: str) -> Path:
     return report_path
 
 
+def dump_web_prompt(
+    system_prompt: str,
+    static_context: str,
+    dynamic_content: str,
+    today_str: str,
+) -> Path:
+    """Assemble the full prompt and write to reports/YYYY-MM-DD_web_prompt.txt.
+
+    The output is formatted for direct paste into a Claude web chat.
+    Three web searches are embedded as explicit instructions so Claude web
+    runs them inline during report generation rather than relying on the
+    pre-fetched pipeline data that would normally come from the API calls.
+    """
+    web_header = f"""# WC2026 Morning Report Prompt — {today_str}
+# Paste this entire file into a Claude web chat (claude.ai).
+# Claude will run the three web searches inline and write the full report.
+# After Claude responds, copy the report text into:
+#   reports/{today_str}_morning_report.md
+# Then send with: python agent/morning_report.py --send-email
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+## INSTRUCTIONS FOR CLAUDE WEB
+
+You are generating the World Cup 2026 morning briefing report. Before writing anything, run these three web searches in order and incorporate the results into the relevant sections:
+
+**Search 1 — Recent results:**
+Search for: "World Cup 2026 match results {today_str}"
+Return completed match results from the last 2 days as dated bullet points.
+Format: YYYY-MM-DD: Team A score–score Team B (Group X). Label each day clearly.
+
+**Search 2 — News and injuries:**
+Search for: "World Cup 2026 injuries lineup news {today_str}"
+Return 3–5 bullet points: injuries, suspensions, confirmed lineups, team form.
+Only items relevant to today's matches.
+
+**Search 3 — Around the tournament:**
+Search for: "World Cup 2026 atmosphere stories fans moments {today_str}"
+Return 3–5 bullet points: crowd atmosphere, VAR controversies, surprising performances,
+player milestones, memorable goals, coach quotes, venue conditions.
+No match result summaries — only color and narrative.
+
+Use these search results to fill the RESULTS, NEWS & INJURIES, and AROUND THE TOURNAMENT sections below.
+The pre-fetched live data (odds, fixtures, line movements, injuries) is provided below — use it as-is.
+
+---
+
+## SYSTEM PROMPT
+
+"""
+
+    assembled = (
+        web_header
+        + system_prompt
+        + "\n\n---\n\n"
+        + static_context
+        + "\n\n---\n\n"
+        + dynamic_content
+    )
+
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    out_path = REPORTS_DIR / f"{today_str}_web_prompt.txt"
+    out_path.write_text(assembled, encoding="utf-8")
+    return out_path
+
+
 # ── Git Push ───────────────────────────────────────────────────────────────────
 
 def git_commit_and_push(report_path: Path, today_str: str) -> None:
@@ -825,6 +892,11 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true", help="Print prompt, skip Claude API call")
     parser.add_argument("--send-email", action="store_true", help="Send today's saved report (no regeneration)")
     parser.add_argument("--send-date", metavar="YYYY-MM-DD", help="Date of report to send (default: today)")
+    parser.add_argument(
+        "--web-prompt",
+        action="store_true",
+        help="Build and save the assembled prompt to reports/YYYY-MM-DD_web_prompt.txt for use in Claude web (no API call)",
+    )
     args = parser.parse_args()
 
     if args.send_email:
@@ -860,7 +932,12 @@ def main() -> None:
     line_movements = compute_line_movements(odds_result["data"], previous_cache)
 
     # 5. Web searches: recent results + news (share one Anthropic client)
-    if not args.dry_run:
+    if args.web_prompt:
+        # Claude web will run these searches inline — skip the API-based calls
+        recent_results = "(Claude web will search for this — see search instructions above)"
+        news = "(Claude web will search for this — see search instructions above)"
+        around_the_tournament = "(Claude web will search for this — see search instructions above)"
+    elif not args.dry_run:
         try:
             import anthropic
             client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
@@ -905,6 +982,14 @@ def main() -> None:
         print(dynamic_content[:2000])
         print("=" * 60)
         print("[DRY RUN] Skipping Claude API call, report save, git push, and email.")
+        return
+
+    # ── Web prompt path ────────────────────────────────────────────────────────
+    if args.web_prompt:
+        out_path = dump_web_prompt(system_prompt, static_context, dynamic_content, today_str)
+        print(f"[WEB PROMPT] Saved to {out_path}")
+        print(f"[WEB PROMPT] Paste into claude.ai — Claude will run searches and write the report.")
+        print(f"[WEB PROMPT] After editing, send with: python agent/morning_report.py --send-email")
         return
 
     # 8. Call Claude
