@@ -54,6 +54,26 @@
       "name": "Emilio",
       "email": "emilio.mena128@gmail.com",
       "active": true
+    },
+    {
+      "name": "Carrick",
+      "email": "carrickjh@yahoo.com",
+      "active": true
+    },
+    {
+      "name": "Connor",
+      "email": "connor@mckfamily.com",
+      "active": true
+    },
+    {
+      "name": "Grayson",
+      "email": "graysontp1742@gmail.com",
+      "active": true
+    },
+    {
+      "name": "Bryce",
+      "email": "bforys7@gmail.com",
+      "active": true
     }
   ]
 }
