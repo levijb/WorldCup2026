@@ -571,23 +571,15 @@ function renderGroupSchedule() {
   }
   const dates = Object.keys(byDate).sort();
 
-  // Each group plays exactly 3 matchdays; the openfootball `round` field is a
-  // tournament-wide slot number (e.g. "Matchday 8") and does not map to a
-  // per-group 1/2/3 matchday, so derive it from date order within each group.
-  const groupDates = {};
-  for (const m of games) {
-    if (!m.group) continue;
-    groupDates[m.group] = groupDates[m.group] || new Set();
-    groupDates[m.group].add(m.date);
-  }
-  const groupDateOrder = {};
-  for (const [g, dates_] of Object.entries(groupDates)) {
-    const sorted = [...dates_].sort();
-    groupDateOrder[g] = {};
-    sorted.forEach((d, i) => { groupDateOrder[g][d] = i + 1; });
-  }
+  // Matchday is determined by global tournament date range, not per-group position:
+  // MD1 = June 11-17 (each group's first pair of games)
+  // MD2 = June 18-23 (each group's second pair of games)
+  // MD3 = June 24-27 (each group's third pair of games, simultaneous within group)
   function getMatchday(m) {
-    return groupDateOrder[m.group]?.[m.date] || null;
+    if (!m.date) return null;
+    if (m.date <= '2026-06-17') return 1;
+    if (m.date <= '2026-06-23') return 2;
+    return 3;
   }
 
   let html = `<div class="sched-title">Group Stage Schedule</div>
