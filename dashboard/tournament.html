@@ -513,9 +513,8 @@ function renderGroups() {
         <thead><tr>
           <th style="width:18px"></th>
           <th style="text-align:left">Team</th>
-          <th title="Played">P</th><th title="Wins">W</th>
+          <th title="Wins">W</th>
           <th title="Draws">D</th><th title="Losses">L</th>
-          <th title="Goals For">GF</th><th title="Goals Against">GA</th>
           <th title="Goal Difference">GD</th><th title="Points">Pts</th>
         </tr></thead>
         <tbody>`;
@@ -528,8 +527,7 @@ function renderGroups() {
       html += `<tr>
         <td><span class="qual-dot qual-${status}"></span></td>
         <td><span style="white-space:nowrap">${rankStr}${flagStr}<span style="font-weight:500;color:var(--text-primary)">${t.name}</span></span></td>
-        <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
-        <td>${t.gf}</td><td>${t.ga}</td>
+        <td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
         <td>${t.gd >= 0 ? '+' : ''}${t.gd}</td>
         <td style="font-weight:700;color:var(--text-primary)">${t.pts}</td>
       </tr>`;
