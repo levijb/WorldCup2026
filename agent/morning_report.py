@@ -772,185 +772,263 @@ def git_commit_and_push(report_path: Path, today_str: str) -> None:
 
 # ── Email Sending ─────────────────────────────────────────────────────────────
 
-def markdown_to_html(md_text: str) -> str:
-    """Convert markdown report to styled HTML email."""
+def build_email_html(markdown_content: str) -> str:
+    """Convert markdown report to styled light-mode HTML email."""
     import re
 
-    html = md_text
+    lines = markdown_content.split('\n')
+    output_blocks = []  # list of HTML strings
+    i = 0
 
-    # Headers
-    html = re.sub(r'^#### (.+)$', r'<h4>\1</h4>', html, flags=re.MULTILINE)
-    html = re.sub(r'^### (.+)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
-    html = re.sub(r'^## (.+)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
-    html = re.sub(r'^# (.+)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
+    def inline_format(text: str) -> str:
+        """Apply inline markdown formatting to a string."""
+        # Links
+        text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2" style="color:#1a56db;text-decoration:none;">\1</a>', text)
+        # Bold
+        text = re.sub(r'\*\*(.+?)\*\*', r'<strong style="color:#111827;font-weight:600;">\1</strong>', text)
+        # Italic
+        text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
+        return text
 
-    # Bold and italic
-    html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', html)
-    html = re.sub(r'\*(.+?)\*', r'<em>\1</em>', html)
+    def is_match_header(line: str) -> bool:
+        """Detect a bold match-preview header line."""
+        stripped = line.strip()
+        return (stripped.startswith('**') and stripped.endswith('**')
+                and ' ET ' in stripped and ' | ' in stripped
+                and not stripped.startswith('**BET:')
+                and not stripped.startswith('**ODDS:')
+                and not stripped.startswith('**EDGE')
+                and not stripped.startswith('**RISK')
+                and not stripped.startswith('**RECOMMENDED')
+                and not stripped.startswith('**KEY')
+                and not stripped.startswith('**Parlay'))
 
-    # Links
-    html = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', html)
+    def is_bet_label(line: str) -> bool:
+        """Detect a bet block label line."""
+        stripped = line.strip()
+        return any(stripped.startswith(label) for label in [
+            '**BET:', '**ODDS:', '**EDGE REASONING:', '**RISK LEVEL:',
+            '**RECOMMENDED STAKE:', '**KEY RISK FACTORS:'
+        ])
 
-    # Horizontal rules
-    html = re.sub(r'^---$', r'<hr>', html, flags=re.MULTILINE)
+    def is_parlay_header(line: str) -> bool:
+        """Detect a parlay block header."""
+        stripped = line.strip()
+        return re.match(r'\*\*Parlay \d+:', stripped) is not None
 
-    # Code blocks (bet recommendation blocks)
-    html = re.sub(
-        r'```[\w]*\n(.*?)```',
-        lambda m: f'<div class="bet-block"><pre>{m.group(1)}</pre></div>',
-        html,
-        flags=re.DOTALL,
-    )
+    def render_bet_block(block_lines: list) -> str:
+        """Render a bet recommendation block as an amber-bordered card."""
+        rendered = []
+        for line in block_lines:
+            line = line.strip()
+            if not line or line == '---':
+                continue
+            if line.startswith('- '):
+                rendered.append(f'<div style="margin:2px 0 2px 12px;color:#374151;font-size:13px;">• {inline_format(line[2:])}</div>')
+            else:
+                # Bold label + value
+                rendered.append(f'<div style="margin:4px 0;font-size:13px;line-height:1.5;">{inline_format(line)}</div>')
+        return (
+            '<div style="background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 6px 6px 0;'
+            'padding:14px 16px;margin:16px 0;">'
+            + '\n'.join(rendered)
+            + '</div>'
+        )
 
-    # Inline code
-    html = re.sub(r'`([^`]+)`', r'<code>\1</code>', html)
+    def render_parlay_block(block_lines: list) -> str:
+        """Render a parlay block as a blue-grey bordered card."""
+        rendered = []
+        for line in block_lines:
+            line = line.strip()
+            if not line or line == '---':
+                continue
+            if line.startswith('- '):
+                rendered.append(f'<div style="margin:2px 0 2px 12px;color:#374151;font-size:13px;">• {inline_format(line[2:])}</div>')
+            else:
+                rendered.append(f'<div style="margin:4px 0;font-size:13px;line-height:1.5;">{inline_format(line)}</div>')
+        return (
+            '<div style="background:#f0f4ff;border-left:4px solid #6366f1;border-radius:0 6px 6px 0;'
+            'padding:14px 16px;margin:16px 0;">'
+            + '\n'.join(rendered)
+            + '</div>'
+        )
 
-    # Bullet lists — group consecutive - lines into <ul>
-    def replace_bullets(match):
-        items = match.group(0).strip().split('\n')
-        li_items = ''.join(f'<li>{re.sub(r"^- ", "", item)}</li>' for item in items if item.strip())
-        return f'<ul>{li_items}</ul>'
-    html = re.sub(r'(^- .+\n?)+', replace_bullets, html, flags=re.MULTILINE)
+    # Group lines into logical blocks
+    while i < len(lines):
+        line = lines[i]
+        stripped = line.strip()
 
-    # Paragraphs — wrap blocks separated by blank lines
-    paragraphs = re.split(r'\n\n+', html)
-    result = []
-    for p in paragraphs:
-        p = p.strip()
-        if not p:
+        # Skip empty lines (handled as block separators implicitly)
+        if not stripped:
+            i += 1
             continue
-        if p.startswith('<h') or p.startswith('<ul') or p.startswith('<hr') or p.startswith('<div') or p.startswith('<pre'):
-            result.append(p)
-        else:
-            result.append(f'<p>{p}</p>')
-    html = '\n'.join(result)
 
-    # Wrap in full email template
+        # Horizontal rule
+        if stripped == '---':
+            output_blocks.append('<hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0;">')
+            i += 1
+            continue
+
+        # H1
+        if stripped.startswith('# ') and not stripped.startswith('##'):
+            text = stripped[2:]
+            output_blocks.append(
+                f'<h1 style="font-size:22px;font-weight:700;color:#111827;'
+                f'border-bottom:2px solid #e5e7eb;padding-bottom:12px;margin:0 0 8px;">'
+                f'{inline_format(text)}</h1>'
+            )
+            i += 1
+            continue
+
+        # H2
+        if stripped.startswith('## '):
+            text = stripped[3:]
+            output_blocks.append(
+                f'<h2 style="font-size:13px;font-weight:700;color:#1a56db;'
+                f'text-transform:uppercase;letter-spacing:0.7px;margin:28px 0 10px;">'
+                f'{inline_format(text)}</h2>'
+            )
+            i += 1
+            continue
+
+        # H3
+        if stripped.startswith('### '):
+            text = stripped[4:]
+            output_blocks.append(
+                f'<h3 style="font-size:15px;font-weight:600;color:#1f2937;margin:20px 0 6px;">'
+                f'{inline_format(text)}</h3>'
+            )
+            i += 1
+            continue
+
+        # H4
+        if stripped.startswith('#### '):
+            text = stripped[5:]
+            output_blocks.append(
+                f'<h4 style="font-size:14px;font-weight:600;color:#374151;margin:16px 0 4px;">'
+                f'{inline_format(text)}</h4>'
+            )
+            i += 1
+            continue
+
+        # Bet block — collect until blank line or next bet block or ---
+        if is_bet_label(stripped):
+            block_lines = []
+            while i < len(lines) and lines[i].strip() and lines[i].strip() != '---':
+                block_lines.append(lines[i])
+                i += 1
+            output_blocks.append(render_bet_block(block_lines))
+            continue
+
+        # Parlay block
+        if is_parlay_header(stripped):
+            block_lines = []
+            while i < len(lines) and lines[i].strip() and lines[i].strip() != '---':
+                block_lines.append(lines[i])
+                i += 1
+            output_blocks.append(render_parlay_block(block_lines))
+            continue
+
+        # Match preview header — bold line with ET time and pipes
+        if is_match_header(stripped):
+            # Strip outer **
+            text = stripped[2:-2]
+            # Split into name part and meta part on first |
+            parts = text.split(' | ', 1)
+            name = parts[0].strip()
+            meta = parts[1].strip() if len(parts) > 1 else ''
+            output_blocks.append(
+                f'<div style="background:#f8fafc;border-left:4px solid #1a56db;'
+                f'border-radius:0 6px 6px 0;padding:10px 14px;margin:20px 0 6px;">'
+                f'<div style="font-size:15px;font-weight:700;color:#111827;">{inline_format(name)}</div>'
+                f'<div style="font-size:12px;color:#6b7280;margin-top:3px;">{inline_format(meta)}</div>'
+                f'</div>'
+            )
+            i += 1
+            continue
+
+        # Bullet list — collect consecutive bullet lines
+        if stripped.startswith('- '):
+            list_items = []
+            while i < len(lines) and lines[i].strip().startswith('- '):
+                list_items.append(
+                    f'<li style="margin-bottom:8px;line-height:1.65;color:#374151;">'
+                    f'{inline_format(lines[i].strip()[2:])}</li>'
+                )
+                i += 1
+            output_blocks.append(
+                '<ul style="padding-left:20px;margin:8px 0 12px;">'
+                + ''.join(list_items)
+                + '</ul>'
+            )
+            continue
+
+        # Regular paragraph — collect until blank line
+        para_lines = []
+        while i < len(lines) and lines[i].strip() and not lines[i].strip().startswith('#'):
+            current = lines[i].strip()
+            # Stop if we hit a structural element
+            if (current == '---' or current.startswith('- ')
+                    or is_bet_label(current) or is_parlay_header(current)
+                    or is_match_header(current)):
+                break
+            para_lines.append(current)
+            i += 1
+
+        if para_lines:
+            text = ' '.join(para_lines)
+            output_blocks.append(
+                f'<p style="font-size:14px;line-height:1.75;color:#374151;margin:0 0 14px;">'
+                f'{inline_format(text)}</p>'
+            )
+        else:
+            i += 1
+
+    body_html = '\n'.join(output_blocks)
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>World Cup 2026 Morning Report</title>
-<style>
-  body {{
-    margin: 0;
-    padding: 0;
-    background-color: #0d1117;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    color: #e6edf3;
-  }}
-  .email-wrapper {{
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 24px 24px 40px;
-  }}
-  h1 {{
-    font-size: 22px;
-    font-weight: 700;
-    color: #ffffff;
-    border-bottom: 1px solid #30363d;
-    padding-bottom: 12px;
-    margin-bottom: 6px;
-  }}
-  h2 {{
-    font-size: 16px;
-    font-weight: 700;
-    color: #58a6ff;
-    margin-top: 28px;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }}
-  h3 {{
-    font-size: 15px;
-    font-weight: 600;
-    color: #e6edf3;
-    margin-top: 20px;
-    margin-bottom: 6px;
-  }}
-  h4 {{
-    font-size: 14px;
-    font-weight: 600;
-    color: #e6edf3;
-    margin-top: 16px;
-    margin-bottom: 4px;
-  }}
-  p {{
-    font-size: 14px;
-    line-height: 1.75;
-    color: #c9d1d9;
-    margin: 0 0 14px;
-  }}
-  ul {{
-    padding-left: 20px;
-    margin: 0 0 14px;
-  }}
-  li {{
-    font-size: 14px;
-    line-height: 1.7;
-    color: #c9d1d9;
-    margin-bottom: 6px;
-  }}
-  strong {{
-    color: #e6edf3;
-    font-weight: 600;
-  }}
-  a {{
-    color: #58a6ff;
-    text-decoration: none;
-  }}
-  hr {{
-    border: none;
-    border-top: 1px solid #30363d;
-    margin: 24px 0;
-  }}
-  code {{
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 4px;
-    padding: 1px 5px;
-    font-size: 12px;
-    font-family: 'SFMono-Regular', Consolas, monospace;
-    color: #e6edf3;
-  }}
-  .bet-block {{
-    background: #161b22;
-    border-left: 3px solid #ffab00;
-    border-radius: 0 6px 6px 0;
-    padding: 12px 16px;
-    margin: 14px 0;
-  }}
-  .bet-block pre {{
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #c9d1d9;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }}
-  .toc {{
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
-  }}
-  .toc a {{
-    color: #8b949e;
-    font-size: 13px;
-    display: block;
-    line-height: 1.8;
-    text-decoration: none;
-  }}
-  .toc a:hover {{ color: #58a6ff; }}
-</style>
 </head>
-<body>
-<div class="email-wrapper">
-{html}
-</div>
+<body style="margin:0;padding:0;background-color:#f6f8fa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+
+  <!-- Outer wrapper -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f6f8fa;">
+    <tr>
+      <td align="center" style="padding:24px 12px 40px;">
+
+        <!-- Content card -->
+        <table width="640" cellpadding="0" cellspacing="0" border="0"
+               style="max-width:640px;width:100%;background:#ffffff;
+                      border:1px solid #e5e7eb;border-radius:8px;
+                      box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+          <tr>
+            <!-- Top accent bar -->
+            <td style="background:linear-gradient(90deg,#1a56db,#6366f1);
+                       height:4px;border-radius:8px 8px 0 0;font-size:0;">&nbsp;</td>
+          </tr>
+          <tr>
+            <td style="padding:28px 32px 32px;">
+              {body_html}
+
+              <!-- Footer -->
+              <div style="margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;
+                          font-size:12px;color:#9ca3af;text-align:center;">
+                World Cup 2026 Morning Report &nbsp;|&nbsp;
+                <a href="https://levijb.github.io/WorldCup2026/dashboard/tournament.html"
+                   style="color:#1a56db;text-decoration:none;">Live Dashboard</a>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
 </body>
 </html>"""
 
@@ -983,7 +1061,7 @@ def send_emails(report_text: str, today_str: str) -> None:
     weekday = et_now.strftime("%A")
     date_display = et_now.strftime("%B %d").replace(" 0", " ").lstrip()
     subject = f"World Cup 2026 Morning Brief — {weekday} {date_display}"
-    html_body = markdown_to_html(report_text)
+    html_body = build_email_html(report_text)
 
     context = ssl.create_default_context()
     try:
