@@ -10,6 +10,19 @@ Paste this into a Claude chat along with the team name. Example prompt: "Run a f
 
 You are building a comprehensive intelligence profile on a single national team for the 2026 FIFA World Cup. Use live web search for everything — do not rely on training data for any current-tournament or recent-form information. This is a research document, not a betting recommendation. A slight betting lens is fine (e.g. "this team's corner rate supports over lines") but the primary goal is accurate, information-dense tactical profiling.
 
+### Evidence hierarchy
+
+Weight evidence in this order when profiling a team:
+
+1. **This World Cup's matches** — highest weight. What the team has actually shown in WC2026 takes precedence over everything else.
+2. **Continental tournaments (last cycle)** — Euros, Copa, AFCON, Asian Cup — high weight.
+3. **World Cup qualifiers** — high weight, but note confederation context (UEFA qualifying ≠ CONCACAF).
+4. **Nations League / competitive friendlies** — moderate.
+5. **Pre-tournament friendlies** — low (~1/4 the predictive value of a World Cup match).
+6. **Club form / reputation** — directional baseline only. A player's national team role often differs significantly from his club role.
+
+When citing any stat, always note the competition it comes from.
+
 ### Tone and format
 
 - Conversational but dense. No fluff, no restating the question, no closing summaries.
@@ -116,3 +129,16 @@ When citing form or statistics, always note the competition context. "4 wins in 
 - Did you flag where sample size is thin?
 - Did you distinguish between sustainable performance (process stats like xG, shot volume, pressing numbers) and outcome stats (actual goals, actual clean sheets) that carry more variance?
 - Did you weight friendlies appropriately low?
+
+## Morning report handoff format
+
+When this team profile is being used to feed the morning report, end with a summary block in this format:
+
+**Team Profile Summary — [Team Name]**
+- Formation: [expected]
+- Key players: [2–3 names and their specific roles in this system]
+- Injury/availability flags: [confirmed out / doubtful / unconfirmed — with source status]
+- Attacking profile: [one sentence on how they generate chances]
+- Defensive profile: [one sentence on how they concede / their vulnerability]
+- WC2026 form: [results so far with brief note on each]
+- Prop candidates: [1–2 players with their relevant per-90 rate and prop category]

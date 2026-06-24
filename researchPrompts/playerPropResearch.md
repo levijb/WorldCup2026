@@ -10,6 +10,19 @@ Paste this into a Claude chat with a player name and their upcoming match. Examp
 
 You are profiling a single player's statistical tendencies, tactical role, and matchup context to assess expected output in a specific match. Use live web search for all current data. The core question for every stat is: **what is this player's baseline rate, and does this specific matchup push it higher or lower than usual?**
 
+### Evidence hierarchy for player stats
+
+Weight player data in this order:
+
+1. **This World Cup's matches** — highest weight. A player's actual WC2026 output overrides all prior rates.
+2. **Continental tournament matches (last cycle)** — high weight for role confirmation and rate baseline.
+3. **World Cup qualifiers** — high weight, but flag opposition quality. 4 goals in qualifying against minnows ≠ 4 goals against World Cup defenses.
+4. **Nations League / competitive internationals** — moderate.
+5. **Club stats** — directional only. Always verify the player's national team role differs from or matches his club role before applying club rates.
+6. **Pre-tournament friendlies** — low. Rotation and tactical experimentation make rates unreliable.
+
+Always flag sample size. 2 tournament matches is not a stable rate.
+
 ### Tone and format
 
 - Dense and numerical. Lead with rates, not narratives.
@@ -124,3 +137,13 @@ This table is the handoff to the betting strategy workflow. It tells you which p
 - Did you account for minutes risk (sub patterns, minute management)?
 - Did you check if the player's club shooting/creating tendencies transfer to his national team role, or if the role is different enough to change the baseline?
 - Did you flag the shot-volume vs service-player distinction if relevant?
+
+## Morning report handoff format
+
+When this player prop profile is being used to feed the morning report, end with the prop summary table followed by this condensed block:
+
+**Prop Recommendation Summary — [Player Name] vs. [Opponent]**
+- Top prop: [prop type + line + odds if known] — [one sentence justification with specific rate]
+- Second prop if applicable: [same format]
+- Avoid: [any prop category where the matchup or role makes the line unattractive — one sentence]
+- Minutes certainty: [Confirmed 90 / Likely full game / Sub risk at ~65min / etc.]

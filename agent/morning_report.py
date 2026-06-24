@@ -773,43 +773,184 @@ def git_commit_and_push(report_path: Path, today_str: str) -> None:
 # ── Email Sending ─────────────────────────────────────────────────────────────
 
 def markdown_to_html(md_text: str) -> str:
-    """Minimal markdown-to-HTML converter using inline styles — no external CSS."""
+    """Convert markdown report to styled HTML email."""
     import re
-    lines = md_text.split("\n")
-    html_lines = []
-    bold_re = re.compile(r"\*\*(.+?)\*\*")
-    bold_repl = r'<strong style="color:#ffffff">\1</strong>'
-    link_re = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
-    link_repl = r'<a href="\2" style="color:#58a6ff;text-decoration:none">\1</a>'
 
-    def inline(s: str) -> str:
-        return bold_re.sub(bold_repl, link_re.sub(link_repl, s))
+    html = md_text
 
-    for line in lines:
-        if line.startswith("### "):
-            line = f'<h3 style="color:#e0e0e0;margin:16px 0 4px">{inline(line[4:])}</h3>'
-        elif line.startswith("## "):
-            line = f'<h2 style="color:#ffffff;margin:20px 0 6px;border-bottom:1px solid #333;padding-bottom:4px">{inline(line[3:])}</h2>'
-        elif line.startswith("# "):
-            line = f'<h1 style="color:#ffffff;margin:0 0 16px">{inline(line[2:])}</h1>'
-        elif line.strip() == "---":
-            line = '<hr style="border:none;border-top:1px solid #333;margin:16px 0">'
-        elif line.startswith("- ") or line.startswith("• "):
-            line = f'<li style="margin:2px 0">{inline(line[2:])}</li>'
-        elif line.strip() == "":
-            line = "<br>"
+    # Headers
+    html = re.sub(r'^#### (.+)$', r'<h4>\1</h4>', html, flags=re.MULTILINE)
+    html = re.sub(r'^### (.+)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
+    html = re.sub(r'^## (.+)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
+    html = re.sub(r'^# (.+)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
+
+    # Bold and italic
+    html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', html)
+    html = re.sub(r'\*(.+?)\*', r'<em>\1</em>', html)
+
+    # Links
+    html = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', html)
+
+    # Horizontal rules
+    html = re.sub(r'^---$', r'<hr>', html, flags=re.MULTILINE)
+
+    # Code blocks (bet recommendation blocks)
+    html = re.sub(
+        r'```[\w]*\n(.*?)```',
+        lambda m: f'<div class="bet-block"><pre>{m.group(1)}</pre></div>',
+        html,
+        flags=re.DOTALL,
+    )
+
+    # Inline code
+    html = re.sub(r'`([^`]+)`', r'<code>\1</code>', html)
+
+    # Bullet lists — group consecutive - lines into <ul>
+    def replace_bullets(match):
+        items = match.group(0).strip().split('\n')
+        li_items = ''.join(f'<li>{re.sub(r"^- ", "", item)}</li>' for item in items if item.strip())
+        return f'<ul>{li_items}</ul>'
+    html = re.sub(r'(^- .+\n?)+', replace_bullets, html, flags=re.MULTILINE)
+
+    # Paragraphs — wrap blocks separated by blank lines
+    paragraphs = re.split(r'\n\n+', html)
+    result = []
+    for p in paragraphs:
+        p = p.strip()
+        if not p:
+            continue
+        if p.startswith('<h') or p.startswith('<ul') or p.startswith('<hr') or p.startswith('<div') or p.startswith('<pre'):
+            result.append(p)
         else:
-            line = f'<p style="margin:4px 0">{inline(line)}</p>'
-        html_lines.append(line)
+            result.append(f'<p>{p}</p>')
+    html = '\n'.join(result)
 
-    body_content = "\n".join(html_lines)
+    # Wrap in full email template
     return f"""<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"></head>
-<body style="background:#0f1117;color:#c0c0c0;font-family:Georgia,serif;max-width:700px;margin:0 auto;padding:24px;line-height:1.6;font-size:15px">
-{body_content}
-<hr style="border:none;border-top:1px solid #333;margin:24px 0">
-<p style="color:#555;font-size:12px">WorldCup2026 — automated morning briefing</p>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup 2026 Morning Report</title>
+<style>
+  body {{
+    margin: 0;
+    padding: 0;
+    background-color: #0d1117;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: #e6edf3;
+  }}
+  .email-wrapper {{
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 24px 40px;
+  }}
+  h1 {{
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 12px;
+    margin-bottom: 6px;
+  }}
+  h2 {{
+    font-size: 16px;
+    font-weight: 700;
+    color: #58a6ff;
+    margin-top: 28px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }}
+  h3 {{
+    font-size: 15px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-top: 20px;
+    margin-bottom: 6px;
+  }}
+  h4 {{
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+    margin-top: 16px;
+    margin-bottom: 4px;
+  }}
+  p {{
+    font-size: 14px;
+    line-height: 1.75;
+    color: #c9d1d9;
+    margin: 0 0 14px;
+  }}
+  ul {{
+    padding-left: 20px;
+    margin: 0 0 14px;
+  }}
+  li {{
+    font-size: 14px;
+    line-height: 1.7;
+    color: #c9d1d9;
+    margin-bottom: 6px;
+  }}
+  strong {{
+    color: #e6edf3;
+    font-weight: 600;
+  }}
+  a {{
+    color: #58a6ff;
+    text-decoration: none;
+  }}
+  hr {{
+    border: none;
+    border-top: 1px solid #30363d;
+    margin: 24px 0;
+  }}
+  code {{
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 12px;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    color: #e6edf3;
+  }}
+  .bet-block {{
+    background: #161b22;
+    border-left: 3px solid #ffab00;
+    border-radius: 0 6px 6px 0;
+    padding: 12px 16px;
+    margin: 14px 0;
+  }}
+  .bet-block pre {{
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #c9d1d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }}
+  .toc {{
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+  }}
+  .toc a {{
+    color: #8b949e;
+    font-size: 13px;
+    display: block;
+    line-height: 1.8;
+    text-decoration: none;
+  }}
+  .toc a:hover {{ color: #58a6ff; }}
+</style>
+</head>
+<body>
+<div class="email-wrapper">
+{html}
+</div>
 </body>
 </html>"""
 

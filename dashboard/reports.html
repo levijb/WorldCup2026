@@ -180,8 +180,9 @@ async function loadReports() {
         ? new Date(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}T12:00:00Z`).toLocaleDateString('en-US',
             { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }) + rawDate.slice(dateMatch[0].length)
         : rawDate;
+      const viewerUrl = `report-viewer.html?file=${encodeURIComponent(f.raw)}`;
       return `<div class="report-item">
-        <div class="report-date"><a href="${f.raw}" target="_blank">${date}</a></div>
+        <div class="report-date"><a href="${viewerUrl}">${date}</a></div>
         <div class="report-preview">${f.preview}</div>
       </div>`;
     }).join('');

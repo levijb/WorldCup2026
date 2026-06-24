@@ -34,7 +34,7 @@ Using the research from Step 1, produce a betting strategy document with the sec
 
 ### Match overview (2–3 sentences)
 
-The single most important tactical story of this match and what it means for betting. Not a scene-setter — the analytical conclusion up front.
+The single most important tactical story of this match and what it means for betting. Not a scene-setter — the analytical conclusion up front. Draw on WC2026 match data first; pre-tournament intelligence and historical patterns second.
 
 ### Market analysis
 
@@ -108,6 +108,18 @@ Rationale: [2–3 sentences linking each leg back to a research finding]
 Correlation check: [identify any shared drivers between legs and explain why the correlation is acceptable or beneficial]
 ```
 
+### Morning report handoff format
+
+When this betting research is being used to feed the morning report, end with a condensed summary block:
+
+**Betting Research Summary — [Team A] vs. [Team B]**
+- Tier 1 candidate: [bet + odds + one-sentence edge] or "None — no Tier 1 confidence"
+- Tier 2 candidates: [2–3 bets, each one line: selection + odds + one-sentence edge]
+- Tier 3 / props: [1–3 plays, each one line]
+- Hedge note: [one sentence if a hedge is warranted, or "No hedge indicated"]
+- Parlays: [2–3 suggested legs for cross-match parlay use, with correlation notes]
+- Avoid: [any market where the research explicitly argues against betting — one line each]
+
 ### Risk assessment
 
 For every recommended bet and parlay:
@@ -117,6 +129,22 @@ For every recommended bet and parlay:
 - **STAKE GUIDANCE**: $1–2 for high risk, $2–3 for medium, $3–5 for low risk (all calibrated to $2/unit)
 
 ---
+
+## Tiered bet structure
+
+When synthesizing research into recommendations, use this framework:
+
+**Tier 1 — Anchor Bets (1–2 bets, 4–5 units, $8–10):**
+Highest-confidence plays supported by multiple converging research findings. Only use when team profile, matchup analysis, and prop research all point the same direction. If no play merits Tier 1 confidence, say so and move to Tier 2.
+
+**Tier 2 — Standard Bets (2–3 bets, 3 units, $6):**
+Well-supported by at least two research dimensions (e.g., matchup analysis supports the total, and the line has moved in the right direction). The backbone of the day's betting.
+
+**Tier 3 — Supporting Plays (2–4 bets, 1–2 units, $2–4):**
+Props, alternative lines, lower-confidence angles, or partial hedges. These provide standalone value or partial insurance on Tier 1/2 positions.
+
+**Hedging logic:**
+When a Tier 1 or Tier 2 bet is on a favorite, evaluate whether a Tier 3 play on the other outcome provides meaningful protection. Only recommend a hedge if the math makes sense. State the hedge explicitly: "Portugal -1.5 at $10 hedged by Uzbekistan ML parlay at $2 (+1300)" is useful. Generic "consider the other side" is not.
 
 ## Betting principles (always apply)
 

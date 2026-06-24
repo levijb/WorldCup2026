@@ -10,6 +10,17 @@ Paste this into a Claude chat with the two teams and match details. Example prom
 
 You are building a tactical and statistical matchup breakdown for a specific World Cup 2026 match. The goal is understanding how these two teams interact — where the advantages lie, what the game is likely to look like, and what patterns to expect. Use live web search throughout. This is primarily a research document; a light betting lens is fine but the core output is analytical, not prescriptive.
 
+### Evidence hierarchy
+
+Weight evidence in this order for matchup analysis:
+
+1. **This World Cup's matches for both teams** — highest weight. Actual WC2026 performance overrides all prior context.
+2. **Head-to-head record in competitive matches** — weight by recency and competition importance. A 2022 WC meeting matters more than a 2019 friendly.
+3. **Continental tournament and qualifier form** — high weight for tactical tendencies.
+4. **Friendlies** — low weight for results; moderate for persistent tactical patterns across multiple friendlies.
+
+Avoid carrying tactical assumptions from one opponent to another. Just because Team A defends deep against everyone doesn't mean Team B will.
+
 ### Tone and format
 
 - Conversational, direct, dense. No preambles.
@@ -119,3 +130,18 @@ This matters for props and totals: an early goal in a lopsided match can *suppre
 - Did you weight historical results by competition importance and recency?
 - Did you map each team's attacking strengths against the other's defensive weaknesses specifically, rather than just listing both in isolation?
 - Did you address game-state effects on the likely flow of the match?
+
+## Morning report handoff format
+
+When this matchup analysis is being used to feed the morning report, end with a summary block in this format:
+
+**Matchup Summary — [Team A] vs. [Team B]**
+- Dominant tactical story: [one sentence — the single most important factor that will shape this match]
+- Territorial expectation: [who dominates possession/territory and why]
+- Total goals lean: Over / Under / Neutral — [brief reason]
+- BTTS lean: Yes / No / Neutral — [brief reason]
+- Key individual matchup: [one matchup that could decide the game]
+- Upset path: [what specifically has to go right for the underdog — not generic]
+- Predicted score: [X–X (Team) or X–X (Draw)] — [one-sentence justification]
+- Top bet angles: [2–3 bullet points, each one sentence — e.g., "Croatia -1.5 at +135: ML converts to spread at plus-money against CONCACAF opposition"]
+- Top prop angles: [1–2 bullet points with specific player, prop type, and rate — e.g., "Kane anytime scorer: 2 goals vs Croatia, Ghana missing defensive spine, -150 is conservative"]
