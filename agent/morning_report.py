@@ -1112,6 +1112,16 @@ def build_email_html(markdown_content: str) -> str:
         text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
         return text
 
+    def slugify(heading_html: str) -> str:
+        """GitHub-style slug: strip tags/punctuation (no substitution), turn each
+        whitespace run-char into its own hyphen, so it matches the anchors the
+        model already writes in its TOC (e.g. "Today's Matches" -> "todays-matches",
+        "News & Injuries" -> "news--injuries")."""
+        text = re.sub(r'<[^>]+>', '', heading_html).lower()
+        text = re.sub(r'[^\w\s-]', '', text)
+        text = re.sub(r'\s', '-', text)
+        return text.strip('-')
+
     def is_match_header(line: str) -> bool:
         """Detect a bold match-preview header line."""
         stripped = line.strip()
@@ -1205,10 +1215,12 @@ def build_email_html(markdown_content: str) -> str:
         # H2
         if stripped.startswith('## '):
             text = stripped[3:]
+            heading_text = inline_format(text)
+            slug = slugify(heading_text)
             output_blocks.append(
-                f'<h2 style="font-size:13px;font-weight:700;color:#1a56db;'
+                f'<h2 id="{slug}" style="font-size:13px;font-weight:700;color:#1a56db;'
                 f'text-transform:uppercase;letter-spacing:0.7px;margin:28px 0 10px;">'
-                f'{inline_format(text)}</h2>'
+                f'{heading_text}</h2>'
             )
             i += 1
             continue
@@ -1216,9 +1228,11 @@ def build_email_html(markdown_content: str) -> str:
         # H3
         if stripped.startswith('### '):
             text = stripped[4:]
+            heading_text = inline_format(text)
+            slug = slugify(heading_text)
             output_blocks.append(
-                f'<h3 style="font-size:15px;font-weight:600;color:#1f2937;margin:20px 0 6px;">'
-                f'{inline_format(text)}</h3>'
+                f'<h3 id="{slug}" style="font-size:15px;font-weight:600;color:#1f2937;margin:20px 0 6px;">'
+                f'{heading_text}</h3>'
             )
             i += 1
             continue

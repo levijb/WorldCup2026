@@ -149,7 +149,7 @@ Examples: "Day 13. Messi broke the all-time WC scoring record last night. Englan
 
 **Line 2:** `[Live dashboard →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)`
 
-**Line 3 — TABLE OF CONTENTS** (markdown anchor links, two levels):
+**Line 3 — TABLE OF CONTENTS (optional):** Include only if the report is long enough to benefit from one — omit it for a concise slate. If included, use markdown anchor links, two levels:
 ```
 ## Contents
 - [Tournament Status](#tournament-status)
@@ -167,6 +167,7 @@ Examples: "Day 13. Messi broke the all-time WC scoring record last night. Englan
 - [Around the Tournament](#around-the-tournament)
 - [Tomorrow's Slate](#tomorrows-slate)
 ```
+Top-level entries must match the slug the email renderer generates from the corresponding `##` heading: lowercase, punctuation stripped (not replaced — an apostrophe just disappears), each remaining whitespace character turned into its own hyphen (so a removed character next to a space leaves a double hyphen). E.g. `## Today's Matches` → `#todays-matches`, `## News & Injuries` → `#news--injuries`. Never invent a different slug than this produces; a mismatch is a broken link in the email. Nested per-match sub-bullets are for readability — the email renderer does not currently anchor individual match/prediction headings, so treat those as non-clickable in email clients.
 
 ---
 
