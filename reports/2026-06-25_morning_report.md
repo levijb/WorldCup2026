@@ -142,64 +142,64 @@ USA win with a degree of ease despite rotation. Türkiye get a late moment but i
 
 ## Bet Recommendations
 
-**BET:** Germany ML — Ecuador vs. Germany (Moneyline) TIER 1
-**ODDS:** Approximately -240 to -260 (best available) | Implied: ~71–72%
-**EDGE REASONING:** Germany have been the most complete team in Group E across both matches — the 7–1 opening was against an outclassed opponent, but the 2–1 win over Ivory Coast showed they can perform against a side that genuinely presses and competes. Ecuador have one point and haven't found the net against quality opposition. Germany's midfield quality gives them control in every phase, and Ecuador's high press plays directly into Musiala's ability to find pockets between lines. The price implies about a 72% win probability; the true number based on Group E evidence is higher than that.
-**RISK LEVEL:** Low
-**RECOMMENDED STAKE:** $8 (4 units)
+**BET:** Ecuador vs. Germany — Draw (Moneyline) TIER 2
+**ODDS:** -125 (FanDuel) | Implied: ~55.6%
+**EDGE REASONING:** The market is treating this as a near coin-flip — Germany at +320, Ecuador at +290, draw at -125. That pricing reflects real uncertainty: Germany have been strong but Ecuador press aggressively and have nothing to lose, while Germany have motivation to protect fitness ahead of the knockout stage. The draw is the -125 favorite for good reason; a cagey, controlled match where neither side pushes hard for a winner is the most structurally plausible outcome. Germany's historical group-stage conservatism reinforces the lean.
+**RISK LEVEL:** Medium
+**RECOMMENDED STAKE:** $6 (3 units)
 **KEY RISK FACTORS:**
-- Ecuador score early from a set piece and Germany have to chase the game in unfamiliar territory
-- Nagelsmann rotates to protect players for the knockout stage and the second string underperforms
+- Germany score early and the match opens up, making the draw irrelevant within 30 minutes
+- Ecuador press high and create enough to nick a winner on the counter
 
 ---
 
 **BET:** Netherlands ML — Tunisia vs. Netherlands (Moneyline) TIER 2
-**ODDS:** Approximately -450 to -500 (best available) | Implied: ~82–83%
-**EDGE REASONING:** Tunisia have conceded nine goals in two games and produced almost nothing in attack against either Sweden or Japan. Netherlands without their three missing players are still a squad capable of controlling this match from kick-off. The price is steep but it reflects what the match actually is — a significant mismatch in quality. The risk of a draw is minimal given Tunisia's complete lack of competitive output; the risk of a Netherlands loss is essentially theoretical. Lay at the ML rather than the spread to capture what should be a clean 3-unit return.
+**ODDS:** -1000 (FanDuel) | Implied: ~90.9%
+**EDGE REASONING:** Tunisia have conceded nine goals in two games and produced almost nothing in attack against either Sweden or Japan. Netherlands without their three missing players are still a squad capable of controlling this match from kick-off. At -1000 the ML is unplayable as a standalone — you're risking $10 to win $1. The value here is the spread: Netherlands -2.5 or -3 at plus money is the right vehicle for the same directional read. Only take the ML as a parlay leg anchor where the juice is partially offset by other legs.
 **RISK LEVEL:** Low
-**RECOMMENDED STAKE:** $6 (3 units)
+**RECOMMENDED STAKE:** $0 standalone — parlay leg only (see Parlays)
 **KEY RISK FACTORS:**
-- Koeman rotates heavily and a depleted Dutch side underperforms for 60 minutes, allowing Tunisia an ugly set-piece goal
-- Expanded VAR scope produces a Tunisia penalty that changes game state
+- -1000 ML offers no standalone value — spread is the correct market
+- Koeman rotates heavily and a depleted Dutch side concedes a set-piece consolation
 
 ---
 
-**BET:** USA ML — Türkiye vs. USA (Moneyline) TIER 2
-**ODDS:** Approximately -200 to -225 (best available) | Implied: ~67–69%
-**EDGE REASONING:** The USA's structural fade logic applies to their ML price throughout this tournament, but this is a dead rubber against an eliminated and deflated Türkiye side, which is the exact situation where the USA's home crowd advantage and superior squad depth make them genuinely better value than the general tournament fade. Türkiye's defensive record has been terrible (six goals conceded, zero points); even a rotated USA side has the quality to get two goals against them. Pulisic's fitness adds minor uncertainty, but Balogun, McKennie, and the pressing midfield trio have been excellent without him.
-**RISK LEVEL:** Low
-**RECOMMENDED STAKE:** $6 (3 units)
-**KEY RISK FACTORS:**
-- Heavy USA rotation produces an unfamiliar shape that can't create consistently against a desperate Türkiye side
-- Pulisic unavailable and other starters rested; second-string lacks the same penetration
-
----
-
-**BET:** Australia ML — Paraguay vs. Australia (Moneyline) TIER 2
-**ODDS:** Approximately -130 to -145 (best available) | Implied: ~57–59%
-**EDGE REASONING:** Australia have looked the more organized side in Group D across the two completed matches — their 2–0 win over Türkiye was convincing, and the 0–2 loss to USA reflected USA's quality rather than Australian defensive collapse. Paraguay's counter-attacking threat was blunted against USA (1–4) and they needed a narrow 1–0 to beat an already-poor Türkiye. Australia's right-side pace on the counter is exactly the weapon that exploits Paraguay's tendency to commit men forward. The price is fair value; the case for Australia is grounded in what this tournament has actually shown.
+**BET:** Türkiye vs. USA — Draw (Moneyline) TIER 2
+**ODDS:** -115 (FanDuel) | Implied: ~53.5%
+**EDGE REASONING:** The market has this right: USA at +300 with heavy rotation and nothing to play for, against an eliminated Türkiye side playing at SoFi with crowd hostility toward the Americans. Pochettino will rest starters ahead of Sunday's Round of 32; a rotated USA second string against a Türkiye side with something to prove for pride is genuinely even or slightly favoring a draw. The draw at -115 is the structurally correct lean — nearly even money for the most likely single outcome when a resting favorite faces a desperate opponent.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $6 (3 units)
 **KEY RISK FACTORS:**
-- Paraguay score first and Australia's need to chase opens exactly the counter-attacking space Paraguay excel in
-- Sanabria's hold-up play proves too physical for Australia's center-backs to deal with for 90 minutes
+- Pochettino plays more starters than expected and USA's quality wins out comfortably
+- Türkiye score early and hold on for a famous dead-rubber win, making the draw irrelevant
+
+---
+
+**BET:** Australia ML — Paraguay vs. Australia (Moneyline) TIER 1
+**ODDS:** +120 (FanDuel) | Implied: ~45.5%
+**EDGE REASONING:** Australia at plus money as the better team in this group matchup is the clearest value on the slate. Their 2–0 win over Türkiye was convincing; the 0–2 loss to USA reflected USA's quality, not Australian defensive collapse. Paraguay's only win was a narrow 1–0 against an already-poor Türkiye; they were badly exposed 1–4 by the USA. Australia's right-side pace on the counter exploits exactly Paraguay's tendency to commit men forward. Getting plus money on the side with the superior Group D record in a winner-takes-all knockout-spot match is the best price on the board today.
+**RISK LEVEL:** Medium
+**RECOMMENDED STAKE:** $8 (4 units)
+**KEY RISK FACTORS:**
+- Paraguay score first and Australia's need to chase opens the counter-attacking space Paraguay excel in
+- Almiron's energy overwhelms Australia's midfield and Sanabria converts from a set piece
 
 ---
 
 **BET:** Japan vs. Sweden — Draw (Moneyline) TIER 3
-**ODDS:** Approximately +230 to +260 (best available) | Implied: ~28–30%
-**EDGE REASONING:** Both sides need a win, which creates an open game — but Japan's two-game WC2026 record shows they are capable of scoring against anyone and absorbing pressure when they need to. Sweden's set-piece threat is real; Japan's vulnerability without Endo in the pivot means they concede in tight games. The draw at +240 is structurally underpriced when two evenly matched, motivated sides with different tactical strengths collide in a game where neither can settle for less than a win and both know it. The mutual desperation creates the conditions where a 1–1 draw after an open contest is the most likely single outcome.
+**ODDS:** +350 (FanDuel) | Implied: ~22.2%
+**EDGE REASONING:** Both sides need a win, which creates an open game — but Japan's two-game WC2026 record shows they are capable of scoring against anyone and absorbing pressure when they need to. Sweden's set-piece threat is real; Japan's vulnerability without Endo in the pivot means they concede in tight games. At +350, the draw is higher value than the earlier lines implied — the mutual desperation creates exactly the open, scrappy conditions where both sides score once and neither can find the winner. True probability of a draw in this type of must-win matchup is likely closer to 28–30%.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $4 (2 units)
 **KEY RISK FACTORS:**
 - Sweden dominate the second half using physical attrition to wear down Japan's midfield and win 2–1
-- Japan's superior tournament form leads to a convincing 2–0 win that ends the draw scenario cleanly
+- Japan's superior tournament form produces a convincing win that ends the draw scenario cleanly
 
 ---
 
 **BET:** Deniz Undav (Germany) — Anytime Goalscorer TIER 3
-**ODDS:** Approximately +160 to +200 (best available) | Implied: ~33–38%
-**EDGE REASONING:** Undav has started both Germany group games and scored in both — against Curaçao and Ivory Coast. He operates inside the box with intelligent movement and is Germany's primary beneficiary when Musiala and Wirtz create from deeper positions. Ecuador's defensive line has conceded freely when opponents break their press; Germany will break it repeatedly. A player who has scored in 100% of his WC2026 starts at +160 to do so again against Ecuador's leaky defense is a strong prop play.
+**ODDS:** Approximately +180 to +220 (FanDuel/DraftKings — confirm live) | Implied: ~31–36%
+**EDGE REASONING:** Undav has started both Germany group games and scored in both — against Curaçao and Ivory Coast. He operates inside the box with intelligent movement and is Germany's primary beneficiary when Musiala and Wirtz create from deeper positions. Note that Germany's ML is now +320 — the market prices this as a coin-flip match — but Undav's goalscorer prop is independent of the result; he can score in a draw or a Germany win. Ecuador's defensive line has conceded freely when opponents break their press. A player who has scored in 100% of his WC2026 starts at roughly +200 remains a strong prop play regardless of the match result market.
 **RISK LEVEL:** Medium
 **RECOMMENDED STAKE:** $4 (2 units)
 **KEY RISK FACTORS:**
@@ -208,71 +208,69 @@ USA win with a degree of ease despite rotation. Türkiye get a late moment but i
 
 ---
 
-No clear edge on Curaçao vs. Ivory Coast — Ivory Coast ML at approximately -300 doesn't pay enough given real rotation uncertainty. Pass.
+No clear edge on Curaçao vs. Ivory Coast — Ivory Coast ML at -650 (FanDuel) doesn't pay enough given real rotation uncertainty. Pass.
 
 ---
 
 ## Parlays
 
-**Parlay 1: The Group Closers — Three Favorites**
-- Leg 1: Germany ML @ approximately -250
-- Leg 2: Netherlands ML @ approximately -475
-- Leg 3: USA ML @ approximately -210
+**Parlay 1: Value Plus-Money Double — Australia + Draw**
+- Leg 1: Australia ML vs. Paraguay @ +120 (FanDuel)
+- Leg 2: Türkiye vs. USA Draw @ -115 (FanDuel)
 
-Estimated combined odds: approximately +175 to +210.
-Three matches where the quality gap is structural rather than marginal. Germany over Ecuador, Netherlands over Tunisia, USA over Türkiye — the three most clearly one-sided fixtures of the day. The only correlation is that all three require the favored side to win; otherwise, these are entirely independent matches with independent drivers.
+Estimated combined odds: approximately +185.
+Australia at plus money as the better Group D side pairs with the USA rotation draw as the structural lean. Two independent matches, both with specific reasoning behind the direction. The USA draw is close to even money so it functions as a near-anchor that boosts Australia's upside.
 **RECOMMENDED STAKE:** $4 (2 units)
 
 ---
 
-**Parlay 2: Undav and the Over — Germany Goals**
-- Leg 1: Deniz Undav anytime scorer @ approximately +180
-- Leg 2: Germany vs. Ecuador Over 2.5 goals @ approximately -120
-- Leg 3: Australia ML @ -135
+**Parlay 2: Goalscorer Props — Multi-Match**
+- Leg 1: Deniz Undav (Germany) anytime scorer @ approximately +200 (FanDuel)
+- Leg 2: Cody Gakpo (Netherlands) anytime scorer @ approximately +150 (FanDuel)
+- Leg 3: Australia ML @ +120 (FanDuel)
 
-Estimated combined odds: approximately +420.
-Germany scoring 2+ against Ecuador is the structural core — Undav scoring is a more specific slice of the same driver, making legs 1 and 2 correlated (named explicitly: both require Germany to score multiple times). Australia winning is the independent leg that diversifies the underlying driver.
+Estimated combined odds: approximately +680.
+Two players who have scored in every WC2026 appearance against opponents who have conceded freely, plus Australia at plus money. Gakpo has scored in both Netherlands group games; Undav has scored in both Germany starts. Tunisia and Ecuador have both been poor defensively. Australia is the independent non-prop leg diversifying the parlay's underlying driver.
 **RECOMMENDED STAKE:** $2 (1 unit)
 
 ---
 
-**Parlay 3: Props Only — Multi-Match**
-- Leg 1: Deniz Undav (Germany) anytime scorer @ approximately +180
-- Leg 2: Cody Gakpo (Netherlands) anytime scorer @ approximately +150
-- Leg 3: Folarin Balogun (USA) anytime scorer @ approximately +140
+**Parlay 3: The Draw Hedge — Japan-Sweden Insurance**
+- Leg 1: Japan vs. Sweden Draw @ +350 (FanDuel)
+- Leg 2: Australia ML @ +120 (FanDuel)
 
-Estimated combined odds: approximately +750 to +850.
-Three different matches, three players who have scored in their WC2026 appearances against opponents who have conceded freely. Gakpo has scored in both Netherlands group games; Balogun has two goals from Monaco-level finishing efficiency; Undav has two goals in two starts. Tunisia, Ecuador, and Türkiye have all been poor defensively. Low individual variance on the goalscorer threshold, excellent combined payout.
+Estimated combined odds: approximately +890.
+The Japan-Sweden draw at +350 is the value leg — structurally plausible in a must-win match where both sides score and neither finds the winner. Australia winning is the independent anchor. If both hit, this pays nearly 10x on $2.
 **RECOMMENDED STAKE:** $2 (1 unit)
 
 ---
 
-**Parlay 4: The Draw Hedge — Japan-Sweden Insurance**
-- Leg 1: Japan vs. Sweden Draw @ approximately +245
-- Leg 2: Australia ML @ -135
-- Leg 3: USA ML @ approximately -210
+**Parlay 4: Group E Sweep**
+- Leg 1: Ecuador vs. Germany Draw @ -125 (FanDuel)
+- Leg 2: Ivory Coast ML vs. Curaçao @ -650 (FanDuel — parlay only)
 
-Estimated combined odds: approximately +550 to +650.
-This parlay hedges the standalone Japan-Sweden draw bet. The Australia and USA legs are independent results-based bets from other matches; the draw provides the tail-risk upside. If Japan and Sweden draw while Australia and USA both win, this pays well over 6x on $2.
-**RECOMMENDED STAKE:** $2 (1 unit)
+Estimated combined odds: approximately +115.
+Near even money for two reads: the Germany-Ecuador draw as the structural lean given both teams' incentives and the near coin-flip pricing, and Ivory Coast winning despite rotation. Both legs correlated only in that they involve Group E matches — the outcomes are entirely independent.
+**RECOMMENDED STAKE:** $4 (2 units)
 
 ---
 
-**Parlay 5: Group E Sweep**
-- Leg 1: Germany ML @ approximately -250
-- Leg 2: Ivory Coast ML vs. Curaçao @ approximately -300
+**Parlay 5: Netherlands Anchor + Australia**
+- Leg 1: Netherlands ML vs. Tunisia @ -1000 (FanDuel — parlay leg only)
+- Leg 2: Australia ML vs. Paraguay @ +120 (FanDuel)
+- Leg 3: Türkiye vs. USA Draw @ -115 (FanDuel)
 
-Estimated combined odds: approximately +100 to +130.
-Near-even money for two results that both sides would describe as near-certainties. The only risk is heavy rotation from both Germany and Ivory Coast producing unexpected results. At even money or slight plus, it's worth the stake for two near-locks.
+Estimated combined odds: approximately +210.
+Netherlands -1000 is unplayable standalone but as a parlay anchor it converts the dead weight of near-certain juice into combined payout. Australia and the USA/Türkiye draw are the legs carrying value. Three independent matches, three different underlying drivers.
 **RECOMMENDED STAKE:** $4 (2 units)
 
 ---
 
 ## Sharp Money
 
-- **Germany ML** has attracted consistent handle relative to ticket count across multiple books since lines opened — sharp money tracking with the quality read. No reverse line movement; the opening price has compressed slightly.
-- **USA ML** against Türkiye is seeing heavy public action given the home crowd narrative, but the line hasn't moved substantially, suggesting books are comfortable holding it. Not a sharp signal either way — public money and sharp money appear aligned on this one.
-- Nothing notable in the Group F slate — Japan-Sweden is being bet roughly proportionally to public perception, with no significant line movement from open.
+- **Germany at +320 and Ecuador at +290** with the draw as -125 favorite is the sharpest signal on today's slate — the market is explicitly pricing this as a three-way near-coin-flip, which suggests books have significant two-way action and no consensus. Sharp money appears to have driven Germany's ML out to plus territory; the public expected a heavy Germany favorite.
+- **USA at +300** in a dead rubber is reverse line movement territory — Türkiye opened shorter and USA opened shorter; the draw compressing to -115 favorite suggests sharp money landed on the draw as the most likely outcome when a resting favorite faces an eliminated side with crowd hostility.
+- **Australia at +120** against Paraguay in a must-win for both sides is the most exploitable plus-money value on the board — no significant movement from open reported, which means the market hasn't fully priced Australia's superior group performance.
 
 ---
 
@@ -298,3 +296,5 @@ Near-even money for two results that both sides would describe as near-certainti
 - 8:00 PM ET — Uruguay vs. Spain (Group H, TBD)
 - 11:00 PM ET — New Zealand vs. Belgium (Group G, TBD)
 - 11:00 PM ET — Egypt vs. Iran (Group G, TBD)
+
+*FanDuel preview lines: Norway vs. France — NOR +360 | FRA -160 | Draw +350. Uruguay vs. Spain — URU +600 | ESP -200 | Draw +310. Belgium vs. New Zealand — BEL -600 | NZL +1500 | Draw +600.*
