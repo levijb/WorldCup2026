@@ -1218,6 +1218,7 @@ def build_email_html(markdown_content: str) -> str:
             heading_text = inline_format(text)
             slug = slugify(heading_text)
             output_blocks.append(
+                f'<a name="{slug}"></a>'
                 f'<h2 id="{slug}" style="font-size:13px;font-weight:700;color:#1a56db;'
                 f'text-transform:uppercase;letter-spacing:0.7px;margin:28px 0 10px;">'
                 f'{heading_text}</h2>'
@@ -1231,6 +1232,7 @@ def build_email_html(markdown_content: str) -> str:
             heading_text = inline_format(text)
             slug = slugify(heading_text)
             output_blocks.append(
+                f'<a name="{slug}"></a>'
                 f'<h3 id="{slug}" style="font-size:15px;font-weight:600;color:#1f2937;margin:20px 0 6px;">'
                 f'{heading_text}</h3>'
             )
