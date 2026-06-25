@@ -1,5 +1,4 @@
 # World Cup Morning Report
-
 Wednesday, June 24, 2026 — Day 14
 
 [Live dashboard →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)
@@ -28,11 +27,12 @@ Wednesday, June 24, 2026 — Day 14
 - [Around the Tournament](#around-the-tournament)
 - [Tomorrow's Slate](#tomorrows-slate)
 
+
 ---
 
 ## Tournament Status
 
-Day 14. Groups A, B, and C close out today across three simultaneous time slots — six matches, three full groups decided. Canada and Switzerland are level on four points in Group B and a draw sends both through, which is the most interesting game theory problem of the day. Group C resolves around Scotland vs. Brazil in Miami; Scotland need at least a point and will probably get a hostile 65,000 strong crowd regardless. Mexico are already through in Group A and effectively watching; Czechia and South Africa need wins to have any path forward.
+Day 14 of group stages. First day of Matchday 3, which changes to six matches in three time slots for the next four days. This is to prevent within-group colluding like West Germany and Austris did to Algeria in 1982 (https://en.wikipedia.org/wiki/Disgrace_of_Gij%C3%B3n). Groups A, B, and C close out today, three full groups decided. Canada and Switzerland are level on four points in Group B and a draw sends both through, which is the most interesting game theory problem of the day. Group C resolves around Scotland vs. Brazil in Miami; Scotland need at least a point and will probably get a hostile 65,000 strong crowd regardless. Mexico are already through in Group A. Czechia and South Africa need wins to have any path forward.
 
 Group B: Canada 4pts | Switzerland 4pts | Bosnia & Herzegovina 1pt | Qatar 0pts  
 Group C: Brazil 4pts | Morocco 4pts | Scotland 3pts | Haiti 0pts  

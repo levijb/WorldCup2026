@@ -1,8 +1,8 @@
 # WorldCup2026
 
-A personal AI-powered World Cup 2026 newsletter and betting intelligence system. Every morning during the tournament, a daily briefing goes out to ~15 subscribers covering tournament news, match previews, tactical predictions, and betting recommendations for the day's games — written in the style of a sharp football analyst with a dry sense of humor and no patience for hedging.
+A personal AI-powered World Cup 2026 newsletter and betting intelligence system. Every morning during the tournament, I run the AI prompts to generate the morning report, manually edit it, and send it via email to subscribers. The reports cover tournament news, match previews, tactical predictions, and betting recommendations for the day's games.
 
-Built with Claude (web and Code) and Python. Designed for small-stake betting on DraftKings and FanDuel.
+Built with Claude (web and Code) and Python. I originally designed the newsletter to be completely automated but that requires paying extra for API tokens, so I switched to a web based final prompt to pull live data. 
 
 **Tournament:** June 11 – July 19, 2026 | USA / Mexico / Canada
 

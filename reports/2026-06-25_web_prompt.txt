@@ -1,8 +1,8 @@
-# WC2026 Morning Report Prompt — 2026-06-24
+# WC2026 Morning Report Prompt — 2026-06-25
 # Paste this entire file into a Claude web chat (claude.ai).
 # Claude will run web searches inline and write the full report.
 # After Claude responds, copy the report text into:
-#   reports/2026-06-24_morning_report.md
+#   reports/2026-06-25_morning_report.md
 # Then send with: python agent/morning_report.py --send-email
 #
 # ─────────────────────────────────────────────────────────────────────────────
@@ -13,12 +13,12 @@ You are generating the World Cup 2026 morning briefing report using the v2 forma
 Before writing anything, run these two web searches and incorporate the results.
 
 **Search 1 — News and injuries:**
-Search for: "World Cup 2026 injuries lineup news June 24 2026 Bosnia & Herzegovina Brazil Canada Czech Republic Haiti Mexico Morocco Qatar Scotland South Africa South Korea Switzerland"
+Search for: "World Cup 2026 injuries lineup news June 25 2026 Australia Curaçao Ecuador Germany Ivory Coast Japan Netherlands Paraguay Sweden Tunisia Turkey USA"
 Return 4–6 bullet points: confirmed injuries, suspensions, expected lineups, fitness concerns.
 Only items relevant to today's matches. Distinguish confirmed from unconfirmed.
 
 **Search 2 — Around the tournament:**
-Search for: "World Cup 2026 stories atmosphere moments June 24 2026"
+Search for: "World Cup 2026 stories atmosphere moments June 25 2026"
 Return 4–5 bullet points: crowd moments, VAR controversies, player milestones, coach quotes,
 fan stories, venue conditions, tournament narrative threads.
 No match result summaries — color and narrative only.
@@ -532,29 +532,29 @@ No analysis. No odds. Use the fixture data from LIVE DATA below.
 
 ---
 
-## LIVE DATA — 2026-06-24 04:51 ET
+## LIVE DATA — 2026-06-25 00:19 ET
 
-### Today's Fixtures (2026-06-24)
-  • Bosnia & Herzegovina vs Qatar | 3:00 PM ET | 2:00 PM CT | 12:00 PM PT | 8:00 PM BST | TBD, 
-  • Switzerland vs Canada | 3:00 PM ET | 2:00 PM CT | 12:00 PM PT | 8:00 PM BST | TBD, 
-  • Scotland vs Brazil | 6:00 PM ET | 5:00 PM CT | 3:00 PM PT | 11:00 PM BST | TBD, 
-  • Morocco vs Haiti | 6:00 PM ET | 5:00 PM CT | 3:00 PM PT | 11:00 PM BST | TBD, 
-  • Czech Republic vs Mexico | 9:00 PM ET | 8:00 PM CT | 6:00 PM PT | 2:00 AM BST | TBD, 
-  • South Africa vs South Korea | 9:00 PM ET | 8:00 PM CT | 6:00 PM PT | 2:00 AM BST | TBD, 
+### Today's Fixtures (2026-06-25)
+  • Curaçao vs Ivory Coast | 4:00 PM ET | 3:00 PM CT | 1:00 PM PT | 9:00 PM BST | TBD, 
+  • Ecuador vs Germany | 4:00 PM ET | 3:00 PM CT | 1:00 PM PT | 9:00 PM BST | TBD, 
+  • Japan vs Sweden | 7:00 PM ET | 6:00 PM CT | 4:00 PM PT | 12:00 AM BST | TBD, 
+  • Tunisia vs Netherlands | 7:00 PM ET | 6:00 PM CT | 4:00 PM PT | 12:00 AM BST | TBD, 
+  • Paraguay vs Australia | 10:00 PM ET | 9:00 PM CT | 7:00 PM PT | 3:00 AM BST | TBD, 
+  • Turkey vs USA | 10:00 PM ET | 9:00 PM CT | 7:00 PM PT | 3:00 AM BST | TBD, 
 
-### Results — Yesterday (Tuesday, June 23)
+### Results — Yesterday (Wednesday, June 24)
 (Claude web will search for this — see search instructions above)
 
-### Results — Two Days Ago (Monday, June 22)
+### Results — Two Days Ago (Tuesday, June 23)
 (Claude web will search for this — see search instructions above)
 
 ### Tomorrow's Fixtures
-  4:00 PM ET — Curaçao vs Ivory Coast
-  4:00 PM ET — Ecuador vs Germany
-  7:00 PM ET — Japan vs Sweden
-  7:00 PM ET — Tunisia vs Netherlands
-  10:00 PM ET — Paraguay vs Australia
-  10:00 PM ET — Turkey vs USA
+  3:00 PM ET — Norway vs France
+  3:00 PM ET — Senegal vs Iraq
+  8:00 PM ET — Cape Verde vs Saudi Arabia
+  8:00 PM ET — Uruguay vs Spain
+  11:00 PM ET — New Zealand vs Belgium
+  11:00 PM ET — Egypt vs Iran
 
 ### Current Odds
   (No DraftKings odds available — use web search for current lines)

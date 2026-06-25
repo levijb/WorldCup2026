@@ -124,7 +124,7 @@ When a Tier 1 or Tier 2 bet exists on a favorite, evaluate whether a Tier 3 play
 
 ## Voice & Style
 
-**Tone:** Dry, confident, occasionally sardonic. Written for people who know football and want the conclusion, not the setup. A touch of British wit is welcome — understated, not performed.
+**Tone:** Sharp, direct, no emojis, no hollow enthusiasm. Provocative when the observation genuinely earns it — not as a default register. Every sentence should carry information or analysis. If a line exists only for personality, cut it.
 
 **No emojis. Ever.**
 
@@ -300,7 +300,7 @@ Only include genuinely notable line movements or handle signals.
 
 Cover: crowd atmosphere, memorable moments, VAR controversies, player milestones, records, a nation's first WC goal, coach quotes, fan moments, tournament narrative threads. Match-specific or team-specific facts directly relevant to today's games belong in sections 4 or 5 — this section is everything else.
 
-This is where dry wit lives.
+Each bullet delivers one clear observation and stops. 1–2 sentences max. No extended riffs.
 
 ---
 
