@@ -318,6 +318,20 @@ async function loadReport() {
     container.innerHTML = `<div class="report-body">${html}</div>`;
     markBetBlocks(container);
     markToc(container);
+
+    // Intercept all hash anchor clicks inside the report so they scroll
+    // smoothly instead of reloading the page (which drops the #fragment
+    // before the async content has rendered).
+    container.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const id = a.getAttribute('href').slice(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
   } catch (e) {
     container.innerHTML = `<div class="error-msg">
       Could not load report: ${e.message}<br>
