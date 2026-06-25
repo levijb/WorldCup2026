@@ -257,6 +257,24 @@
 <script>
 marked.setOptions({ breaks: true, gfm: true });
 
+// marked v9 defaults to no heading ids — add them back via a custom renderer
+// so TOC anchor links (#tournament-status etc.) actually resolve on the page.
+const renderer = new marked.Renderer();
+renderer.heading = function(text, level) {
+  // marked HTML-escapes the heading text before this runs (' -> &#39;, & -> &amp;, etc.) —
+  // strip those entities first so punctuation vanishes the same way it does in the markdown
+  // source, then turn each remaining whitespace char into its own hyphen (no collapsing) to
+  // match the slug convention the reports themselves already use (e.g. "News & Injuries" -> "news--injuries").
+  const slug = text
+    .replace(/&[#\w]+;/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s/g, '-');
+  return `<h${level} id="${slug}">${text}</h${level}>\n`;
+};
+marked.setOptions({ renderer });
+
 function getFileParam() {
   return new URLSearchParams(window.location.search).get('file');
 }
