@@ -361,6 +361,66 @@ Key sharp-money pre-tournament read:
 - Norway/Colombia/Japan/Morocco: value relative to Opta probabilities"""
 
 
+def _fmt_kickoff_multi_tz(kickoff_dt: datetime) -> str:
+    """Format a kickoff datetime across ET/CT/PT/BST for display."""
+    def _t(hours_offset: int, label: str) -> str:
+        t = kickoff_dt.astimezone(timezone(timedelta(hours=hours_offset)))
+        return t.strftime("%I:%M %p").lstrip("0") + f" {label}"
+    return f"{_t(-4, 'ET')} | {_t(-5, 'CT')} | {_t(-7, 'PT')} | {_t(1, 'BST')}"
+
+
+def format_today_fixtures(fixtures: list) -> str:
+    """Format today's fixtures with multi-timezone kickoff times."""
+    fixture_lines = []
+    for f in fixtures:
+        try:
+            home = f["teams"]["home"]["name"]
+            away = f["teams"]["away"]["name"]
+            kickoff_utc = f["fixture"]["date"]
+            kickoff_dt = datetime.fromisoformat(kickoff_utc.replace("Z", "+00:00"))
+            times = _fmt_kickoff_multi_tz(kickoff_dt)
+            venue = f["fixture"].get("venue", {}).get("name", "TBD")
+            city = f["fixture"].get("venue", {}).get("city", "")
+            fixture_lines.append(f"  • {home} vs {away} | {times} | {venue}, {city}")
+        except (KeyError, ValueError):
+            fixture_lines.append(f"  • {f}")
+    return "\n".join(fixture_lines) if fixture_lines else "  No fixtures found for today."
+
+
+def format_tomorrow_fixtures(fixtures_tomorrow: list) -> str:
+    """Format tomorrow's slate as one line per match."""
+    tomorrow_lines = []
+    for f in fixtures_tomorrow:
+        try:
+            kickoff_dt = datetime.fromisoformat(f["commence_time"].replace("Z", "+00:00"))
+            kickoff_et = kickoff_dt.astimezone(timezone(ET_OFFSET))
+            time_str = kickoff_et.strftime("%I:%M %p").lstrip("0") + " ET"
+        except (KeyError, ValueError):
+            time_str = "TBD"
+        ground = f.get("ground", "")
+        group = f.get("group", "")
+        suffix = ""
+        if ground or group:
+            parts = [p for p in (ground, group) if p]
+            suffix = f" ({', '.join(parts)})"
+        tomorrow_lines.append(f"  {time_str} — {f['home_team']} vs {f['away_team']}{suffix}")
+    return "\n".join(tomorrow_lines) if tomorrow_lines else "  No matches scheduled for tomorrow."
+
+
+def format_injuries_block(injuries: list) -> str:
+    """Format the injury list, capped for prompt length."""
+    inj_lines = []
+    for inj in injuries[:30]:  # cap at 30 entries for prompt length
+        try:
+            player = inj["player"]["name"]
+            team = inj["team"]["name"]
+            reason = inj.get("injury", {}).get("reason", "unknown")
+            inj_lines.append(f"  • {player} ({team}): {reason}")
+        except (KeyError, TypeError):
+            pass
+    return "\n".join(inj_lines) if inj_lines else "  No injury data available."
+
+
 def build_dynamic_content(
     today_str: str,
     fixtures: list,
@@ -375,28 +435,7 @@ def build_dynamic_content(
     """Dynamic content block: today's data — never cache this."""
     et_now = now_et().strftime("%Y-%m-%d %H:%M ET")
 
-    # Format today's fixtures with multi-timezone kickoff times
-    def _fmt_kickoff(kickoff_dt: datetime) -> str:
-        def _t(hours_offset: int, label: str) -> str:
-            t = kickoff_dt.astimezone(timezone(timedelta(hours=hours_offset)))
-            return t.strftime("%I:%M %p").lstrip("0") + f" {label}"
-        return f"{_t(-4, 'ET')} | {_t(-5, 'CT')} | {_t(-7, 'PT')} | {_t(1, 'BST')}"
-
-    fixture_lines = []
-    for f in fixtures:
-        try:
-            home = f["teams"]["home"]["name"]
-            away = f["teams"]["away"]["name"]
-            kickoff_utc = f["fixture"]["date"]
-            kickoff_dt = datetime.fromisoformat(kickoff_utc.replace("Z", "+00:00"))
-            times = _fmt_kickoff(kickoff_dt)
-            venue = f["fixture"].get("venue", {}).get("name", "TBD")
-            city = f["fixture"].get("venue", {}).get("city", "")
-            fixture_lines.append(f"  • {home} vs {away} | {times} | {venue}, {city}")
-        except (KeyError, ValueError):
-            fixture_lines.append(f"  • {f}")
-    fixtures_text = "\n".join(fixture_lines) if fixture_lines else "  No fixtures found for today."
-
+    fixtures_text = format_today_fixtures(fixtures)
     results_text = recent_results if recent_results else "  No recent results."
 
     # Format DraftKings odds with implied probabilities
@@ -426,35 +465,8 @@ def build_dynamic_content(
                 odds_lines.append(f"  {home} vs {away}:\n    " + "\n    ".join(markets_text))
     odds_text = "\n".join(odds_lines) if odds_lines else "  No DraftKings odds available."
 
-    # Format injuries
-    inj_lines = []
-    for inj in injuries[:30]:  # cap at 30 entries for prompt length
-        try:
-            player = inj["player"]["name"]
-            team = inj["team"]["name"]
-            reason = inj.get("injury", {}).get("reason", "unknown")
-            inj_lines.append(f"  • {player} ({team}): {reason}")
-        except (KeyError, TypeError):
-            pass
-    injuries_text = "\n".join(inj_lines) if inj_lines else "  No injury data available."
-
-    # Format tomorrow's slate
-    tomorrow_lines = []
-    for f in fixtures_tomorrow:
-        try:
-            kickoff_dt = datetime.fromisoformat(f["commence_time"].replace("Z", "+00:00"))
-            kickoff_et = kickoff_dt.astimezone(timezone(ET_OFFSET))
-            time_str = kickoff_et.strftime("%I:%M %p").lstrip("0") + " ET"
-        except (KeyError, ValueError):
-            time_str = "TBD"
-        ground = f.get("ground", "")
-        group = f.get("group", "")
-        suffix = ""
-        if ground or group:
-            parts = [p for p in (ground, group) if p]
-            suffix = f" ({', '.join(parts)})"
-        tomorrow_lines.append(f"  {time_str} — {f['home_team']} vs {f['away_team']}{suffix}")
-    tomorrow_text = "\n".join(tomorrow_lines) if tomorrow_lines else "  No matches scheduled for tomorrow."
+    injuries_text = format_injuries_block(injuries)
+    tomorrow_text = format_tomorrow_fixtures(fixtures_tomorrow)
 
     return f"""## LIVE DATA — {et_now}
 
@@ -598,65 +610,375 @@ def save_report(report_text: str, today_str: str, quota_remaining: str) -> Path:
     return report_path
 
 
-def dump_web_prompt(
-    system_prompt: str,
-    static_context: str,
-    dynamic_content: str,
-    today_str: str,
-) -> Path:
-    """Assemble the full prompt and write to reports/YYYY-MM-DD_web_prompt.txt.
+def _fmt_human_date(dt: datetime) -> str:
+    """Format a date as 'Weekday, Month D' (no leading zero on the day)."""
+    return dt.strftime("%A, %B %d").replace(" 0", " ")
 
-    The output is formatted for direct paste into a Claude web chat.
-    Three web searches are embedded as explicit instructions so Claude web
-    runs them inline during report generation rather than relying on the
-    pre-fetched pipeline data that would normally come from the API calls.
-    """
-    web_header = f"""# WC2026 Morning Report Prompt — {today_str}
+
+def split_results_by_date(combined: str, yesterday_iso: str, two_days_ago_iso: str) -> tuple:
+    """Split a combined 'YYYY-MM-DD: ...' results blob into two date buckets."""
+    if not combined or combined.strip().startswith(
+        ("(recent results unavailable", "(Claude web will search")
+    ):
+        placeholder = "(Claude web will search for this — see search instructions above)"
+        return placeholder, placeholder
+
+    yesterday_lines, two_days_lines = [], []
+    for line in combined.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith(yesterday_iso):
+            yesterday_lines.append(stripped)
+        elif stripped.startswith(two_days_ago_iso):
+            two_days_lines.append(stripped)
+        else:
+            # Unlabeled line — default to the more recent bucket
+            yesterday_lines.append(stripped)
+
+    yesterday_text = "\n".join(f"  {l}" for l in yesterday_lines) if yesterday_lines else "  No matches."
+    two_days_text = "\n".join(f"  {l}" for l in two_days_lines) if two_days_lines else "  No matches."
+    return yesterday_text, two_days_text
+
+
+def format_odds_block_v2(odds_result: dict) -> str:
+    """Format DraftKings odds as one HOME/AWAY/Draw/O-U line per match."""
+    lines = []
+    for match in odds_result.get("data", []):
+        home = match.get("home_team", "")
+        away = match.get("away_team", "")
+        home_odds = away_odds = draw_odds = ou_text = None
+        for bm in match.get("bookmakers", []):
+            if bm.get("key") != "draftkings":
+                continue
+            for mkt in bm.get("markets", []):
+                key = mkt.get("key")
+                outcomes = mkt.get("outcomes", [])
+                if key == "h2h":
+                    for o in outcomes:
+                        name = o.get("name", "")
+                        if name == home:
+                            home_odds = o.get("price")
+                        elif name == away:
+                            away_odds = o.get("price")
+                        elif name.lower() == "draw":
+                            draw_odds = o.get("price")
+                elif key == "totals" and outcomes:
+                    o = outcomes[0]
+                    ou_text = f"{o.get('point', '')} {o.get('name', '')} {o.get('price', 0):+d}"
+        if home_odds is None and away_odds is None:
+            continue
+        parts = [
+            f"HOME {home_odds:+d}" if home_odds is not None else "HOME n/a",
+            f"AWAY {away_odds:+d}" if away_odds is not None else "AWAY n/a",
+        ]
+        if draw_odds is not None:
+            parts.append(f"Draw {draw_odds:+d}")
+        if ou_text:
+            parts.append(f"O/U {ou_text}")
+        lines.append(f"  {home} vs {away}: " + " | ".join(parts))
+    return "\n".join(lines) if lines else "  (No DraftKings odds available — use web search for current lines)"
+
+
+WEB_PROMPT_TEMPLATE = """# WC2026 Morning Report Prompt — {report_date}
 # Paste this entire file into a Claude web chat (claude.ai).
-# Claude will run the three web searches inline and write the full report.
+# Claude will run web searches inline and write the full report.
 # After Claude responds, copy the report text into:
-#   reports/{today_str}_morning_report.md
+#   reports/{report_date}_morning_report.md
 # Then send with: python agent/morning_report.py --send-email
 #
 # ─────────────────────────────────────────────────────────────────────────────
 
 ## INSTRUCTIONS FOR CLAUDE WEB
 
-You are generating the World Cup 2026 morning briefing report. Before writing anything, run these three web searches in order and incorporate the results into the relevant sections:
+You are generating the World Cup 2026 morning briefing report using the v2 format below.
+Before writing anything, run these two web searches and incorporate the results.
 
-**Search 1 — Recent results:**
-Search for: "World Cup 2026 match results {today_str}"
-Return completed match results from the last 2 days as dated bullet points.
-Format: YYYY-MM-DD: Team A score–score Team B (Group X). Label each day clearly.
+**Search 1 — News and injuries:**
+Search for: "World Cup 2026 injuries lineup news {search_date} {today_teams}"
+Return 4–6 bullet points: confirmed injuries, suspensions, expected lineups, fitness concerns.
+Only items relevant to today's matches. Distinguish confirmed from unconfirmed.
 
-**Search 2 — News and injuries:**
-Search for: "World Cup 2026 injuries lineup news {today_str}"
-Return 3–5 bullet points: injuries, suspensions, confirmed lineups, team form.
-Only items relevant to today's matches.
+**Search 2 — Around the tournament:**
+Search for: "World Cup 2026 stories atmosphere moments {search_date}"
+Return 4–5 bullet points: crowd moments, VAR controversies, player milestones, coach quotes,
+fan stories, venue conditions, tournament narrative threads.
+No match result summaries — color and narrative only.
 
-**Search 3 — Around the tournament:**
-Search for: "World Cup 2026 atmosphere stories fans moments {today_str}"
-Return 3–5 bullet points: crowd atmosphere, VAR controversies, surprising performances,
-player milestones, memorable goals, coach quotes, venue conditions.
-No match result summaries — only color and narrative.
-
-Use these search results to fill the RESULTS, NEWS & INJURIES, and AROUND THE TOURNAMENT sections below.
-The pre-fetched live data (odds, fixtures, line movements, injuries) is provided below — use it as-is.
+Scores for yesterday and two days ago are pre-filled in the LIVE DATA section below. Do NOT search for scores. Use those confirmed figures and write editorial notes for each.
 
 ---
 
-## SYSTEM PROMPT
+## SYSTEM PROMPT (v2)
 
+{system_prompt}
+
+---
+
+## OUTPUT FORMAT — follow this section order exactly
+
+### SECTION 1 — HEADER BLOCK
+
+**Line 1:** 2–3 short punchy phrases — the biggest things happening today. Facts, not hype.
+Example: "Day 14. Matchday 3 begins. Six matches, all simultaneous within slots."
+
+**Line 2:** `[Live dashboard →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)`
+
+**Line 3 — TABLE OF CONTENTS** (two-level markdown anchor links):
+Generate the TOC dynamically based on today's fixtures. Top level = major sections.
+Sub-level = one entry per match under Today's Matches and Predictions.
+Format each match sub-entry as: `  - [Team A vs. Team B — H:MM PM ET](#team-a-vs-team-b)`
+Anchor IDs: lowercase, spaces to hyphens, strip special characters, strip periods.
+
+---
+
+### SECTION 2 — TOURNAMENT STATUS
+
+4–6 bullets or short sentences:
+- Day number and tournament stage
+- Which groups play today and matchday number
+- Who has clinched / who is eliminated (relevant to today's groups only)
+- Group standings for today's groups only. Format: `Group B: Canada 4pts | Switzerland 4pts | Bosnia 1pt | Qatar 0pts`
+- One sentence on broader tournament picture if notable
+
+Scannable. Not an essay.
+
+---
+
+### SECTION 3 — RESULTS
+
+Two dated subsections. Never merge under one header.
+
+**Yesterday — [Weekday, Month D]**
+**Two Days Ago — [Weekday, Month D]**
+
+Format per match: `- Team A X–Y Team B (Group Z) — [note]`
+- En-dash (–) between goals. Em-dash (—) before note.
+- Late-night games (11 PM or midnight ET kickoff) count for the calendar date they kicked off.
+- Notes: 1–2 sentences, editorial voice. One sharp observation — market implication, narrative angle, or tactical read. Pick the most valuable. Don't pad.
+- If no matches for a subsection: "No matches."
+
+---
+
+### SECTION 4 — TODAY'S MATCHES
+
+One bold header + one paragraph per match. No blank line between header and paragraph.
+
+Header format: `**Team A vs. Team B — H:MM PM ET | Stadium Name, City | Group X**`
+Use "vs." with period. ET 12-hour format. Pipe separators.
+
+Paragraph, 4–5 sentences:
+1. Group scenario — what each team needs from this match specifically.
+2. Tactical setup and what WC2026 form (not reputation) suggests.
+3. Key injuries or lineup factors relevant to today.
+4. Venue/conditions if relevant (altitude, heat, dome — skip if standard sea-level).
+5. One sentence pointing toward the prediction or bet angle.
+
+Do not re-explain group standings — readers have TOURNAMENT STATUS.
+
+---
+
+### SECTION 5 — NEWS & INJURIES
+
+4–6 bullets, one line each. From Search 1 above.
+Confirmed injuries: state clearly ("X is officially out").
+Unconfirmed: flag explicitly ("X reported carrying a knock — unconfirmed").
+Facts only. No editorial padding.
+
+---
+
+### SECTION 6 — PREDICTIONS
+
+Pure football analysis. No odds, no betting language, no units anywhere in this section.
+
+One subsection per match. Header: `#### Team A vs. Team B`
+
+**Paragraph 1 — Tactical read (3–4 sentences):**
+Lead with the single most important tactical story of this matchup. Draw on WC2026 form first,
+then qualifying/continental data as context. No reputation-only analysis ("Brazil are world-class").
+Specific observations only.
+
+**Paragraph 2 — Game flow + scoreline (2 sentences):**
+Most likely game-state progression, then one clear prediction:
+`Predicted score: X–X (Team A win)` or `Predicted score: X–X (Draw)`
+
+---
+
+### SECTION 7 — BET RECOMMENDATIONS
+
+Pure betting. Evaluate every match in today's fixtures.
+
+**Tiered structure — label every bet:**
+- TIER 1 (1–2 per day, $8–10, 4–5 units): highest confidence only. Do not force one.
+- TIER 2 (2–3 per day, $6, 3 units): well-supported edge with known risks.
+- TIER 3 (2–4 per day, $2–4, 1–2 units): props, hedges, supporting plays.
+
+**Format for every bet:**
+```
+**BET:** [Selection] — [Match] ([Market]) [TIER 1 / TIER 2 / TIER 3]
+**ODDS:** [American odds] ([Book]) | Implied: [X.X%]
+**EDGE REASONING:** [2–3 sentences. Sentence 1: the edge. Sentence 2: the support. Sentence 3 if needed: market signal or structural reason.]
+**RISK LEVEL:** Low / Medium / High
+**RECOMMENDED STAKE:** $X (X units)
+**KEY RISK FACTORS:**
+- [one line]
+- [one line max]
+```
+
+Rules:
+- Do NOT use "Asian Handicap" — say "spread" or write the line directly.
+- Do NOT include MODEL EDGE or any model-probability field.
+- If a match has no edge, state why in one sentence with the specific odds as reference.
+- Include 1–2 player props when matchup data supports a specific rate.
+- Only prop confirmed starters. Never prop an injury-doubt player.
+- When a Tier 1/2 bet is on a favorite, evaluate whether a Tier 3 hedge on the other side makes mathematical sense. State the hedge explicitly if so.
+
+---
+
+### SECTION 8 — PARLAYS
+
+4–6 parlays. Max 4 legs each. Required types:
+- At least one mixing result/total legs with player props
+- At least one purely player props across multiple matches
+- At least one partially hedging a Tier 1 or Tier 2 straight bet
+
+Rules: no stacking legs that all require the same team to dominate. Name any correlation explicitly.
+
+Format:
+```
+**Parlay N: [Name] — [legs summary]**
+- Leg 1: [selection] @ [odds]
+- Leg 2: [selection] @ [odds]
+- Leg 3: [selection] @ [odds — if applicable]
+Estimated combined odds: approximately +XXX.
+[1–2 sentences: why these legs belong together, what driver they share or don't share.]
+**RECOMMENDED STAKE:** $X (X units)
+```
+
+---
+
+### SECTION 9 — SHARP MONEY
+
+3 bullets max, or "Nothing notable today."
+Only include genuinely notable line movements or handle signals. Don't pad.
+
+---
+
+### SECTION 10 — AROUND THE TOURNAMENT
+
+4–5 bullets. 1–2 sentences each — enough to deliver the observation and stop.
+No odds. No bet angles. Match-specific facts belong in sections 4 or 5.
+Cover: crowd moments, VAR controversies, player milestones, records broken, fan stories,
+coach quotes, venue conditions, tournament narrative threads developing across groups.
+Each bullet should carry one clear observation. Don't extend for personality.
+
+---
+
+### SECTION 11 — TOMORROW'S SLATE
+
+One bullet per match, each on its own line:
+`- H:MM PM ET — Team A vs. Team B (Group X, Venue, City)`
+
+No analysis. No odds. Use the fixture data from LIVE DATA below.
+
+---
+
+## LIVE DATA — {report_date} {data_timestamp}
+
+### Today's Fixtures ({report_date})
+{today_fixtures}
+
+### Results — Yesterday ({yesterday_date})
+{yesterday_results}
+
+### Results — Two Days Ago ({two_days_ago_date})
+{two_days_ago_results}
+
+### Tomorrow's Fixtures
+{tomorrow_fixtures}
+
+### Current Odds
+{odds_block}
+
+### Line Movements vs Yesterday
+{line_movements}
+
+### Injury Report
+{injury_report}
+
+---
+
+## KEY CONTEXT
+
+### Group Standings (today's groups only)
+{group_standings}
+
+### Advancement Scenarios
+{advancement_scenarios}
+
+### Additional Intelligence
+{additional_context}
 """
 
-    assembled = (
-        web_header
-        + system_prompt
-        + "\n\n---\n\n"
-        + static_context
-        + "\n\n---\n\n"
-        + dynamic_content
+
+def dump_web_prompt(
+    system_prompt: str,
+    today_str: str,
+    fixtures: list,
+    fixtures_tomorrow: list,
+    recent_results: str,
+    odds_result: dict,
+    injuries: list,
+    line_movements: str,
+) -> Path:
+    """Assemble the v2 web-prompt template and write to reports/YYYY-MM-DD_web_prompt.txt.
+
+    The output is formatted for direct paste into a Claude web chat. Only two
+    web searches are embedded as explicit instructions (news/injuries, and
+    tournament color) — match scores are pre-fetched here via the Anthropic
+    API so Claude web doesn't need to search for them.
+    """
+    et_now = now_et()
+    yesterday_dt = et_now - timedelta(days=1)
+    two_days_ago_dt = et_now - timedelta(days=2)
+
+    yesterday_results, two_days_ago_results = split_results_by_date(
+        recent_results,
+        yesterday_dt.strftime("%Y-%m-%d"),
+        two_days_ago_dt.strftime("%Y-%m-%d"),
     )
+
+    today_teams = " ".join(sorted({
+        name
+        for f in fixtures
+        for name in (
+            f.get("teams", {}).get("home", {}).get("name"),
+            f.get("teams", {}).get("away", {}).get("name"),
+        )
+        if name
+    }))
+
+    fields = {
+        "report_date": today_str,
+        "search_date": et_now.strftime("%B %d %Y"),
+        "today_teams": today_teams or "(no fixtures found)",
+        "system_prompt": system_prompt,
+        "today_fixtures": format_today_fixtures(fixtures),
+        "yesterday_date": _fmt_human_date(yesterday_dt),
+        "yesterday_results": yesterday_results,
+        "two_days_ago_date": _fmt_human_date(two_days_ago_dt),
+        "two_days_ago_results": two_days_ago_results,
+        "tomorrow_fixtures": format_tomorrow_fixtures(fixtures_tomorrow),
+        "odds_block": format_odds_block_v2(odds_result),
+        "line_movements": line_movements or "  No significant line movements vs yesterday's cache.",
+        "injury_report": format_injuries_block(injuries),
+        "data_timestamp": et_now.strftime("%H:%M ET"),
+        "group_standings": "(Use confirmed scores above to infer standings)",
+        "advancement_scenarios": "(Claude web will determine from standings above)",
+        "additional_context": "None.",
+    }
+
+    assembled = WEB_PROMPT_TEMPLATE.format(**fields)
 
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     out_path = REPORTS_DIR / f"{today_str}_web_prompt.txt"
@@ -947,15 +1269,31 @@ def build_email_html(markdown_content: str) -> str:
             i += 1
             continue
 
-        # Bullet list — collect consecutive bullet lines
+        # Bullet list — collect consecutive bullet lines, with one level of nesting
         if stripped.startswith('- '):
             list_items = []
             while i < len(lines) and lines[i].strip().startswith('- '):
-                list_items.append(
-                    f'<li style="margin-bottom:8px;line-height:1.65;color:#374151;">'
-                    f'{inline_format(lines[i].strip()[2:])}</li>'
-                )
+                content = lines[i].strip()[2:]
                 i += 1
+                # Collect any nested "  - " items that follow this top-level item
+                nested_items = []
+                while i < len(lines) and lines[i].startswith('  - '):
+                    nested_items.append(
+                        f'<li style="margin-bottom:3px;line-height:1.6;color:#6b7280;font-size:13px;'
+                        f'padding-left:4px;">{inline_format(lines[i].strip()[2:])}</li>'
+                    )
+                    i += 1
+                sub_html = ''
+                if nested_items:
+                    sub_html = (
+                        '<ul style="padding-left:16px;margin:4px 0 2px;list-style-type:none;">'
+                        + ''.join(nested_items)
+                        + '</ul>'
+                    )
+                list_items.append(
+                    f'<li style="margin-bottom:6px;line-height:1.65;color:#374151;">'
+                    f'{inline_format(content)}{sub_html}</li>'
+                )
             output_blocks.append(
                 '<ul style="padding-left:20px;margin:8px 0 12px;">'
                 + ''.join(list_items)
@@ -1114,7 +1452,7 @@ def main() -> None:
     parser.add_argument(
         "--web-prompt",
         action="store_true",
-        help="Build and save the assembled prompt to reports/YYYY-MM-DD_web_prompt.txt for use in Claude web (no API call)",
+        help="Build and save the assembled prompt to reports/YYYY-MM-DD_web_prompt.txt for use in Claude web (one lightweight results lookup uses the API; no full report generation call)",
     )
     args = parser.parse_args()
 
@@ -1152,8 +1490,16 @@ def main() -> None:
 
     # 5. Web searches: recent results + news (share one Anthropic client)
     if args.web_prompt:
-        # Claude web will run these searches inline — skip the API-based calls
-        recent_results = "(Claude web will search for this — see search instructions above)"
+        # v2 web prompt: pre-fetch results here (cheap) so Claude web doesn't
+        # need to search for scores. News and atmosphere stay deferred to the
+        # two search instructions embedded in the prompt itself.
+        try:
+            import anthropic
+            client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+            print("[FETCH] Recent results via web search (pre-filled for Claude web)...")
+            recent_results = fetch_recent_results_via_search(client)
+        except Exception as e:
+            recent_results = f"(recent results unavailable: {e})"
         news = "(Claude web will search for this — see search instructions above)"
         around_the_tournament = "(Claude web will search for this — see search instructions above)"
     elif not args.dry_run:
@@ -1205,9 +1551,18 @@ def main() -> None:
 
     # ── Web prompt path ────────────────────────────────────────────────────────
     if args.web_prompt:
-        out_path = dump_web_prompt(system_prompt, static_context, dynamic_content, today_str)
+        out_path = dump_web_prompt(
+            system_prompt=system_prompt,
+            today_str=today_str,
+            fixtures=fixtures,
+            fixtures_tomorrow=fixtures_tomorrow,
+            recent_results=recent_results,
+            odds_result=odds_result,
+            injuries=injuries,
+            line_movements=line_movements,
+        )
         print(f"[WEB PROMPT] Saved to {out_path}")
-        print(f"[WEB PROMPT] Paste into claude.ai — Claude will run searches and write the report.")
+        print(f"[WEB PROMPT] Paste into claude.ai — Claude will run the two search instructions and write the report.")
         print(f"[WEB PROMPT] After editing, send with: python agent/morning_report.py --send-email")
         return
 
