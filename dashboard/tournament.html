@@ -419,8 +419,10 @@ function buildGroupMap() {
 
 function buildBracketData() {
   bracketData = {};
-  for (const m of allMatches) {
-    if (m.group) continue; // group stage match
+  const koMatches = allMatches.filter(m => !m.group).sort((a, b) => (a.num || 999) - (b.num || 999));
+  bracketData._byNum = {};
+  for (const m of koMatches) {
+    if (!m.num) continue;
     const roundInfo = KO_ROUND_LABELS[m.round];
     if (!roundInfo) continue;
     const { id } = roundInfo;
@@ -431,9 +433,9 @@ function buildBracketData() {
     if (played) {
       if (ft[0] > ft[1]) winner = m.team1;
       else if (ft[1] > ft[0]) winner = m.team2;
-      // draw in KO = goes to extra time / penalties (score.ft may reflect that)
     }
-    bracketData[id].push({
+    const entry = {
+      num: m.num,
       team1: m.team1 || 'TBD',
       team2: m.team2 || 'TBD',
       score: played ? `${ft[0]}–${ft[1]}` : null,
@@ -441,7 +443,9 @@ function buildBracketData() {
       ground: m.ground || null,
       date: m.date || null,
       time: m.time || null,
-    });
+    };
+    bracketData[id].push(entry);
+    bracketData._byNum[m.num] = entry;
   }
 }
 
@@ -683,24 +687,20 @@ function renderBracket() {
     return `<div style="display:flex;flex-direction:column;align-items:stretch;width:24px;align-self:stretch">${segs}</div>`;
   }
 
-  const r32 = bracketData['r32'] || [];
-  const r16 = bracketData['r16'] || [];
-  const qf  = bracketData['qf']  || [];
-  const sf  = bracketData['sf']  || [];
-  const fin = bracketData['final'] || [];
+  const bn = bracketData._byNum || {};
+  const n = (id) => bn[id] || { team1: 'TBD', team2: 'TBD', score: null, winner: null, ground: null, date: null, time: null };
 
-  // Slice each round in half for left/right sides
-  const leftR32  = Array.from({length: 8},  (_, i) => r32[i]);
-  const rightR32 = Array.from({length: 8},  (_, i) => r32[i + 8]);
-  const leftR16  = Array.from({length: 4},  (_, i) => r16[i]);
-  const rightR16 = Array.from({length: 4},  (_, i) => r16[i + 4]);
-  const leftQF   = Array.from({length: 2},  (_, i) => qf[i]);
-  const rightQF  = Array.from({length: 2},  (_, i) => qf[i + 2]);
-  const leftSF   = [sf[0]];
-  const rightSF  = [sf[1]];
+  const leftR32  = [74, 77, 73, 75, 81, 82, 83, 84].map(n);
+  const rightR32 = [76, 78, 79, 80, 86, 88, 85, 87].map(n);
+  const leftR16  = [89, 90, 93, 94].map(n);
+  const rightR16 = [91, 92, 95, 96].map(n);
+  const leftQF   = [97, 98].map(n);
+  const rightQF  = [99, 100].map(n);
+  const leftSF   = [n(101)];
+  const rightSF  = [n(102)];
 
   // Final card
-  const fm = fin[0];
+  const fm = n(104);
   const ft1 = fm?.team1 || 'TBD';
   const ft2 = fm?.team2 || 'TBD';
   const fscore = fm?.score || null;
@@ -745,7 +745,7 @@ function renderBracket() {
   html += roundColumn('Quarter-Finals', rightQF);
   html += connectorCol(4, 'left');
   html += roundColumn('Round of 16', rightR16);
-  html += connectorCol(8, 'left');
+  html += connectorCol(4, 'left');
   html += roundColumn('Round of 32', rightR32);
 
   html += '</div>';
