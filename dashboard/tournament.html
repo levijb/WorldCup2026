@@ -124,7 +124,7 @@
   .bracket-round {
     display: flex;
     flex-direction: column;
-    min-width: 155px;
+    min-width: 160px;
     align-items: stretch;
   }
   .bracket-round-title {
@@ -133,43 +133,65 @@
     font-weight: 700;
     color: var(--text-dim);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
     padding: 7px 4px;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border);
     margin-bottom: 8px;
     flex-shrink: 0;
   }
+  .bracket-round-title.rt-r32  { color: #58a6ff; }
+  .bracket-round-title.rt-r16  { color: #a371f7; }
+  .bracket-round-title.rt-qf   { color: #f78166; }
+  .bracket-round-title.rt-sf   { color: #ff9900; }
+  .bracket-round-title.rt-final{ color: var(--accent-amber); }
+
   .bracket-match { margin: 4px; }
-  .bracket-slot {
+  .bracket-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 6px 10px;
-    font-size: 12px;
-    color: var(--text-muted);
-    white-space: nowrap;
+    border-radius: 6px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 135px;
+    min-width: 148px;
   }
-  .bracket-slot.winner { color: var(--accent-green); font-weight: 600; border-color: var(--accent-green); }
-  .bracket-slot.tbd { color: var(--text-dim); font-style: italic; }
-  .bracket-venue {
+  .bracket-slot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--bg-item);
+  }
+  .bracket-slot:last-of-type { border-bottom: none; }
+  .bracket-slot.tbd { color: var(--text-dim); font-style: italic; font-weight: 400; }
+  .bracket-slot.winner {
+    background: rgba(0, 200, 83, 0.09);
+    color: #00e676;
+    font-weight: 700;
+  }
+  .bracket-slot.loser { color: var(--text-dim); font-weight: 400; }
+  .bracket-slot-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bracket-slot-score {
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 12px;
+    text-align: right;
+    color: var(--text-primary);
+  }
+  .bracket-slot-score.winning { color: #00e676; }
+  .bracket-slot-score.losing  { color: var(--text-dim); }
+  .bracket-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 10px;
     font-size: 10px;
     color: var(--text-dim);
-    text-align: center;
-    margin: 2px 4px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 147px;
-  }
-  .bracket-date {
-    font-size: 10px;
-    color: var(--text-muted);
-    text-align: center;
-    margin: 0 4px 4px;
+    background: var(--bg-base);
+    border-top: 1px solid var(--bg-item);
   }
   .final-header {
     background: #1f2937;
@@ -648,30 +670,48 @@ function renderBracket() {
   const container = document.getElementById('bracket-view');
 
   // Helper: render a single match card
-  function matchCard(m, roundId) {
+  function matchCard(m) {
     const t1 = m?.team1 || 'TBD';
     const t2 = m?.team2 || 'TBD';
     const score = m?.score || null;
     const winner = m?.winner || null;
-    const venue = m?.ground ? `${VENUE_STADIUMS[m.ground] || m.ground}` : null;
-    const kickoff = (m?.time && m?.date) ? fmtVenueTimeToET(m.time, m.date) : null;
+    const venue = m?.ground ? (VENUE_STADIUMS[m.ground] || m.ground) : null;
     const dateLabel = m?.date ? new Date(m.date + 'T12:00:00Z').toLocaleDateString('en-US',
       { month: 'short', day: 'numeric', timeZone: 'UTC' }) : null;
-    const s1 = t1 === winner ? 'winner' : t1 === 'TBD' ? 'tbd' : '';
-    const s2 = t2 === winner ? 'winner' : t2 === 'TBD' ? 'tbd' : '';
-    return `<div class="bracket-match">
-      <div class="bracket-slot ${s1}">${t1}${score ? ` ${score.split('–')[0]}` : ''}</div>
-      <div class="bracket-slot ${s2}" style="margin-top:2px">${t2}${score ? ` ${score.split('–')[1]}` : ''}</div>
-      ${venue ? `<div class="bracket-venue">${venue}</div>` : ''}
-      ${(dateLabel && kickoff) ? `<div class="bracket-date">${dateLabel} · ${kickoff.split(' / ')[0]}</div>` : ''}
-    </div>`;
+    const scored = score !== null;
+    const sc = scored ? score.split('–') : [null, null];
+    const s1 = t1 === 'TBD' ? 'tbd' : winner ? (t1 === winner ? 'winner' : 'loser') : '';
+    const s2 = t2 === 'TBD' ? 'tbd' : winner ? (t2 === winner ? 'winner' : 'loser') : '';
+    const sc1cls = scored ? (t1 === winner ? 'winning' : 'losing') : '';
+    const sc2cls = scored ? (t2 === winner ? 'winning' : 'losing') : '';
+    const footer = (dateLabel || venue) ? `<div class="bracket-footer">
+      <span>${dateLabel || ''}</span>
+      <span>${venue || ''}</span>
+    </div>` : '';
+    return `<div class="bracket-match"><div class="bracket-card">
+      <div class="bracket-slot ${s1}">
+        <span class="bracket-slot-name">${t1}</span>
+        ${scored ? `<span class="bracket-slot-score ${sc1cls}">${sc[0]}</span>` : ''}
+      </div>
+      <div class="bracket-slot ${s2}">
+        <span class="bracket-slot-name">${t2}</span>
+        ${scored ? `<span class="bracket-slot-score ${sc2cls}">${sc[1]}</span>` : ''}
+      </div>
+      ${footer}
+    </div></div>`;
   }
+
+  const RT_CLASS = {
+    'Round of 32': 'rt-r32', 'Round of 16': 'rt-r16',
+    'Quarter-Finals': 'rt-qf', 'Semi-Finals': 'rt-sf', 'Final': 'rt-final'
+  };
 
   // Helper: render a round column (title + evenly spaced matches)
   function roundColumn(label, matches) {
     const cards = matches.map(m => matchCard(m)).join('');
+    const cls = RT_CLASS[label] || '';
     return `<div class="bracket-round">
-      <div class="bracket-round-title">${label}</div>
+      <div class="bracket-round-title ${cls}">${label}</div>
       <div style="display:flex;flex-direction:column;justify-content:space-around;flex:1">${cards}</div>
     </div>`;
   }
@@ -709,17 +749,28 @@ function renderBracket() {
   const fkickoff = (fm?.time && fm?.date) ? fmtVenueTimeToET(fm.time, fm.date) : null;
   const fdateLabel = fm?.date ? new Date(fm.date + 'T12:00:00Z').toLocaleDateString('en-US',
     { month: 'short', day: 'numeric', timeZone: 'UTC' }) : null;
-  const fs1 = ft1 === fwinner ? 'winner' : ft1 === 'TBD' ? 'tbd' : '';
-  const fs2 = ft2 === fwinner ? 'winner' : ft2 === 'TBD' ? 'tbd' : '';
+  const fscored = fscore !== null;
+  const fsc = fscored ? fscore.split('–') : [null, null];
+  const fs1 = ft1 === 'TBD' ? 'tbd' : fwinner ? (ft1 === fwinner ? 'winner' : 'loser') : '';
+  const fs2 = ft2 === 'TBD' ? 'tbd' : fwinner ? (ft2 === fwinner ? 'winner' : 'loser') : '';
+  const fsc1cls = fscored ? (ft1 === fwinner ? 'winning' : 'losing') : '';
+  const fsc2cls = fscored ? (ft2 === fwinner ? 'winning' : 'losing') : '';
 
-  const finalCol = `<div class="bracket-round" style="min-width:160px;align-items:center;justify-content:center">
-    <div class="bracket-round-title" style="width:100%">Final</div>
+  const finalCol = `<div class="bracket-round" style="min-width:170px;align-items:center;justify-content:center">
+    <div class="bracket-round-title rt-final" style="width:100%">Final</div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:auto;padding:8px 0">
       <div class="final-header">FINAL</div>
-      <div class="bracket-slot ${fs1}" style="min-width:140px">${ft1}${fscore ? ` ${fscore.split('–')[0]}` : ''}</div>
-      <div class="bracket-slot ${fs2}" style="margin-top:2px;min-width:140px">${ft2}${fscore ? ` ${fscore.split('–')[1]}` : ''}</div>
-      ${fvenue ? `<div class="bracket-venue">${fvenue}</div>` : ''}
-      ${(fdateLabel && fkickoff) ? `<div class="bracket-date">${fdateLabel} · ${fkickoff.split(' / ')[0]}</div>` : ''}
+      <div class="bracket-match" style="margin-top:6px"><div class="bracket-card" style="min-width:150px">
+        <div class="bracket-slot ${fs1}">
+          <span class="bracket-slot-name">${ft1}</span>
+          ${fscored ? `<span class="bracket-slot-score ${fsc1cls}">${fsc[0]}</span>` : ''}
+        </div>
+        <div class="bracket-slot ${fs2}">
+          <span class="bracket-slot-name">${ft2}</span>
+          ${fscored ? `<span class="bracket-slot-score ${fsc2cls}">${fsc[1]}</span>` : ''}
+        </div>
+        ${(fdateLabel || fvenue) ? `<div class="bracket-footer"><span>${fdateLabel||''}</span><span>${fvenue||''}</span></div>` : ''}
+      </div></div>
     </div>
   </div>`;
 
