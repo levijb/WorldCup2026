@@ -1,8 +1,12 @@
 # World Cup Morning Report
+Thursday June 25, 2026
+
 
 Day 15. Groups D, E, and F close out today — Germany and Japan need results, USA play Türkiye at 10 PM ET.
 
 [Live dashboard →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)
+
+---
 
 ## Contents
 - [Tournament Status](#tournament-status)
@@ -30,6 +34,7 @@ Day 15. Groups D, E, and F close out today — Germany and Japan need results, U
 
 ---
 
+<a name="tournament-status"></a>
 ## Tournament Status
 
 Day 15 — Group Stage Matchday 3. Groups D, E, and F conclude today across three simultaneous slots (4 PM, 7 PM, 10 PM ET). USA have already clinched Group D; the night slot is about positioning, not survival, for Pochettino's side. Germany lead Group E on goal difference and need a result to win it; Japan need a win in Group F to guarantee advancing, though draws and other results may be enough.
@@ -42,6 +47,7 @@ Messi scored twice in Argentina's 2–0 win over Austria on June 22, breaking Mi
 
 ---
 
+<a name="results"></a>
 ## Results
 
 **Yesterday — Wednesday, June 24**
@@ -62,34 +68,42 @@ Messi scored twice in Argentina's 2–0 win over Austria on June 22, breaking Mi
 
 ---
 
+<a name="todays-matches"></a>
 ## Today's Matches
 
+<a name="ecuador-vs-germany"></a>
 **Ecuador vs. Germany — 4:00 PM ET | MetLife Stadium, East Rutherford | Group E**
 
 Germany need a win or draw to guarantee topping Group E; Ecuador need a win to reach a guaranteed knockout spot, otherwise they rely on third-place calculations. Germany have been the most emphatic team in Group E by a wide margin — 7–1 against Curaçao, 2–1 against a quality Ivory Coast side — but Ecuador are physically organized and press high, which is a genuinely different test than either of those opponents offered. Deniz Undav has been clinical in both appearances for Germany; Musiala's creativity in tight spaces is the primary tactical weapon Nagelsmann will deploy against Ecuador's defensive shape. No significant injury concerns confirmed for either side. MetLife is a standard sea-level open-air venue — June evening conditions, manageable. Germany's structure and depth make them the clear favorite but Ecuador are the type of side that can make this uncomfortable.
 
+<a name="curaçao-vs-ivory-coast"></a>
 **Curaçao vs. Ivory Coast — 4:00 PM ET | Lincoln Financial Field, Philadelphia | Group E**
 
 Both sides are already through or eliminated: Ivory Coast guaranteed third place at minimum and could move up depending on the Ecuador-Germany result; Curaçao have zero points and are eliminated. Ivory Coast have beaten both Ecuador and Germany in this group — results that mark them as credibly dangerous going forward — but have every reason to protect players from yellow cards and fatigue before the knockout stage. Curaçao scored their historic first-ever World Cup goal against Germany and will approach this as an opportunity for a genuine moment. Philadelphia dome conditions. Ivory Coast rotation means this may be closer than the odds imply, but they have the quality to win even at reduced intensity.
 
+<a name="japan-vs-sweden"></a>
 **Japan vs. Sweden — 7:00 PM ET | AT&T Stadium, Arlington | Group F**
 
 Japan need a win to guarantee advancing, though a draw combined with the right Tunisia-Netherlands result could also be sufficient. Sweden have three points and are in identical position — they need a win. This is the sharpest elimination-stakes contest of the day. Japan's performances have been the most analytically interesting story in Group F: a 2–2 draw with Netherlands that came from behind twice, then a 4–0 dismantling of Tunisia that was as comprehensive as the scoreline suggests. Daichi Kamada has been Japan's creative engine; Takefusa Kubo a menace in wide areas. Sweden are a physical, direct side who rely on set-piece threat and vertical transitions. AT&T Stadium dome in Dallas — neutral, controlled conditions. Neither side needs the draw; expect both to come out intent on winning.
 
+<a name="tunisia-vs-netherlands"></a>
 **Tunisia vs. Netherlands — 7:00 PM ET | Arrowhead Stadium, Kansas City | Group F**
 
 Netherlands are through but don't control their group destiny depending on Japan's result. Tunisia have zero points after losing 1–5 to Sweden and 0–4 to Japan and are already eliminated. The Oranje should win this comfortably — their squad quality over a winless Tunisia side is not in doubt — but the three absences of Timber, Simons, and De Ligt have created real structural gaps. Ronald Koeman's side have looked good in flashes against better opposition than Tunisia; this should be a controlled performance. Arrowhead is an outdoor open-air stadium in Kansas City — June conditions, manageable. The Dutch are heavy favorites; the question is only margin and whether Koeman manages minutes.
 
+<a name="paraguay-vs-australia"></a>
 **Paraguay vs. Australia — 10:00 PM ET | Levi's Stadium, Santa Clara | Group D**
 
 Both teams have three points and are alive for a top-two finish in Group D, though the USA's position and Türkiye's elimination means only one of them can come second. Paraguay won their only match against Türkiye after opening with a heavy 1–4 loss to the USA; Australia beat Türkiye 2–0 then lost 0–2 to the USA. This is effectively a direct playoff for the final Group D knockout spot. Paraguay are physical and direct, relying on Miguel Almiron's industry in midfield and Antonio Sanabria's hold-up play. Australia have looked more organized defensively than their results suggest; their pace on the counter through their right side is the chief danger. Levi's Stadium Santa Clara is sea-level, open-air. One of the more genuinely balanced matches of the day.
 
+<a name="türkiye-vs-usa"></a>
 **Türkiye vs. USA — 10:00 PM ET | SoFi Stadium, Los Angeles | Group D**
 
 USA have already clinched Group D and top spot; Türkiye are eliminated with zero points. Pochettino will rotate but this is not straightforward rest — the USA play their Round of 32 fixture on Sunday and need rhythm, not just fitness. Pulisic's status is the key injury watch: ESPN reports he is "ready and hoping to play" but his availability has been fragile. Folarin Balogun's two goals against Paraguay put him in the Golden Boot conversation; his minutes against Türkiye are relevant to whether that momentum carries into the knockout stage. SoFi is a dome — neutral conditions, the loudest US home crowd possible. Türkiye have nothing to play for except pride, which can produce unhinged energy or completely flat performances; the Turkish group stage record suggests the latter.
 
 ---
 
+<a name="news--injuries"></a>
 ## News & Injuries
 
 - **Christian Pulisic (USA) — fitness concern, unconfirmed.** ESPN reports he is "ready and hoping to play" vs. Türkiye after missing training time with an unspecified issue. Key Pochettino selection call given the Round of 32 Sunday.
@@ -100,38 +114,45 @@ USA have already clinched Group D and top spot; Türkiye are eliminated with zer
 
 ---
 
+<a name="predictions"></a>
 ## Predictions
 
+<a name="predictions-ecuador-vs-germany"></a>
 #### Ecuador vs. Germany
 
 Germany's 7–1 opening against Curaçao was always going to flatter the scoreline given the opposition, but the 2–1 win over Ivory Coast — who are a genuine competitive team — demonstrated Nagelsmann's side can grind out results when the opponent fights back. Ecuador pressed high and caused problems in patches against both Ivory Coast and Curaçao but lack a finishing touch when they get into the final third. Germany's central midfield control through Kimmich and Kroos's heir apparent Wirtz will be decisive; Ecuador's pressing structure works best when the opposition plays out from the back, which Germany are comfortable doing but smart enough to vary. Musiala between the lines will be difficult for Ecuador to pick up without fouling.
 
 Germany manage the game professionally and find the net twice through their forward depth; Ecuador get a moment but don't convert. Predicted score: 2–0 (Germany).
 
+<a name="predictions-curaçao-vs-ivory-coast"></a>
 #### Curaçao vs. Ivory Coast
 
 Ivory Coast have already proven they can compete with Germany and Ecuador in this group; their 1–0 win over Ecuador and 1–2 loss to Germany were both performances that showed genuine quality. The tactical question for this match is how much Ivory Coast rotate — and if they rotate heavily, whether their second-string quality still overwhelms an eliminated Curaçao side. Curaçao's historic goal against Germany was a moment of genuine pride but their defensive organization has been porous in all three games. Even a rotated Ivory Coast have the individual quality to dominate possession and create volume.
 
 Ivory Coast win at reduced intensity; Curaçao make it briefly competitive. Predicted score: 2–1 (Ivory Coast).
 
+<a name="predictions-japan-vs-sweden"></a>
 #### Japan vs. Sweden
 
 Japan's comeback from behind twice against Netherlands in the opener — then their ruthless 4–0 against Tunisia — has established them as the most tactically complete Asian side remaining in this tournament. Sweden are a different test: physically aggressive in the press, strong in the air from set pieces, and with a striker group that can punish any mistake. Japan's defensive shape without Endo in the pivot is the key vulnerability; Sweden's direct play targets exactly the areas that Endo's absence leaves open. Kubo and Kamada will need to be central to Japan's attack to compensate for the loss of Mitoma's width.
 
 A tight first half; Sweden use a set piece to go ahead. Japan respond and equalize. Predicted score: 1–1 (Draw).
 
+<a name="predictions-tunisia-vs-netherlands"></a>
 #### Tunisia vs. Netherlands
 
 Tunisia have been outclassed in both group games — 1–5 to Sweden, 0–4 to Japan — and arrive as a side with no points, no clear tactical identity in this tournament, and limited motivation beyond individual performances. Netherlands without Timber, Simons, and De Ligt are structurally reduced but still significantly better than Tunisia. Cody Gakpo and Brian Brobbey have been the attacking outlets with Reijnders linking well from midfield. This should be a comfortable Dutch win; the main watch is whether Koeman tests his depth ahead of the knockout stage.
 
 Netherlands control this from the first whistle and score multiple times. Tunisia may get a consolation. Predicted score: 3–0 (Netherlands).
 
+<a name="predictions-paraguay-vs-australia"></a>
 #### Paraguay vs. Australia
 
 The most balanced and genuinely competitive fixture of the day. Paraguay beat Türkiye 1–0 in a tight match but were badly exposed in the 1–4 loss to USA; Australia beat Türkiye 2–0 comfortably then were outplayed 0–2 by USA. Both sides know exactly what they need: a win. Paraguay rely on Almiron's energy and Sanabria's hold-up; Australia have looked dangerous on transitions and have covered ground effectively. The game state from minute one will be open, which suits neither team's preferred defensive-first approach. Levi's Stadium sea-level conditions.
 
 An even contest that tips Australia's way on a second-half transition goal; Paraguay create but can't convert. Predicted score: 1–0 (Australia).
 
+<a name="predictions-türkiye-vs-usa"></a>
 #### Türkiye vs. USA
 
 USA have nothing to gain from this result in terms of advancement; everything to gain in terms of form, rhythm, and confidence before Sunday's Round of 32. Türkiye's tournament has been a disaster — zero points, zero competitive moments — but they play at SoFi Los Angeles with a crowd that will be at least partly hostile to the Americans. Pochettino will likely balance starters and rotation intelligently; Balogun's minutes are worth watching if the tournament top-scorer conversation remains live. Türkiye's defensive organization hasn't held up in any of their three matches; the USA's pressing midfield trio has been excellent when together.
@@ -140,6 +161,7 @@ USA win with a degree of ease despite rotation. Türkiye get a late moment but i
 
 ---
 
+<a name="bet-recommendations"></a>
 ## Bet Recommendations
 
 **BET:** Ecuador vs. Germany — Draw (Moneyline) TIER 2
@@ -212,6 +234,7 @@ No clear edge on Curaçao vs. Ivory Coast — Ivory Coast ML at -650 (FanDuel) d
 
 ---
 
+<a name="parlays"></a>
 ## Parlays
 
 **Parlay 1: Value Plus-Money Double — Australia + Draw**
@@ -266,6 +289,7 @@ Netherlands -1000 is unplayable standalone but as a parlay anchor it converts th
 
 ---
 
+<a name="sharp-money"></a>
 ## Sharp Money
 
 - **Germany at +320 and Ecuador at +290** with the draw as -125 favorite is the sharpest signal on today's slate — the market is explicitly pricing this as a three-way near-coin-flip, which suggests books have significant two-way action and no consensus. Sharp money appears to have driven Germany's ML out to plus territory; the public expected a heavy Germany favorite.
@@ -274,6 +298,7 @@ Netherlands -1000 is unplayable standalone but as a parlay anchor it converts th
 
 ---
 
+<a name="around-the-tournament"></a>
 ## Around the Tournament
 
 - Messi scored his 17th and 18th World Cup goals in Argentina's win over Austria on Monday, breaking Miroslav Klose's record of 16. He turned 39 during the tournament and was reportedly spotted doing a midnight workout the morning after the record. Haaland (4 goals) and Mbappé (4 goals) are both in pursuit — tomorrow's Norway vs. France becomes one of the more loaded individual duels in World Cup history for reasons that have nothing to do with group standings.
@@ -288,6 +313,7 @@ Netherlands -1000 is unplayable standalone but as a parlay anchor it converts th
 
 ---
 
+<a name="tomorrows-slate"></a>
 ## Tomorrow's Slate
 
 - 3:00 PM ET — Norway vs. France (Group I, Gillette Stadium, Foxborough)

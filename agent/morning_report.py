@@ -724,11 +724,15 @@ Example: "Day 14. Matchday 3 begins. Six matches, all simultaneous within slots.
 
 **Line 2:** `[Live dashboard →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)`
 
-**Line 3 — TABLE OF CONTENTS** (two-level markdown anchor links):
+**Line 3 — TABLE OF CONTENTS** (required, two-level markdown anchor links):
 Generate the TOC dynamically based on today's fixtures. Top level = major sections.
 Sub-level = one entry per match under Today's Matches and Predictions.
 Format each match sub-entry as: `  - [Team A vs. Team B — H:MM PM ET](#team-a-vs-team-b)`
-Anchor IDs: lowercase, spaces to hyphens, strip special characters, strip periods.
+Anchor IDs: lowercase, strip all punctuation (apostrophes, ampersands etc. vanish entirely —
+do not replace them with anything), then convert each remaining whitespace character to its
+own hyphen without collapsing. Examples: `Today's Matches` → `#todays-matches`,
+`News & Injuries` → `#news--injuries` (double hyphen — the space on each side of & each
+becomes its own hyphen). `Tomorrow's Slate` → `#tomorrows-slate`. Never collapse hyphens.
 
 ---
 
@@ -768,7 +772,10 @@ Header format: `**Team A vs. Team B — H:MM PM ET | Stadium Name, City | Group 
 Use "vs." with period. ET 12-hour format. Pipe separators.
 
 Paragraph, 4–5 sentences:
-1. Group scenario — what each team needs from this match specifically.
+1. Lead with the sharpest analytical angle — the key injury, the tactical mismatch, or the
+   line move that doesn't make sense. Group scenario only when it's the actual tactical
+   driver (e.g. a team that must win and will fundamentally change their shape because of it).
+   Do not open with generic group advancement math if there's a sharper hook available.
 2. Tactical setup and what WC2026 form (not reputation) suggests.
 3. Key injuries or lineup factors relevant to today.
 4. Venue/conditions if relevant (altitude, heat, dome — skip if standard sea-level).
