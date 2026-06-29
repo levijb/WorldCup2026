@@ -368,6 +368,25 @@ const VENUE_STADIUMS = {
   'Vancouver': 'BC Place',
 };
 
+const VENUE_CITY = {
+  'Atlanta': 'Atlanta',
+  'Boston (Foxborough)': 'Boston',
+  'Dallas (Arlington)': 'Dallas',
+  'Guadalajara (Zapopan)': 'Guadalajara',
+  'Houston': 'Houston',
+  'Kansas City': 'Kansas City',
+  'Los Angeles (Inglewood)': 'Los Angeles',
+  'Mexico City': 'Mexico City',
+  'Miami (Miami Gardens)': 'Miami',
+  'Monterrey (Guadalupe)': 'Monterrey',
+  'New York/New Jersey (East Rutherford)': 'New York',
+  'Philadelphia': 'Philadelphia',
+  'San Francisco Bay Area (Santa Clara)': 'San Francisco',
+  'Seattle': 'Seattle',
+  'Toronto': 'Toronto',
+  'Vancouver': 'Vancouver',
+};
+
 // Knockout round labels as they appear in openfootball data
 const KO_ROUND_LABELS = {
   'Round of 32': { id: 'r32', matches: 16 },
@@ -675,7 +694,9 @@ function renderBracket() {
     const t2 = m?.team2 || 'TBD';
     const score = m?.score || null;
     const winner = m?.winner || null;
-    const venue = m?.ground ? (VENUE_STADIUMS[m.ground] || m.ground) : null;
+    const stadiumName = m?.ground ? (VENUE_STADIUMS[m.ground] || m.ground) : null;
+    const cityName = m?.ground ? (VENUE_CITY[m.ground] || null) : null;
+    const venue = stadiumName ? (cityName ? `${stadiumName} · ${cityName}` : stadiumName) : null;
     const dateLabel = m?.date ? new Date(m.date + 'T12:00:00Z').toLocaleDateString('en-US',
       { month: 'short', day: 'numeric', timeZone: 'UTC' }) : null;
     const scored = score !== null;
@@ -747,7 +768,9 @@ function renderBracket() {
   const ft2 = fm?.team2 || 'TBD';
   const fscore = fm?.score || null;
   const fwinner = fm?.winner || null;
-  const fvenue = fm?.ground ? `${VENUE_STADIUMS[fm.ground] || fm.ground}` : null;
+  const fStadium = fm?.ground ? (VENUE_STADIUMS[fm.ground] || fm.ground) : null;
+  const fCity = fm?.ground ? (VENUE_CITY[fm.ground] || null) : null;
+  const fvenue = fStadium ? (fCity ? `${fStadium} · ${fCity}` : fStadium) : null;
   const fkickoff = (fm?.time && fm?.date) ? fmtVenueTimeToET(fm.time, fm.date) : null;
   const fdateLabel = fm?.date ? new Date(fm.date + 'T12:00:00Z').toLocaleDateString('en-US',
     { month: 'short', day: 'numeric', timeZone: 'UTC' }) : null;
