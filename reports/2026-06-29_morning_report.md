@@ -103,6 +103,8 @@ Morocco defend well, allow the Dutch possession without dangerous penetration, a
 
 ## Bet Recommendations
 
+Note: FanDuel has bets both including stoppage time and not including stoppage time. No stoppage time bets have slightly longer odds. Also their default supersub rule has saved me mroe than once - player props automatically transfer and carry on with their substitution.  
+
 **BET:** Vinicius Jr. Anytime Scorer — Brazil vs. Japan TIER 1
 **ODDS:** +140 (FanDuel) | Implied: 41.7%
 **EDGE REASONING:** Vinicius has scored in all three of Brazil's group stage matches — four goals total in this tournament. Japan's wing-back system requires their right wing-back to track him defensively all afternoon, and that individual duel (Nakamura vs. Vinicius at age 23 with elite pace) consistently generates scoring opportunities regardless of how the rest of the game goes. He's the primary penalty taker if one is awarded, and he's taking more shots per 90 in this tournament than in any previous international stretch. At +140 — 41.7% implied — the true probability is closer to 55% given his tournament form and the matchup.
@@ -241,5 +243,6 @@ Hedges within the day's positions: Germany -1.5 straight bet is our Tier 2 ancho
 
 ## Tomorrows Slate
 
-- 1:00 PM ET — Ivory Coast vs. Norway (Round of 32, AT&T Stadium, Arlington, TX)
-- 5:00 PM ET — France vs. Sweden (Round of 32, MetLife Stadium, East Rutherford, NJ)
+- 1:00 PM ET - Ivory Coast vs. Norway (Round of 32, AT&T Stadium, Arlington, TX)
+- 5:00 PM ET - France vs. Sweden (Round of 32, MetLife Stadium, East Rutherford, NJ)
+- 9:00 PM ET - Mexico vs. Ecuador (Round of 32, Estudio Azteca, Mexico City)
