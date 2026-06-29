@@ -8,77 +8,77 @@
     {
       "name": "Will",
       "email": "willmbdavis@gmail.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Mom",
       "email": "bartekdavis@yahoo.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Dad",
       "email": "mark.davis104@yahoo.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Soren",
       "email": "sorenebdavis@gmail.com",
-      "active": false
+      "active": true
     },
     {
       "name": "David",
       "email": "david.siamon@gmail.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Walter",
       "email": "Walto1998@hotmail.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Devin",
       "email": "devinjmcdonald3@gmail.com",
-      "active": false  
+      "active": true  
     },
     {
       "name": "Skylar",
       "email": "Skylarfunk13@gmail.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Fayed",
       "email": "gayafayed@gmail.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Emilio",
       "email": "emilio.mena128@gmail.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Carrick",
       "email": "carrickjh@yahoo.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Connor",
       "email": "connor@mckfamily.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Grayson",
       "email": "graysontp1742@gmail.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Bryce",
       "email": "bforys7@gmail.com",
-      "active": false
+      "active": true
     },
     {
       "name": "Colin",
       "email": "colinlombardi5@gmail.com",
-      "active": false
+      "active": true
     }
   ]
 }
