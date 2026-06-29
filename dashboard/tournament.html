@@ -174,6 +174,8 @@
   }
   .bracket-slot.loser { color: var(--text-dim); font-weight: 400; }
   .bracket-slot-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bracket-flag { font-size: 13px; margin-right: 4px; }
+  .bracket-rank { font-size: 10px; color: var(--text-dim); margin-left: 4px; font-variant-numeric: tabular-nums; }
   .bracket-slot-score {
     font-size: 12px;
     font-weight: 700;
@@ -329,7 +331,7 @@ const TEAM_FLAGS = {
   'Spain': '🇪🇸', 'Cape Verde': '🇨🇻', 'Saudi Arabia': '🇸🇦', 'Uruguay': '🇺🇾',
   'France': '🇫🇷', 'Senegal': '🇸🇳', 'Iraq': '🇮🇶', 'Norway': '🇳🇴',
   'Argentina': '🇦🇷', 'Algeria': '🇩🇿', 'Austria': '🇦🇹', 'Jordan': '🇯🇴',
-  'Portugal': '🇵🇹', 'DR Congo': '🇨🇩', 'Uzbekistan': '🇺🇿', 'Colombia': '🇨🇴',
+  'Portugal': '🇵🇹', 'DR Congo': '🇨🇩', 'Congo DR': '🇨🇩', 'Uzbekistan': '🇺🇿', 'Colombia': '🇨🇴',
   'England': '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 'Croatia': '🇭🇷', 'Ghana': '🇬🇭', 'Panama': '🇵🇦',
 };
 
@@ -688,6 +690,14 @@ function renderGroupSchedule() {
 function renderBracket() {
   const container = document.getElementById('bracket-view');
 
+  function teamDisplay(name) {
+    if (!name || name === 'TBD') return name;
+    const flag = TEAM_FLAGS[name] || '';
+    const rank = TEAM_RANKINGS[name] ? `<span class="bracket-rank">#${TEAM_RANKINGS[name]}</span>` : '';
+    const flagHtml = flag ? `<span class="bracket-flag">${flag}</span>` : '';
+    return `${flagHtml}${name}${rank ? ' ' + rank : ''}`;
+  }
+
   // Helper: render a single match card
   function matchCard(m) {
     const t1 = m?.team1 || 'TBD';
@@ -711,11 +721,11 @@ function renderBracket() {
     </div>` : '';
     return `<div class="bracket-match"><div class="bracket-card">
       <div class="bracket-slot ${s1}">
-        <span class="bracket-slot-name">${t1}</span>
+        <span class="bracket-slot-name">${teamDisplay(t1)}</span>
         ${scored ? `<span class="bracket-slot-score ${sc1cls}">${sc[0]}</span>` : ''}
       </div>
       <div class="bracket-slot ${s2}">
-        <span class="bracket-slot-name">${t2}</span>
+        <span class="bracket-slot-name">${teamDisplay(t2)}</span>
         ${scored ? `<span class="bracket-slot-score ${sc2cls}">${sc[1]}</span>` : ''}
       </div>
       ${footer}
@@ -787,11 +797,11 @@ function renderBracket() {
       <div class="final-header">FINAL</div>
       <div class="bracket-match" style="margin-top:6px"><div class="bracket-card" style="min-width:150px">
         <div class="bracket-slot ${fs1}">
-          <span class="bracket-slot-name">${ft1}</span>
+          <span class="bracket-slot-name">${teamDisplay(ft1)}</span>
           ${fscored ? `<span class="bracket-slot-score ${fsc1cls}">${fsc[0]}</span>` : ''}
         </div>
         <div class="bracket-slot ${fs2}">
-          <span class="bracket-slot-name">${ft2}</span>
+          <span class="bracket-slot-name">${teamDisplay(ft2)}</span>
           ${fscored ? `<span class="bracket-slot-score ${fsc2cls}">${fsc[1]}</span>` : ''}
         </div>
         ${(fdateLabel || fvenue) ? `<div class="bracket-footer"><span>${fdateLabel||''}</span><span>${fvenue||''}</span></div>` : ''}
