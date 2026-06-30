@@ -471,17 +471,28 @@ function buildBracketData() {
     const { id } = roundInfo;
     if (!bracketData[id]) bracketData[id] = [];
     const ft = m.score?.ft;
+    const et = m.score?.et;
+    const pk = m.score?.p;
     const played = Array.isArray(ft);
     let winner = null;
+    let wentToPK = false;
     if (played) {
       if (ft[0] > ft[1]) winner = m.team1;
       else if (ft[1] > ft[0]) winner = m.team2;
+      else if (Array.isArray(et) && et[0] !== et[1]) {
+        winner = et[0] > et[1] ? m.team1 : m.team2;
+      } else if (Array.isArray(pk)) {
+        wentToPK = true;
+        if (pk[0] > pk[1]) winner = m.team1;
+        else if (pk[1] > pk[0]) winner = m.team2;
+      }
     }
     const entry = {
       num: m.num,
       team1: m.team1 || 'TBD',
       team2: m.team2 || 'TBD',
       score: played ? `${ft[0]}–${ft[1]}` : null,
+      pkScore: wentToPK ? `${pk[0]}–${pk[1]}` : null,
       winner,
       ground: m.ground || null,
       date: m.date || null,
@@ -715,8 +726,9 @@ function renderBracket() {
     const s2 = t2 === 'TBD' ? 'tbd' : winner ? (t2 === winner ? 'winner' : 'loser') : '';
     const sc1cls = scored ? (t1 === winner ? 'winning' : 'losing') : '';
     const sc2cls = scored ? (t2 === winner ? 'winning' : 'losing') : '';
+    const pkLabel = m?.pkScore ? ` <span class="bracket-pk">(${m.pkScore} PK)</span>` : '';
     const footer = (dateLabel || venue) ? `<div class="bracket-footer">
-      <span>${dateLabel || ''}</span>
+      <span>${dateLabel || ''}${pkLabel}</span>
       <span>${venue || ''}</span>
     </div>` : '';
     return `<div class="bracket-match"><div class="bracket-card">
