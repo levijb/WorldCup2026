@@ -501,6 +501,24 @@ function buildBracketData() {
     bracketData[id].push(entry);
     bracketData._byNum[m.num] = entry;
   }
+
+  // Second pass: resolve "W74"-style placeholders into actual winner names.
+  // openfootball sometimes lags on filling these in for future rounds even
+  // after the feeder match is decided (especially PK-decided games), so
+  // resolve locally using winners we already computed above.
+  const byNum = bracketData._byNum;
+  function resolvePlaceholder(name) {
+    const match = typeof name === 'string' && name.match(/^W(\d+)$/);
+    if (!match) return name;
+    const feederNum = parseInt(match[1], 10);
+    const feeder = byNum[feederNum];
+    return feeder?.winner || name;
+  }
+  for (const num of Object.keys(byNum)) {
+    const entry = byNum[num];
+    entry.team1 = resolvePlaceholder(entry.team1);
+    entry.team2 = resolvePlaceholder(entry.team2);
+  }
 }
 
 // ── Standings Computation ─────────────────────────────────────────────────────
