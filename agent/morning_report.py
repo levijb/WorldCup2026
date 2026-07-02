@@ -1038,6 +1038,7 @@ The pre-fetched live data (odds, fixtures, line movements) is provided in the LI
 
 """
 
+    fence = '```'
     ko_request = f"""
 ---
 
@@ -1143,16 +1144,16 @@ Pure betting. Where is genuine edge against the market in knockout conditions?
 - Props in knockout matches: game-state risk is amplified — teams protecting leads shut down in the second half, suppressing shot and touch counts
 
 **Format for every bet:**
-BET: [Selection] — [Match] ([Market]) [TIER 1 / TIER 2 / TIER 3]
-ODDS: [American odds] ([Book]) | Implied: [X.X%]
-EDGE REASONING: [2–3 sentences. Sentence 1: the edge. Sentence 2: the support. Sentence 3 if needed: market signal or structural reason.]
-RISK LEVEL: Low / Medium / High
-RECOMMENDED STAKE: $X (X units)
-KEY RISK FACTORS:
-
-[one line]
-[one line max]
-
+{fence}
+**BET:** [Selection] — [Match] ([Market]) [TIER 1 / TIER 2 / TIER 3]
+**ODDS:** [American odds] ([Book]) | Implied: [X.X%]
+**EDGE REASONING:** [2–3 sentences. Sentence 1: the edge. Sentence 2: the support. Sentence 3 if needed: market signal or structural reason.]
+**RISK LEVEL:** Low / Medium / High
+**RECOMMENDED STAKE:** $X (X units)
+**KEY RISK FACTORS:**
+- [one line]
+- [one line max]
+{fence}
 
 Rules:
 - Evaluate every match in TODAY'S MATCHES. If a match has no edge, state why in one sentence with specific odds as reference.
@@ -1172,15 +1173,15 @@ Rules:
 - At least one partially hedging a Tier 1 or Tier 2 straight bet
 
 Rules: no stacking legs that all require the same team to dominate. Name any correlation explicitly.
-```
+{fence}
 **Parlay N: [Name] — [legs summary]**
-Leg 1: [selection] @ [odds]
-Leg 2: [selection] @ [odds]
-Leg 3: [selection] @ [odds]
+- Leg 1: [selection] @ [odds]
+- Leg 2: [selection] @ [odds]
+- Leg 3: [selection] @ [odds]
 Estimated combined odds: approximately +XXX.
 [1–2 sentences: why these legs belong together, what driver they share or don't share.]
 **RECOMMENDED STAKE:** $X (X units)
-```
+{fence}
 
 ---
 
@@ -1205,8 +1206,6 @@ One bullet per match:
 `- H:MM PM ET — Team A vs. Team B (Round of XX, Venue, City)`
 
 No analysis. No odds. Use the fixture data from LIVE DATA below.
-
----
 """
 
     # Strip the group-stage REQUEST block that build_dynamic_content() appends —
