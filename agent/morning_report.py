@@ -1172,15 +1172,15 @@ Rules:
 - At least one partially hedging a Tier 1 or Tier 2 straight bet
 
 Rules: no stacking legs that all require the same team to dominate. Name any correlation explicitly.
-Parlay N: [Name] — [legs summary]
-
+```
+**Parlay N: [Name] — [legs summary]**
 Leg 1: [selection] @ [odds]
 Leg 2: [selection] @ [odds]
 Leg 3: [selection] @ [odds]
 Estimated combined odds: approximately +XXX.
 [1–2 sentences: why these legs belong together, what driver they share or don't share.]
-RECOMMENDED STAKE: $X (X units)
-
+**RECOMMENDED STAKE:** $X (X units)
+```
 
 ---
 
@@ -1209,6 +1209,15 @@ No analysis. No odds. Use the fixture data from LIVE DATA below.
 ---
 """
 
+    # Strip the group-stage REQUEST block that build_dynamic_content() appends —
+    # the knockout-specific ko_request replaces it entirely.
+    dynamic_content_stripped = re.sub(
+        r'\n+## REQUEST\b.*',
+        '',
+        dynamic_content,
+        flags=re.DOTALL,
+    )
+
     assembled = (
         web_header
         + system_prompt
@@ -1216,7 +1225,7 @@ No analysis. No odds. Use the fixture data from LIVE DATA below.
         + static_context
         + ko_request
         + "\n\n---\n\n"
-        + dynamic_content
+        + dynamic_content_stripped
     )
 
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
