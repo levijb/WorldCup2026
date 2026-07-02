@@ -8,7 +8,8 @@ Usage:
     python agent/morning_report.py --send-email   # send today's saved report (review first!)
     python agent/morning_report.py --send-email --send-date 2026-06-14  # send a past report
     python agent/morning_report.py --no-email     # (accepted but ignored; email never auto-sends)
-    python agent/morning_report.py --web-prompt   # build prompt file for Claude web (no API tokens)
+    python agent/morning_report.py --web-prompt      # build prompt file for Claude web (no API tokens)
+    python agent/morning_report.py --web-prompt-ko   # build knockout-round prompt for Claude web
 """
 
 import argparse
@@ -993,6 +994,237 @@ def dump_web_prompt(
     return out_path
 
 
+def dump_web_prompt_ko(
+    system_prompt: str,
+    static_context: str,
+    dynamic_content: str,
+    today_str: str,
+) -> Path:
+    """Knockout-round variant of dump_web_prompt(). Round of 32 onward."""
+
+    web_header = f"""# WC2026 Morning Report Prompt — {today_str} (KNOCKOUT ROUND)
+# Paste this entire file into a Claude web chat (claude.ai).
+# Claude will run web searches inline and write the full report.
+# After Claude responds, copy the report text into:
+#   reports/{today_str}_morning_report.md
+# Then send with: python agent/morning_report.py --send-email
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+## INSTRUCTIONS FOR CLAUDE WEB
+
+You are generating the World Cup 2026 morning briefing report. The tournament is now in the KNOCKOUT ROUND (Round of 32 or later). Before writing anything, run these three web searches in order and incorporate the results.
+
+**Search 1 — Recent results:**
+Search for: "World Cup 2026 knockout results {today_str}"
+Return completed match results from the last 2 days as dated bullet points.
+Format each result as: YYYY-MM-DD: Team A X–X Team B (FT) / X–X AET / X–X PKs — one line per match with the full scoreline chain only when ET or PKs occurred. Label each day clearly.
+
+**Search 2 — News and injuries:**
+Search for: "World Cup 2026 injuries lineup news {today_str}"
+Return 4–6 bullet points: confirmed injuries, suspensions, expected lineups, fitness concerns, late scratches.
+Only items relevant to today's knockout matches. Distinguish confirmed from unconfirmed.
+
+**Search 3 — Around the tournament:**
+Search for: "World Cup 2026 knockout atmosphere moments {today_str}"
+Return 4–5 bullet points: crowd atmosphere, VAR controversies, notable performances, player milestones, coach quotes, fan moments, bracket narrative threads.
+No match result summaries — color and narrative only.
+
+The pre-fetched live data (odds, fixtures, line movements) is provided in the LIVE DATA section below — use it as-is. Override any LIVE DATA fixture field that says "No fixtures found" by using the fetch_sports_data tool with league: world_cup to confirm today's actual schedule.
+
+---
+
+## SYSTEM PROMPT (v2)
+
+"""
+
+    ko_request = f"""
+---
+
+## REQUEST — KNOCKOUT ROUND FORMAT
+
+Today is {today_str}. This is a knockout elimination round (Round of 32 or later). Every match is single-elimination — no group math, no advancement scenarios, just win or go home.
+
+Produce the full morning briefing report in this exact section order:
+
+---
+
+### SECTION 1 — HEADER BLOCK
+
+**Line 1:** 2–3 short punchy phrases — the biggest things happening today. Day number (Day 1 = June 11), round name, how many teams remain. Facts, not hype.
+Example: "Day 22. Round of 32. 32 teams, 32 spots left to fill."
+
+**Line 2:** `[Live dashboard →](https://levijb.github.io/WorldCup2026/dashboard/tournament.html)`
+
+**Line 3 — TABLE OF CONTENTS** (required, two-level markdown anchor links). Generate dynamically from today's fixtures. Anchor slug rules: lowercase, strip all punctuation entirely (apostrophes and ampersands vanish — do not replace them), each remaining whitespace character becomes its own hyphen without collapsing. Examples: `Today's Matches` → `#todays-matches`, `News & Injuries` → `#news--injuries` (double hyphen). Never collapse adjacent hyphens.
+
+---
+
+### SECTION 2 — TOURNAMENT STATUS
+
+Bracket state, not group standings. Cover:
+- Day number and round name (Round of 32 / Round of 16 / Quarter-Finals / Semi-Finals)
+- How many matches have been played in this round vs. total in the round
+- Teams that have already advanced to the next round (from prior days' results if applicable)
+- Teams eliminated today or since last report
+- One sentence on the broader bracket picture if notable (e.g. "The bottom half of the bracket has no #1 seed remaining")
+
+Format: scannable bullets, not an essay. 4–6 lines max.
+
+---
+
+### SECTION 3 — RESULTS
+
+Two dated subsections. Never merge.
+
+**Yesterday — [Weekday, Month D]**
+**Two Days Ago — [Weekday, Month D]**
+
+Format per knockout result: `- Team A X–X Team B — [note]`
+- When a match went to extra time: `- Team A X–X Team B (1–1 AET, 4–3 PKs) — [note]` or `- Team A X–X Team B (2–1 AET) — [note]`
+- FT score first, then parenthetical showing AET score and/or PK score only when applicable
+- En-dash (–) between goals. Em-dash (—) before note.
+- Late-night games (11 PM or midnight ET kickoff) count for the calendar date they kicked off.
+- Notes: 1–2 sentences, editorial voice. One sharp observation — market implication, bracket consequence, or tactical read. For PK results, note which team won the shootout clearly.
+- No group labels — this is knockout.
+- If no matches for a subsection: "No matches."
+
+---
+
+### SECTION 4 — TODAY'S MATCHES
+
+One bold header + one paragraph per match. No blank line between header and paragraph.
+
+Header format: `**Team A vs. Team B — H:MM PM ET | Stadium Name, City**`
+Use "vs." with period. ET 12-hour format. Pipe separator. No group label.
+
+Paragraph, 4–5 sentences:
+1. If there is a decisive tactical or tournament-context factor (key injury, one team's dominant form in this tournament vs. the other's shakiness, a specific player match-up that defines the game), lead with that. If it's a coin-flip neutral match, lead with the tactical setup instead.
+2. How each team got here — their path through this tournament in 1–2 sentences. WC2026 form data first; reputation only as directional context.
+3. Key injuries or lineup notes relevant to this specific match.
+4. Venue and conditions if relevant (heat, altitude, dome — skip if standard sea-level neutral).
+5. One sentence pointing toward the prediction or bet angle.
+
+Do NOT re-summarize bracket standings — readers have TOURNAMENT STATUS above.
+
+---
+
+### SECTION 5 — NEWS & INJURIES
+
+4–6 bullets, one line each. From Search 2.
+Confirmed: "X is officially out." Unconfirmed: "X reported carrying a knock (unconfirmed)."
+Only items relevant to today's matches. No editorial padding.
+
+---
+
+### SECTION 6 — PREDICTIONS
+
+Pure football analysis. No odds, no betting language, no units anywhere in this section.
+
+One subsection per match: `#### Team A vs. Team B`
+
+**Paragraph 1 — Tactical read (3–4 sentences):**
+Lead with the single most important tactical story of this matchup. WC2026 form data first — what these teams have actually shown in this tournament. Reputation and historical data only as secondary context. Specific observations only ("Morocco have allowed 2 shots on target across 3 knockout matches" not "Morocco are defensively solid").
+
+**Paragraph 2 — Game flow + elimination pressure (2–3 sentences):**
+How does the match play out? What has to go right for the underdog to survive? Acknowledge ET/PKs as a realistic outcome if the matchup is close. End with: `Predicted score: X–X (Team A win)` or `Predicted score: X–X (Draw — goes to ET/PKs, Team A advances)`.
+
+---
+
+### SECTION 7 — BET RECOMMENDATIONS
+
+Pure betting. Where is genuine edge against the market in knockout conditions?
+
+**Knockout-specific factors to weigh before recommending:**
+- Under 2.5 goals has positive historical ROI in knockout rounds (~2.11 goals/game avg vs. 2.54 group stage)
+- BTTS Yes is historically overpriced in knockouts (~40% hit rate, often priced at 45%+)
+- Draw/DNB is more valuable in knockout rounds — a single late equalizer in regulation wipes a standard ML bet but not DNB
+- ET/PK variance: avoid heavy ML favorites in close matchups where the line doesn't account for 30 extra minutes and a coin-flip shootout
+- Props in knockout matches: game-state risk is amplified — teams protecting leads shut down in the second half, suppressing shot and touch counts
+
+**Format for every bet:**
+BET: [Selection] — [Match] ([Market]) [TIER 1 / TIER 2 / TIER 3]
+ODDS: [American odds] ([Book]) | Implied: [X.X%]
+EDGE REASONING: [2–3 sentences. Sentence 1: the edge. Sentence 2: the support. Sentence 3 if needed: market signal or structural reason.]
+RISK LEVEL: Low / Medium / High
+RECOMMENDED STAKE: $X (X units)
+KEY RISK FACTORS:
+
+[one line]
+[one line max]
+
+
+Rules:
+- Evaluate every match in TODAY'S MATCHES. If a match has no edge, state why in one sentence with specific odds as reference.
+- Do NOT say "Asian Handicap" — say "spread" or write the line directly.
+- Do NOT include a MODEL EDGE field.
+- Include 1–2 player props only when you have a specific rate (shots/90, SOT/90) from this tournament and the matchup pushes that rate higher. Never prop an injury-doubt player.
+- When a Tier 1/2 bet is on a favorite, evaluate whether DNB or a Tier 3 hedge on the other side makes mathematical sense in a single-elimination context.
+
+---
+
+### SECTION 8 — PARLAYS
+
+4–6 parlays. Max 4 legs each. Required types:
+- At least one mixing result/total legs with player props
+- At least one purely player props across multiple matches
+- At least one that accounts for knockout variance (e.g., includes a draw or DNB leg)
+- At least one partially hedging a Tier 1 or Tier 2 straight bet
+
+Rules: no stacking legs that all require the same team to dominate. Name any correlation explicitly.
+Parlay N: [Name] — [legs summary]
+
+Leg 1: [selection] @ [odds]
+Leg 2: [selection] @ [odds]
+Leg 3: [selection] @ [odds]
+Estimated combined odds: approximately +XXX.
+[1–2 sentences: why these legs belong together, what driver they share or don't share.]
+RECOMMENDED STAKE: $X (X units)
+
+
+---
+
+### SECTION 9 — SHARP MONEY
+
+3 bullets max, or "Nothing notable today."
+Only include genuinely notable line movements or handle signals. Don't pad.
+
+---
+
+### SECTION 10 — AROUND THE TOURNAMENT
+
+4–5 bullets from Search 3. 1–2 sentences each.
+Cover: crowd atmosphere, memorable moments, VAR controversies, bracket narratives developing across multiple matches, player milestones, coach quotes, fan moments. No odds, no bet angles.
+Each bullet delivers one clear observation and stops.
+
+---
+
+### SECTION 11 — TOMORROW'S SLATE
+
+One bullet per match:
+`- H:MM PM ET — Team A vs. Team B (Round of XX, Venue, City)`
+
+No analysis. No odds. Use the fixture data from LIVE DATA below.
+
+---
+"""
+
+    assembled = (
+        web_header
+        + system_prompt
+        + "\n\n---\n\n"
+        + static_context
+        + ko_request
+        + "\n\n---\n\n"
+        + dynamic_content
+    )
+
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    out_path = REPORTS_DIR / f"{today_str}_web_prompt.txt"
+    out_path.write_text(assembled, encoding="utf-8")
+    return out_path
+
+
 # ── Git Push ───────────────────────────────────────────────────────────────────
 
 def git_commit_and_push(report_path: Path, today_str: str) -> None:
@@ -1477,6 +1709,11 @@ def main() -> None:
         action="store_true",
         help="Build and save the assembled prompt to reports/YYYY-MM-DD_web_prompt.txt for use in Claude web (one lightweight results lookup uses the API; no full report generation call)",
     )
+    parser.add_argument(
+        "--web-prompt-ko",
+        action="store_true",
+        help="Build knockout-round web prompt (Round of 32 onward). Saves to reports/YYYY-MM-DD_web_prompt.txt",
+    )
     args = parser.parse_args()
 
     if args.send_email:
@@ -1512,17 +1749,8 @@ def main() -> None:
     line_movements = compute_line_movements(odds_result["data"], previous_cache)
 
     # 5. Web searches: recent results + news (share one Anthropic client)
-    if args.web_prompt:
-        # v2 web prompt: pre-fetch results here (cheap) so Claude web doesn't
-        # need to search for scores. News and atmosphere stay deferred to the
-        # two search instructions embedded in the prompt itself.
-        try:
-            import anthropic
-            client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-            print("[FETCH] Recent results via web search (pre-filled for Claude web)...")
-            recent_results = fetch_recent_results_via_search(client)
-        except Exception as e:
-            recent_results = f"(recent results unavailable: {e})"
+    if args.web_prompt or args.web_prompt_ko:
+        recent_results = "(Claude web will search for this — see search instructions above)"
         news = "(Claude web will search for this — see search instructions above)"
         around_the_tournament = "(Claude web will search for this — see search instructions above)"
     elif not args.dry_run:
@@ -1587,6 +1815,18 @@ def main() -> None:
         print(f"[WEB PROMPT] Saved to {out_path}")
         print(f"[WEB PROMPT] Paste into claude.ai — Claude will run the two search instructions and write the report.")
         print(f"[WEB PROMPT] After editing, send with: python agent/morning_report.py --send-email")
+        return
+
+    if args.web_prompt_ko:
+        out_path = dump_web_prompt_ko(
+            system_prompt=system_prompt,
+            static_context=static_context,
+            dynamic_content=dynamic_content,
+            today_str=today_str,
+        )
+        print(f"[WEB PROMPT KO] Saved to {out_path}")
+        print(f"[WEB PROMPT KO] Knockout round format — paste into claude.ai.")
+        print(f"[WEB PROMPT KO] After editing, send with: python agent/morning_report.py --send-email")
         return
 
     # 8. Call Claude
