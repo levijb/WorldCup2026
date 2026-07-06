@@ -798,10 +798,10 @@ function renderBracket() {
   const rightR32 = [83, 84, 81, 82, 86, 88, 85, 87].map(n);
   const leftR16  = [89, 90, 91, 92].map(n);
   const rightR16 = [93, 94, 95, 96].map(n);
-  const leftQF   = [97, 98].map(n);
-  const rightQF  = [99, 100].map(n);
-  const leftSF   = [n(101)];
-  const rightSF  = [n(102)];
+  const leftQF   = [97, 99].map(n);   // G97 top-left (from G89/G90), G99 bottom-left (from G91/G92)
+  const rightQF  = [98, 100].map(n);  // G98 top-right (from G93/G94), G100 bottom-right (from G95/G96)
+  const leftSF   = [n(101)];          // G101 = W97 vs W98
+  const rightSF  = [n(102)];          // G102 = W99 vs W100
 
   // Final card
   const fm = n(104);
