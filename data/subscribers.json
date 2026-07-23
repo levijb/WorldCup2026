@@ -79,6 +79,11 @@
       "name": "Colin",
       "email": "colinlombardi5@gmail.com",
       "active": true
+    },
+    {
+      "name": "Kate",
+      "email": "kad2243@cumc.columbia.edu",
+      "active": true
     }
   ]
 }

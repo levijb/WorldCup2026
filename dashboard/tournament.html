@@ -792,14 +792,16 @@ function renderBracket() {
   const bn = bracketData._byNum || {};
   const n = (id) => bn[id] || { team1: 'TBD', team2: 'TBD', score: null, winner: null, ground: null, date: null, time: null };
 
-  // Left half: G74+G77→G89, G73+G75→G90, G76+G78→G91, G79+G80→G92 → QF G97-98 → SF G101
-  const leftR32  = [74, 77, 73, 75, 76, 78, 79, 80].map(n);
-  // Right half: G83+G84→G93, G81+G82→G94, G86+G88→G95, G85+G87→G96 → QF G99-100 → SF G102
-  const rightR32 = [83, 84, 81, 82, 86, 88, 85, 87].map(n);
-  const leftR16  = [89, 90, 91, 92].map(n);
-  const rightR16 = [93, 94, 95, 96].map(n);
-  const leftQF   = [97, 99].map(n);   // G97 top-left (from G89/G90), G99 bottom-left (from G91/G92)
-  const rightQF  = [98, 100].map(n);  // G98 top-right (from G93/G94), G100 bottom-right (from G95/G96)
+  // Grouped by which SF each QF feeds (not by original R16 numbering), so every
+  // branch stays on one side from R32 through the Final with no mid-bracket crossover.
+  // Left half: G74+G77→G89, G73+G75→G90 → G97; G83+G84→G93, G81+G82→G94 → G98 → SF G101
+  const leftR32  = [74, 77, 73, 75, 83, 84, 81, 82].map(n);
+  // Right half: G76+G78→G91, G79+G80→G92 → G99; G86+G88→G95, G85+G87→G96 → G100 → SF G102
+  const rightR32 = [76, 78, 79, 80, 86, 88, 85, 87].map(n);
+  const leftR16  = [89, 90, 93, 94].map(n);
+  const rightR16 = [91, 92, 95, 96].map(n);
+  const leftQF   = [97, 98].map(n);   // G97 top-left (from G89/G90), G98 bottom-left (from G93/G94)
+  const rightQF  = [99, 100].map(n);  // G99 top-right (from G91/G92), G100 bottom-right (from G95/G96)
   const leftSF   = [n(101)];          // G101 = W97 vs W98
   const rightSF  = [n(102)];          // G102 = W99 vs W100
 
